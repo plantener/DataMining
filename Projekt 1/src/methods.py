@@ -8,6 +8,47 @@ Created on Wed Sep 25 12:50:50 2013
 import numpy as np
 from pylab import *
 
+#Create boxplots of the nine attributes 
+def boxPlot(X,attributeNames):
+    fig = figure()
+    fig.subplots_adjust(hspace=.5)
+    title('Boxplot of the attributes')
+    for i in range(0,9):
+        subplot(3,3,i+1)
+        boxplot(X[:,i])
+        xlabel(attributeNames[i])
+        #ylabel('cm')
+    show()
+    
+#def boxPlot3(X, attr):
+#    figure()
+#    boxplot(X[:,attr])  
+#    xticks(range(1),[attributeNames[attr]])
+#    xlabel(attributeNames[attr])
+#    #ylabel('cm')
+#    show()
+#    
+#
+#def boxPlot(X):
+#    figure()
+#    boxplot(X)
+#    xticks(range(1,10),attributeNames)
+#    ylabel('Standardized')
+#    title('Boxplot of all attributes.')
+#    show()
+
+#Create histograms for the nine attributes
+def histogram(X,attributeNames):
+    attr = 9
+    fig = figure()
+    fig.subplots_adjust(hspace=.5)
+    for i in range(attr):
+        subplot(3,3,i+1)
+        hist(X[:,i],bins=17)
+        xlabel(attributeNames[i])
+    show()
+    
+
 #Plot the data
 def plotTwoAttributes(attr1, attr2, X, y, classNames, attributeNames):
     C = len(classNames)
@@ -20,8 +61,6 @@ def plotTwoAttributes(attr1, attr2, X, y, classNames, attributeNames):
     legend(classNames)
     xlabel(attributeNames[attr1])
     ylabel(attributeNames[attr2])
-    
-    # Output result to screen
     show()
 
 
@@ -58,14 +97,12 @@ def plotPrincipalComponents(principal1, principal2, X, y, classNames):
     for c in range(C):
         class_mask = y.A.ravel()==c
         plot(Z[class_mask,principal1], Z[class_mask,principal2], 'o')
-    #plot(Z[:,principal1], Z[:,principal2], 'o')
     legend(classNames)
     xlabel('PC{0}'.format(principal1+1))
     ylabel('PC{0}'.format(principal2+1))
-    
-    # Output result to screen
     show()
     
+# Gets the direction of a certain principal component
 def getPCADirection(pca, X):
     Y = X - np.ones((len(X),1))*X.mean(0)
     U,S,V = linalg.svd(Y,full_matrices=False)

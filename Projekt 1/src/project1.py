@@ -61,6 +61,12 @@ XPositiveStd2 = XStandardized[y.A.ravel()==1,:]
 XNegative = X[y.A.ravel()==0,:]
 XNegativeStd = zscore(XNegative,ddof=1)
 
+#Make histograms
+histogram(X,attributeNames)
+
+#Make boxplots
+boxPlot(X,attributeNames)
+
 #Plot alcohol and tobacco
 plotTwoAttributes(1,7,X,y,classNames,attributeNames)
 plotTwoAttributes(5,7,X,y,classNames,attributeNames)
