@@ -59,7 +59,7 @@ for i, col_id in enumerate(range(1,11)):
         X[:,i-off_set] = np.mat(doc.col_values(col_id,1,463)).T
  
 #Stanardize data       
-X = zscore(X, ddof=1)
+#X = zscore(X, ddof=1)
 
 #Find all positive CHD
 XPositive = X[y.A.ravel()==1,:]
@@ -74,4 +74,6 @@ XNegative = X[y.A.ravel()==0,:]
         
 #computePrincipalComponents(X)
 #plotPrincipalComponents(0,1,X,y,classNames)
-plotTwoAttributes(3,6,X,y,classNames,attributeNames)
+#plotTwoAttributes(3,6,X,y,classNames,attributeNames)
+
+corrcoef(X.T)
