@@ -23,7 +23,7 @@ def convert(s):
 doc = xlrd.open_workbook('..\\..\\dataset.xlsx').sheet_by_index(0)
 
 #Get Attributes
-attributeNames = doc.row_values(0,1,11)
+attributeNames = doc.row_values(0,1,10)
 
 #Create classes
 classLabels = doc.col_values(10,1,463)
@@ -39,41 +39,54 @@ N = len(y)
 M = len(attributeNames)
 C = len(classNames)
 
-#print(C)
-
-#print(classDict)
 
 #Create matrix holding data
-off_set = 0
-X = np.mat(np.empty((462,10)))
-for i, col_id in enumerate(range(1,11)):
-    #print(attributeNames[col_id-1])
-    #print(doc.col_values(col_id,1,92))
-    #print("i=",i)
-    #print("col_id=",col_id)
+X = np.mat(np.empty((462,9)))
+for i, col_id in enumerate(range(1,10)):
     if(attributeNames[col_id-1] == "famhist"):
         temp12 = [convert(i2) for i2 in doc.col_values(col_id,1,463)]
         X[:,i] = np.mat(temp12).T
-        #off_set = 1
     else:
-        X[:,i-off_set] = np.mat(doc.col_values(col_id,1,463)).T
- 
+        X[:,i] = np.mat(doc.col_values(col_id,1,463)).T
+        
+        
 #Stanardize data       
-#X = zscore(X, ddof=1)
+XStandardized = zscore(X, ddof=1)
 
 #Find all positive CHD
 XPositive = X[y.A.ravel()==1,:]
+XPositiveStd = zscore(XPositive,ddof=1)
+XPositiveStd2 = XStandardized[y.A.ravel()==1,:]
 #All negative CHD
 XNegative = X[y.A.ravel()==0,:]
+XNegativeStd = zscore(XNegative,ddof=1)
 
+#Plot alcohol and tobacco
+plotTwoAttributes(1,7,X,y,classNames,attributeNames)
+plotTwoAttributes(5,7,X,y,classNames,attributeNames)
+plotTwoAttributes(3,6,X,y,classNames,attributeNames)
 
+#Plot the variance explained by the principal components
+computePrincipalComponents(XStandardized, "For both negative and positive CHD")
+computePrincipalComponents(XPositiveStd, "Only for positive CHD")
+computePrincipalComponents(XNegativeStd, "Only for negative CHD")
 
+#Plot the data projected to the first two principal components
+plotPrincipalComponents(0,1,XStandardized,y,classNames)
+plotPrincipalComponents(0,1,XPositiveStd,yPositive,classNames)
+plotPrincipalComponents(0,1,XNegativeStd,yPositive,classNames)
+
+#Calculate directions of PCAs
+print("For both positive and negative:")
+print(getPCADirection(0,XStandardized))
+print("For positive CHD")
+print(getPCADirection(0,XPositiveStd))
+print("For negative CHD:")
+print(getPCADirection(0,XNegativeStd))
         
-        
-#calculateSim(0,"Correlation")
-        
-#computePrincipalComponents(X)
-#plotPrincipalComponents(0,1,X,y,classNames)
-#plotTwoAttributes(3,6,X,y,classNames,attributeNames)
 
-corrcoef(X.T)
+#Calculate correlation between attributes
+corrcoef = corrcoef(X.T,y.T)
+
+print("How the attributes correlate to CHD")
+print([corrcoef[9]])

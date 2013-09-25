@@ -26,7 +26,7 @@ def plotTwoAttributes(attr1, attr2, X, y, classNames, attributeNames):
 
 
 #Compute principal componentss
-def computePrincipalComponents(X):
+def computePrincipalComponents(X,s):
     Y = X - np.ones((len(X),1))*X.mean(0)
     
     U,S,V = linalg.svd(Y,full_matrices=False)
@@ -35,7 +35,7 @@ def computePrincipalComponents(X):
     
     figure()
     plot(range(1,len(rho)+1),rho,'o-')
-    title('Variance explained by principal components');
+    title('Variance explained by principal components: '+s);
     xlabel('Principal component');
     ylabel('Variance explained');
     show()
@@ -51,8 +51,6 @@ def plotPrincipalComponents(principal1, principal2, X, y, classNames):
     
     Z = Y * V
     
-    print(V[0])
-    
     # Plot PCA of the data
     f = figure()
     f.hold()
@@ -67,6 +65,14 @@ def plotPrincipalComponents(principal1, principal2, X, y, classNames):
     
     # Output result to screen
     show()
+    
+def getPCADirection(pca, X):
+    Y = X - np.ones((len(X),1))*X.mean(0)
+    U,S,V = linalg.svd(Y,full_matrices=False)
+    
+    print('Calculating direction of principal component (no ',(pca+1))
+    
+    return V[pca]
     
     
 #Calculate similarities
