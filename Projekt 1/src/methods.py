@@ -30,19 +30,22 @@ def boxPlot(X,attributeNames):
         subplot(3,3,i+1)
         boxplot(X[:,i])
         xticks(range(0),attributeNames)
-        xlabel(attributeNames[i])
+        title(attributeNames[i])
     suptitle("Boxplot of the attributes")
     show()
 
 #Create histograms for the nine attributes
-def histogram(X,attributeNames):
+def histogram(X,attributeNames,y):
     attr = 9
     fig = figure()
-    fig.subplots_adjust(hspace=.3)
+    fig.subplots_adjust(hspace=.5)
     for i in range(attr):
-        subplot(3,3,i+1)
+        subplot(4,3,i+1)
         hist(X[:,i],bins=15)
-        xlabel(attributeNames[i])
+        title(attributeNames[i])
+    subplot(4,3,11)
+    hist(y)
+    title("CHD")
     suptitle("Histogram of the attributes")
     show()
     

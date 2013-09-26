@@ -56,7 +56,7 @@ XNegative = X[y.A.ravel()==0,:]
 XNegativeStd = zscore(XNegative,ddof=1)
 
 #Make histograms
-histogram(X,attributeNames)
+histogram(X,attributeNames,y)
 
 #Make boxplots
 boxPlot(X,attributeNames)
