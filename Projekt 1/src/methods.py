@@ -130,3 +130,39 @@ def calculateSim(row, similarity_measure, X):
         print("Id: ",im_id)
         print("Similarity: ", im_sim)
         print(X[im_id])
+        
+def plot3D(X,y,classNames,attr1,attr2,attr3,attributeNames):
+    f = figure()
+    hold(True)
+    colors = ['blue', 'green']
+    ax = f.add_subplot(111, projection='3d')
+    for c in range(C):
+        class_mask = (y==c).A.ravel()
+        ax.scatter(X[class_mask,attr1].A, X[class_mask,attr2].A, X[class_mask,attr3].A, c=colors[c])    
+    ax.set_xlabel(attributeNames[attr1])
+    ax.set_ylabel(attributeNames[attr2])
+    ax.set_zlabel(attributeNames[attr3])
+    legend(attributeNames)
+    show()
+    
+def plot3DPrincipalCompoents(X,y,classNames,prin1,prin2,prin3,attributeNames):
+    C = len(classNames)    
+    Y = X - np.ones((len(X),1))*X.mean(0)
+    
+    U,S,V = linalg.svd(Y,full_matrices=False)
+    V = mat(V).T
+    
+    Z = Y * V
+
+    f = figure()
+    hold(True)
+    colors = ['blue', 'green']
+    ax = f.add_subplot(111, projection='3d')
+    for c in range(C):
+        class_mask = (y==c).A.ravel()
+        ax.scatter(Z[class_mask,prin1].A, Z[class_mask,prin2].A, Z[class_mask,prin3].A, c=colors[c])    
+    ax.set_xlabel('PC{0}'.format(prin1+1))
+    ax.set_ylabel('PC{0}'.format(prin2+1))
+    ax.set_zlabel('PC{0}'.format(prin3+1))
+    legend(attributeNames)
+    show()    
