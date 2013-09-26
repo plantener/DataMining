@@ -8,44 +8,42 @@ Created on Wed Sep 25 12:50:50 2013
 import numpy as np
 from pylab import *
 
+#Converts Present and Absent into numbers.
+def convert(s):
+    if s == "Present":
+        return 1
+    else:
+        return 0
+
+#Converting for legend
+def convertToWord(n):
+   if (n < 0.5):
+        return "Negative CHD"
+   else:
+        return "Positive CHD"
+
 #Create boxplots of the nine attributes 
 def boxPlot(X,attributeNames):
     fig = figure()
-    fig.subplots_adjust(hspace=.5)
-    title('Boxplot of the attributes')
+    fig.subplots_adjust(hspace=.3)
     for i in range(0,9):
         subplot(3,3,i+1)
         boxplot(X[:,i])
+        xticks(range(0),attributeNames)
         xlabel(attributeNames[i])
-        #ylabel('cm')
+    suptitle("Boxplot of the attributes")
     show()
-    
-#def boxPlot3(X, attr):
-#    figure()
-#    boxplot(X[:,attr])  
-#    xticks(range(1),[attributeNames[attr]])
-#    xlabel(attributeNames[attr])
-#    #ylabel('cm')
-#    show()
-#    
-#
-#def boxPlot(X):
-#    figure()
-#    boxplot(X)
-#    xticks(range(1,10),attributeNames)
-#    ylabel('Standardized')
-#    title('Boxplot of all attributes.')
-#    show()
 
 #Create histograms for the nine attributes
 def histogram(X,attributeNames):
     attr = 9
     fig = figure()
-    fig.subplots_adjust(hspace=.5)
+    fig.subplots_adjust(hspace=.3)
     for i in range(attr):
         subplot(3,3,i+1)
-        hist(X[:,i],bins=17)
+        hist(X[:,i],bins=15)
         xlabel(attributeNames[i])
+    suptitle("Histogram of the attributes")
     show()
     
 
@@ -54,11 +52,12 @@ def plotTwoAttributes(attr1, attr2, X, y, classNames, attributeNames):
     C = len(classNames)
     f = figure()
     f.hold()
-    title('Heart Disease')
+    s = attributeNames[attr1] + " vs. " + attributeNames[attr2]
+    title(s)
     for c in range(C):
         class_mask = y.A.ravel()==c
         plot(X[class_mask,attr1], X[class_mask,attr2], 'o')
-    legend(classNames)
+    legend([convertToWord(i) for i in classNames])
     xlabel(attributeNames[attr1])
     ylabel(attributeNames[attr2])
     show()
@@ -93,7 +92,7 @@ def plotPrincipalComponents(principal1, principal2, X, y, classNames):
     # Plot PCA of the data
     f = figure()
     f.hold()
-    title('Heart Disease data: PCA')
+    title('Data projected onto Principal Components')
     for c in range(C):
         class_mask = y.A.ravel()==c
         plot(Z[class_mask,principal1], Z[class_mask,principal2], 'o')

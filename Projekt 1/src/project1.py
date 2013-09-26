@@ -10,17 +10,11 @@ import xlrd
 from pylab import *
 from scipy.stats import zscore
 from methods import *
-
-def convert(s):
-    if s == "Present":
-        return 1
-    else:
-        return 0
         
 
 
 #Open data
-doc = xlrd.open_workbook('..\\..\\dataset.xlsx').sheet_by_index(0)
+doc = xlrd.open_workbook('..\\..\\dataset.xls').sheet_by_index(0)
 
 #Get Attributes
 attributeNames = doc.row_values(0,1,10)
