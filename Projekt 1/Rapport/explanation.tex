@@ -1,23 +1,31 @@
 \section{Explanation}
 
+In this section we will explain all of the different attributes, our date set contains, as well as how we came to the different types and whether they are discrete or continues attributes. We will also get to subject of data issues e.i. missing and corrupted data.
+
+\subsection{Attributes}
+
 \paragraph{Row} This field is describing the id of the subject. This attribute is discrete and nominal.
 
-\paragraph{systolic blood pressure} (Discrete/Continuous ??) / Ratio
+\paragraph{SBP} SBP is Systolic blood pressure which is a measurement of sort, we came to the type \textbf{interval} because it doesn't originate at zero. Since we came to interval then the attribute most likely would be \textbf{continues}.
 
-\paragraph{tobacco} Continuous / Ratio
+\paragraph{Tobacco} Tobacco is measured as the cumulative consumption in kg, and since that the starting point weight is at 0 it would make the type \textbf{ratio}. Since it is represented as a float it is a \textbf{continues} attribute.
 
-\paragraph{low densiity lipoprotein cholesterol} Continuous / Ratio
+\paragraph{LDL} LDL (Low density lipoprotein cholesterol) is a \textbf{continuous} attribute, with a \textbf{ratio} type since zero is the absence of LDL.
 
-\paragraph{adiposity} Continuous / Ratio
+\paragraph{Adiposity} \textbf{continuous} / \textbf{ratio}
 
-\paragraph{famhist} Discrete / Nominal
+\paragraph{Famhist} Family history is the attribute that tells if heart disease is present or absent in the persons family, this also make attribute \textbf{discrete} because it is represented as a set of words. The type is \textbf{nominal} because it can either be there or not there.
 
-\paragraph{typea} Discrete / Ordinal
+\paragraph{Type-a} Type-a is test score which make it a \textbf{discrete} attribute since it is a countable value. Because a test score usually is a form of grading system if would make the type \textbf{ordinal}.
 
-\paragraph{obesity} Continuous / Ratio
+\paragraph{Obesity} \textbf{continuous} / \textbf{ratio}
 
-\paragraph{alcohol} Continuous / Ratio
+\paragraph{Alcohol} Alcohol is measured as the current alcohol consumption, which we believe is measured pure alcohol liter for a year. Since it is represented as a float it is most likely a \textbf{continuous} attribute, and because $0l$ of pure alcohol is a absence of what is measured which would make the type \textbf{ratio}.
 
-\paragraph{age} Discrete / Ratio
+\paragraph{Age} Age is the age of the subject. Age is usually a continues attribute, but in this data set it is treated like a \textbf{discrete} attribute. Age has a starting point at 0 which would make it absence of a age and that would make the attribute type \textbf{ratio}.
 
-\paragraph{response, coronary heart disease} Discrete / Nominal
+\paragraph{CHD} CHD stands for coronary heart disease and is a sort of boolean attribute that says if the subject has a CHD. Since it is a boolean it makes it a \textbf{discrete} attribute and the type would be \textbf{nominal}.
+
+\subsection{Data issues}
+
+As of missing data, we don't really have any corrupted or missing data in any of our data entries, but we do have a single missing data entry 262
