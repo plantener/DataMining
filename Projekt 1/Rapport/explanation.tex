@@ -6,26 +6,27 @@ In this section we will explain all of the different attributes, our date set co
 
 \paragraph{Row} This field is describing the id of the subject. This attribute is discrete and nominal.
 
-\paragraph{SBP} SBP is Systolic blood pressure which is a measurement of sort, we came to the type \textbf{interval} because it doesn't originate at zero. Since we came to interval then the attribute most likely would be \textbf{continues}.
+\paragraph{SBP} SBP is Systolic blood pressure which is a measurement of the subjects blood pressure, and has the unit mmHg. The desired SBP lies in the range 90-119, but it is plausible to go below or above, but that is when there usually is heart problems.
+We came to the type \textbf{interval} because it doesn't originate at zero. Since we came to interval then the attribute most likely would be \textbf{continues}.
 
-\paragraph{Tobacco} Tobacco is measured as the cumulative consumption in kg, and since that the starting point weight is at 0 it would make the type \textbf{ratio}. Since it is represented as a float it is a \textbf{continues} attribute.
+\paragraph{Tobacco} Tobacco is measured as the cumulative consumption in kg, and since that the starting point weight is at 0 it would make the attribute type \textbf{ratio}. Since it is represented as a float it is a \textbf{continues} attribute.
 
-\paragraph{LDL} LDL (Low density lipoprotein cholesterol) is a \textbf{continuous} attribute, with a \textbf{ratio} type since zero is the absence of LDL.
+\paragraph{LDL} LDL stands for Low density lipoprotein cholesterol and is measured in mmol/L. The regular LDL numbers lies around 4.9 mmol/L. It is a \textbf{continuous} attribute, with a \textbf{ratio} type since zero is the absence of LDL and is  represented as a float.
 
-\paragraph{Adiposity} \textbf{continuous} / \textbf{ratio}
+\paragraph{Adiposity} Adiposity is a sort of indexing for a persons body mass, where this is taken from the waist. It is a \textbf{continuous} attribute since it has floating point attributes, and it takes on \textbf{ratio} as type.
 
-\paragraph{Famhist} Family history is the attribute that tells if heart disease is present or absent in the persons family, this also make attribute \textbf{discrete} because it is represented as a set of words. The type is \textbf{nominal} because it can either be there or not there.
+\paragraph{Famhist} Family history is the attribute that tells if heart disease is present or absent in the persons family, this also make attribute \textbf{discrete} because it is represented as a set of words in the dataset. The type is \textbf{nominal} because it can either be there or not there.
 
-\paragraph{Type-a} Type-a is test score which make it a \textbf{discrete} attribute since it is a countable value. Because a test score usually is a form of grading system if would make the type \textbf{ordinal}.
+\paragraph{Type-a} Type-a is test score which make it a \textbf{discrete} attribute since it is a countable value from 0-100. Because a test score usually is a form of grading system, which would make the type \textbf{ordinal}.
 
-\paragraph{Obesity} \textbf{continuous} / \textbf{ratio}
+\paragraph{Obesity} Obesity is like adiposity a indexing for a persons body mass, we better know this one as BMI. Where adiposity uses the waist to find the index, obesity uses the height. It is as adiposity a \textbf{continuous} attribute with the \textbf{ratio} type.
 
-\paragraph{Alcohol} Alcohol is measured as the current alcohol consumption, which we believe is measured pure alcohol liter for a year. Since it is represented as a float it is most likely a \textbf{continuous} attribute, and because $0l$ of pure alcohol is a absence of what is measured which would make the type \textbf{ratio}.
+\paragraph{Alcohol} Alcohol is measured as the current alcohol consumption, which we believe is measured as pure alcohol liter consumption over a year. Since it is represented as a float it is most likely a \textbf{continuous} attribute, and because 0 l of pure alcohol is a absence of what is measured which would make the type \textbf{ratio}.
 
-\paragraph{Age} Age is the age of the subject. Age is usually a continues attribute, but in this data set it is treated like a \textbf{discrete} attribute. Age has a starting point at 0 which would make it absence of a age and that would make the attribute type \textbf{ratio}.
+\paragraph{Age} Age is the age of the subject. It is usually handled as a continues attribute, but in this data set it is treated like a \textbf{discrete} attribute. Age has a starting point at 0 which would make it absence of a age and that would make the attribute type \textbf{ratio}.
 
-\paragraph{CHD} CHD stands for coronary heart disease and is a sort of boolean attribute that says if the subject has a CHD. Since it is a boolean it makes it a \textbf{discrete} attribute and the type would be \textbf{nominal}.
+\paragraph{CHD} CHD stands for coronary heart disease and is a binary attribute that says if the subject has CHD. Since it is binary it makes the attribute \textbf{discrete} and the type would be \textbf{nominal}.
 
 \subsection{Data issues}
 
-As of missing data, we don't really have any corrupted or missing data in any of our data entries, but we do have a single missing data entry 262
+As of missing data, we don't really have any corrupted or missing data in any of our data entries, but we do have a single missing data entry at 262. Since it is a entire entry that is missing it wont do any harm to our data models. We will
