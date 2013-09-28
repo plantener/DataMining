@@ -9,6 +9,11 @@
 \cfoot{}
 \rfoot{\thepage}
 
+\let\oldlongtable\longtable
+\let\endoldlongtable\endlongtable
+\renewenvironment{longtable}{\rowcolors{0}{white}{myColor}\oldlongtable} {
+\endoldlongtable}
+
 \begin{document}
 %\newtheorem{korollar}{Korollar}[section]
 %\newtheorem{saetning}{Sætning}[section]

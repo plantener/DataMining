@@ -1,6 +1,6 @@
-\section{Principal Component Analysis}
+\subsection{Principal Component Analysis}
 
-\subsection{Variance explained by Principal Components}
+\subsubsection{Variance explained by Principal Components}
 
 In Figure \ref{VariancePCA}, we can see how the variance is explained by the principal component. We can see that the first principal component explains 32\% of the variance, while the second component explains 13\% of the variance. This means that we can explain 45\% of the total variance by using the two first principal components. Furthermore one can see from the graph that we need 5 principal components in order to explain 75\% of the variance, and at least 7 components to explain 90\% of the variance.
 
@@ -12,22 +12,22 @@ In Figure \ref{VariancePCA}, we can see how the variance is explained by the pri
 
 \subsubsection{Direction of the principal components}
 
-Below in Figure \ref{PCADirections}, we can see the directions of the principal components. The most interesting components are the first ones, as these describe the biggest part of the variance. Looking at the first principal component, we see that obesity, adiposity and age are very relevant, while the second principal component is very much describing alcohol and tobacco. We see that all the attributes effect the principal components, meaning they all have impact, however some attributes have larger impact than others. Eg. typea and family history are not heavily described by the first two principal components.
+Below in Figure \ref{PCADirections}, we can see the directions of the principal components. The most interesting components are the first ones, as these describe the biggest part of the variance. Looking at the first principal component, we see that obesity, adiposity and age are very relevant, while the second principal component is mostly described by alcohol and tobacco. We see that all the attributes effect the principal components, meaning they all have impact, however some attributes have larger impact than others. Eg. typea and family history are not heavily described by the first two principal components.
 
 \begin{figure}[H]
-\begin{tabular}{ | l | l | l | l | l | l | l | l | l | l | }
-\hline
-Attributes & sbp & tobacco & ldl & adiposity & famhist & typea & obesity & alcohol & age \\ \hline
-PC1 & -0.3238 & -0.3018 &  -0.3339 &  -0.5163 & -0.1951 & 0.0183 & -0.4015 & -0.1214 & -0.4601 \\ \hline
-PC2 & 0.2383 &  0.4585 & -0.3639 &  -0.1876 &  0.0013 &   -0.2822 & -0.3919 & 0.5430 & 0.1930 \\ \hline
-PC3 & -0.1251 & 0.0682 &  0.0031 & -0.0819 &  0.3384 & 0.7923 & 0.0402 &  0.4591 & -0.1353 \\ \hline
-PC4 & -0.1964 & 0.0054 & 0.1403 & -0.1350 &  0.8334 & -0.2098 & -0.3055 & -0.2585 &  0.1573 \\ \hline
-PC5 & 0.2149 & -0.6236 & -0.2422 &  0.1189 &  0.3054 & -0.3210 & 0.2834 &  0.4190 &  -0.1999 \\ \hline
-PC6 & -0.7814 &  0.1631 &   0.2153 &  0.1309 & -0.0857 & -0.3319 & 0.1736 & 0.3793 & -0.0887 \\ \hline
-PC7 & -0.2681 &  0.1929 & -0.7882 &  0.1957 &  0.1285 &  0.0778 & 0.3333 & -0.2768 &  0.1453 \\ \hline
-PC8 & 0.2354 &  0.4889 &  0.0703 & -0.1731 & 0.1866 & -0.1655 &   0.3387 & -0.1251 & -0.6914 \\ \hline
-PC9 & -0.0141 & -0.0478 & 0.0719 & -0.7575 & -0.0288 & -0.0406 & 0.5040 & 0.0331 & 0.4012 \\ \hline
-\end{tabular}
+\begin{longtable}{ l c c c c c c c c c}
+ \hline
+ \emph{Attributes} &  \emph{sbp} &  \emph{tobacco} &  \emph{ldl} & \emph{adiposity} &  \emph{famhist} &  \emph{typea} &  \emph{obesity} &  \emph{alcohol} &  \emph{age} \\ \hline
+PC1 & -0.3238 & -0.3018 &  -0.3339 &  -0.5163 & -0.1951 & 0.0183 & -0.4015 & -0.1214 & -0.4601 \\ 
+PC2 & 0.2383 &  0.4585 & -0.3639 &  -0.1876 &  0.0013 &   -0.2822 & -0.3919 & 0.5430 & 0.1930 \\ 
+PC3 & -0.1251 & 0.0682 &  0.0031 & -0.0819 &  0.3384 & 0.7923 & 0.0402 &  0.4591 & -0.1353 \\ 
+PC4 & -0.1964 & 0.0054 & 0.1403 & -0.1350 &  0.8334 & -0.2098 & -0.3055 & -0.2585 &  0.1573 \\ 
+PC5 & 0.2149 & -0.6236 & -0.2422 &  0.1189 &  0.3054 & -0.3210 & 0.2834 &  0.4190 &  -0.1999 \\ 
+PC6 & -0.7814 &  0.1631 &   0.2153 &  0.1309 & -0.0857 & -0.3319 & 0.1736 & 0.3793 & -0.0887 \\ 
+PC7 & -0.2681 &  0.1929 & -0.7882 &  0.1957 &  0.1285 &  0.0778 & 0.3333 & -0.2768 &  0.1453 \\ 
+PC8 & 0.2354 &  0.4889 &  0.0703 & -0.1731 & 0.1866 & -0.1655 &   0.3387 & -0.1251 & -0.6914 \\ 
+PC9 & -0.0141 & -0.0478 & 0.0719 & -0.7575 & -0.0288 & -0.0406 & 0.5040 & 0.0331 & 0.4012 \\ \hline  
+\end{longtable}
 \caption{Describing the directions of the principal components.}
 \label{PCADirections}
 \end{figure}
