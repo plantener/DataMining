@@ -7,6 +7,7 @@ Created on Wed Sep 25 12:50:50 2013
 
 import numpy as np
 from pylab import *
+from mpl_toolkits.mplot3d import Axes3D
 
 #Converts Present and Absent into numbers.
 def convert(s):
@@ -21,6 +22,22 @@ def convertToWord(n):
         return "Negative CHD"
    else:
         return "Positive CHD"
+        
+        
+#Calculate mean and variance and range
+def calculateStatistics(X,noAttributes):
+    #res = np.matrix
+    for i in range(noAttributes):
+        temp = []
+        x = X[:,i]
+        #print(x)
+        temp.append(x.mean())
+        temp.append(x.var(ddof=1))
+        #temp.append(np.median(x))
+        temp.append(x.max())
+        temp.append(x.min())
+        print(temp)
+    #return res
 
 #Create boxplots of the nine attributes 
 def boxPlot(X,attributeNames):
@@ -76,7 +93,7 @@ def computePrincipalComponents(X,s):
     
     figure()
     plot(range(1,len(rho)+1),rho,'o-')
-    title('Variance explained by principal components: '+s);
+    title('Variance explained by principal components');
     xlabel('Principal component');
     ylabel('Variance explained');
     show()
@@ -99,19 +116,19 @@ def plotPrincipalComponents(principal1, principal2, X, y, classNames):
     for c in range(C):
         class_mask = y.A.ravel()==c
         plot(Z[class_mask,principal1], Z[class_mask,principal2], 'o')
-    legend(classNames)
+    legend([convertToWord(i) for i in classNames])
     xlabel('PC{0}'.format(principal1+1))
     ylabel('PC{0}'.format(principal2+1))
     show()
     
 # Gets the direction of a certain principal component
-def getPCADirection(pca, X):
+def getPCADirections(X):
     Y = X - np.ones((len(X),1))*X.mean(0)
     U,S,V = linalg.svd(Y,full_matrices=False)
     
-    print('Calculating direction of principal component (no ',(pca+1))
+    print('Calculating direction of principal components: ')
     
-    return V[pca]
+    return V
     
     
 #Calculate similarities
@@ -130,7 +147,8 @@ def calculateSim(row, similarity_measure, X):
         print("Id: ",im_id)
         print("Similarity: ", im_sim)
         print(X[im_id])
-        
+  
+#Plot three attributes against each other      
 def plot3D(X,y,classNames,attr1,attr2,attr3,attributeNames):
     f = figure()
     hold(True)
@@ -143,9 +161,11 @@ def plot3D(X,y,classNames,attr1,attr2,attr3,attributeNames):
     ax.set_ylabel(attributeNames[attr2])
     ax.set_zlabel(attributeNames[attr3])
     legend(attributeNames)
+    title("3D plot of attributes")
     show()
     
-def plot3DPrincipalCompoents(X,y,classNames,prin1,prin2,prin3,attributeNames):
+#Plot principal components in 3D-space
+def plot3DPrincipalComponents(X,y,classNames,prin1,prin2,prin3,attributeNames):
     C = len(classNames)    
     Y = X - np.ones((len(X),1))*X.mean(0)
     
@@ -164,5 +184,6 @@ def plot3DPrincipalCompoents(X,y,classNames,prin1,prin2,prin3,attributeNames):
     ax.set_xlabel('PC{0}'.format(prin1+1))
     ax.set_ylabel('PC{0}'.format(prin2+1))
     ax.set_zlabel('PC{0}'.format(prin3+1))
+    title("3D plot of principal components")
     legend(attributeNames)
     show()    
