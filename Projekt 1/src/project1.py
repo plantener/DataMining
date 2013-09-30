@@ -17,7 +17,7 @@ positive = 160
 noAttributes = 9
 
 #Open data
-doc = xlrd.open_workbook('..\\..\\dataset.xls').sheet_by_index(0)
+doc = xlrd.open_workbook('dataset.xls').sheet_by_index(0)
 
 #Get Attributes
 attributeNames = doc.row_values(0,1,noAttributes+1)
@@ -69,7 +69,7 @@ histogram(X,attributeNames,y)
 boxPlot(X,attributeNames)
 
 #Plot alcohol and tobacco
-plotTwoAttributes(5,7,X,y,classNames,attributeNames)
+plotTwoAttributes(1,7,X,y,classNames,attributeNames)
 plotTwoAttributes(5,7,X,y,classNames,attributeNames)
 plotTwoAttributes(3,6,X,y,classNames,attributeNames)
 
