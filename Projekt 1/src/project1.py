@@ -69,7 +69,7 @@ histogram(X,attributeNames,y)
 boxPlot(X,attributeNames)
 
 #Plot alcohol and tobacco
-plotTwoAttributes(1,7,X,y,classNames,attributeNames)
+plotTwoAttributes(5,7,X,y,classNames,attributeNames)
 plotTwoAttributes(5,7,X,y,classNames,attributeNames)
 plotTwoAttributes(3,6,X,y,classNames,attributeNames)
 
