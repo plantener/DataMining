@@ -1,9 +1,9 @@
-\section{Histogram}
+\subsection{Histogram}
 In this section the histograms of the attributes will be covered. In the next section the boxplots for the attributes are explained. The attributes will be explained in details there.
 \begin{figure}[H]
 \centering
 \includegraphics[width=12cm, keepaspectratio=true]{pictures/histogram.png}
-\caption{\footnotesize Histograms}
+\caption{\footnotesize Histograms ?? (Lille figure -> skal zoome ind)}
 \label{histogram}
 \end{figure}
 Several of our attributes seem to be close to normally distributed. These are:
@@ -32,6 +32,16 @@ Those attributes not distributed normally:
 
 \paragraph{Tobacco} indicates that most persons in the dataset does not smoke.
 \paragraph{Famhist} Is a binary attribute. Showing a few more people in the dataset does not have any family members with CHD, than who does have family history with CHD.
-\paragraph{Alcohol} looks a lot like tobacco. How closely related they are will be shown later.
+\paragraph{Alcohol} looks a lot like tobacco. How closely related they are will be considered later.
 \paragraph{Age} is ranging from 15 to 65, and shows there are more data from people older than 40.
 \paragraph{CHD} is quite important, because this shows us that there are around 300 cases of people \textit{not} having the CHD disease, while only 160 \textit{does} have the disease. This does have an influence in the scatterplots explained later.
+
+\subsubsection{Statistics of the attributes}
+
+Below in Figure \ref{statistics}, one can see the statistics of the attributes.
+
+\begin{figure}[H]
+\input{statistics}
+\caption{Showing the mean, variance, maximum and minimum for the attributes.}
+\label{statistics}
+\end{figure}

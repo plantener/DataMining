@@ -3,39 +3,38 @@
 Below in Figure \ref{correlationTable}, we see how the attributes are related to each other. For instance, we can see that obesity is highly related to adiposity, however the most interesting thing is to see how the attributes might have an impact on whether the subject has the disease or not. So the correlations to chd are the most interesting to look at.
 
 \begin{figure}[H]
-\begin{tabular}{ | l | l | l | l | l | l | l | l | l | l | l | }
+\begin{longtable}{ l c c c c c c c c c c}
   \hline                        
-  Correlation & sbp & tobacco & ldl & adiposity & famhist & typea & obesity & alcohol & age & chd	\\ \hline
+  \emph{Correlation} &  \emph{sbp} &  \emph{tobacco} &  \emph{ldl} &  \emph{adiposity} &  \emph{famhist} &  \emph{typea} &  \emph{obesity} &  \emph{alcohol} &  \emph{age} &  \emph{chd}	\\ \hline
 sbp & 1 & 0.2122 & 0.1583 & 0.3565 &  0.0856 & -0.0575 &
-   0.2381 & 0.1401 &  0.3888 & 0.1924 \\ \hline
+   0.2381 & 0.1401 &  0.3888 & 0.1924 \\ 
    
  tobacco & 0.2122 & 1 & 0.1589 &  0.2866 &  0.0886 & -0.0146 &
-   0.1245 &  0.2008 & 0.4503 &  0.2997 \\ \hline
+   0.1245 &  0.2008 & 0.4503 &  0.2997 \\ 
    
 ldl & 0.1583 & 0.1589 &  1 &          0.4404 &  0.1613 &  0.0440 &
-   0.3305 &  -0.0334 &   0.3118 & 0.2630 \\ \hline
+   0.3305 &  -0.0334 &   0.3118 & 0.2630 \\ 
 
 adiposity &  0.3565 & 0.2866 & 0.4404 & 1 &          0.1817 & -0.0431
- &  0.7166 &  0.1003 &  0.6260 & 0.2541 \\ \hline
+ &  0.7166 &  0.1003 &  0.6260 & 0.2541 \\ 
 
 famhist & 0.0856 & 0.0886 &  0.1614 &  0.1817 &  1      &    0.0448 &
-   0.1156 & 0.0805 &  0.2397 &  0.2724 \\ \hline
+   0.1156 & 0.0805 &  0.2397 &  0.2724 \\ 
 
 typea & -0.0575 & -0.0146 &  0.0440 & -0.0431 &  0.0448 &  1 &
-   0.0740 &   0.0395 & -0.1026 &  0.1032 \\ \hline
+   0.0740 &   0.0395 & -0.1026 &  0.1032 \\ 
 
 obesity & 0.2381 &  0.1245 &  0.3305 &  0.7166 &  0.1156 &  0.0740 &
-   1 &          0.0516 &  0.2918 &  0.1001 \\ \hline
+   1 &          0.0516 &  0.2918 &  0.1001 \\ 
 
 alcohol & 0.1401 & 0.2008 & -0.0334 &   0.1003 &  0.0805 &  0.0395 &
-   0.0516 &  1 &          0.1011 &  0.0625 \\ \hline
+   0.0516 &  1 &          0.1011 &  0.0625 \\ 
 
 age & 0.3888 &  0.4503 &  0.3118 &  0.6260 & 0.2397 & -0.1026 &
-   0.2918 &  0.1011 &  1     &     0.3730  \\ \hline
-  
+   0.2918 &  0.1011 &  1     &     0.3730  \\ 
   
 chd &  0.1924 & 0.2997 & 0.2631 & 0.2541 & 0.2723 & 0.1032 & 0.1001 & 0.0625 & 0.3730 & 1 \\ \hline
-\end{tabular}
+\end{longtable}
 \caption{Table showing how the attributes are correlated to whether subjects have positive or negative chd.}
 \label{correlationTable}
 \end{figure}
