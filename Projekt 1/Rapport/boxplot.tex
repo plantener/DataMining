@@ -4,8 +4,9 @@ In the following section we will discuss what the boxplots of the attributes tel
 Below is a figure representing the boxplot for the referenced attribute.
 \begin{figure}[H]
 \centering
-\includegraphics[width=12cm, keepaspectratio=true]{pictures/boxplot.png}
+\includegraphics[width=9cm, keepaspectratio=true]{pictures/boxplot.png}
 \caption{\footnotesize Boxplots}
+\vspace{-.5cm}
 \label{boxplot}
 \end{figure}
 \paragraph{SBP - Systolic Blood Pressure} shows us that most of the measured blood pressure is close to 130 mmHg. However, we see that there is some outliers in the dataset. This raises some suspicion to the readings. According to other sources \footnote{http://en.wikipedia.org/wiki/Blood\_pressure}, when the blood pressure rises above 180 mmHg for a longer period of time, organs will start to fail. This could indicate that some of the data are incorrect.
@@ -16,7 +17,7 @@ In total there are 15 outliers in this attribute, for comparison the size of the
 \paragraph{ldl - low density lipoprotein cholesterol} is measured in mmol/L. Anything above 4.9 is considered a high cholesterol \footnote{http://www.mayoclinic.com/health/cholesterol-levels/CL00001}. This seems to be consistent with the data from the boxplot. But again there are some outliers, and it does seem odd to have an ldl value more than tripple what is considered to be high.
 Here 14 of our 462 data values are outliers.%In total there are 14/462 outliers in this attribute.
 
-\paragraph{Adiposity - BAI} is an index number to group people by their size, much like BMI. The boxplot shows no outliers, and the average is consistent with what is considered to be normal. \footnote{http://easycalculation.com/health/body-adiposity-index.php}
+\paragraph{Adiposity} is an index number to group people by their size, much like BMI. The boxplot shows no outliers, and the average is consistent with what is considered to be normal \footnote{http://easycalculation.com/health/body-adiposity-index.php}.
 
 \paragraph{Famhist} is a binary value, and does not tell us anything useful in a boxplot.%Off to the next attribute.
 

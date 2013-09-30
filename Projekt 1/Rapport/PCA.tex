@@ -5,7 +5,8 @@
 In Figure \ref{VariancePCA}, we can see how the variance is explained by the principal component. We can see that the first principal component explains 32\% of the variance, while the second component explains 13\% of the variance. This means that we can explain 45\% of the total variance by using the two first principal components. Furthermore one can see from the graph that we need 5 principal components in order to explain 75\% of the variance, and at least 7 components to explain 90\% of the variance.
 
 \begin{figure}[H]
-\includegraphics[scale=0.75]{pictures/PCAPosAndNeg.png}
+\centering
+\includegraphics[width=7cm, keepaspectratio=true]{pictures/PCAPosAndNeg.png}
 \caption{Showing how the variance is explained by the principal components.}
 \label{VariancePCA}
 \end{figure}
@@ -37,7 +38,8 @@ PC9 & -0.0141 & -0.0478 & 0.0719 & -0.7575 & -0.0288 & -0.0406 & 0.5040 & 0.0331
 We can see the data projected onto the first two principal components in Figure \ref{PCAProjected}. At first glance it is hard to see a pattern. However one can see that most of the sick people are located in a direction, where the first principal component is negative. By comparing to how the attributes are described in this component, as shown in Figure \ref{PCADirections}, we see that this principal component are pointing in the negative direction for all the attributes, except typea which is hardly described in this component. And since we have a lot of ill subjects in this negative direction of principal component 1, it indicates that these people have high values in these attributes. Meaning these subjects have a tendency to have high adiposity for instance. The data has been standardized for doing this principal component analysis, meaning that Figure \ref{PCAProjected} indicates that many of the ill subjects has values above the mean in most attributes.
 
 \begin{figure}[H]
-\includegraphics[scale=0.75]{pictures/projectedToPCA.png}
+\centering
+\includegraphics[width=7cm, keepaspectratio=true]{pictures/projectedToPCA.png}
 \caption{Projection of data onto first two principal components.}
 \label{PCAProjected}
 \end{figure}
