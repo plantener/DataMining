@@ -29,8 +29,8 @@ classDict = dict(zip(classNames,range(2)))
 
 y = np.mat([classDict[value] for value in classLabels]).T
 
-yPositive = np.mat([[1] for i in range(160)])
-yNegative = np.mat([[0] for i in range(463-160)])
+yPositive = np.mat([[1] for i in range(positive)])
+yNegative = np.mat([[0] for i in range(size-positive)])
 
 N = len(y)
 M = len(attributeNames)
@@ -85,10 +85,7 @@ print(getPCADirections(XStandardized))
         
 
 #Calculate correlation between attributes
-if chdAttr:
-    corrcoef = corrcoef(X.T)
-else:
-    corrcoef = corrcoef(X.T,y.T)
+corrcoef = corrcoef(X.T,y.T)
 
 print("How the attributes correlate:")
 print(corrcoef)
