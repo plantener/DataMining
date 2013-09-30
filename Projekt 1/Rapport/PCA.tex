@@ -1,8 +1,8 @@
-\subsection{Principal Component Analysis}
+\section{Principal Component Analysis}
 
 For doing the principal component analysis, the data have been standardized.
 
-\subsubsection{Variance explained by Principal Components}
+\subsection{Variance explained by Principal Components}
 
 In Figure \ref{VariancePCA}, we can see how the variance is explained by the principal component. We can see that the first principal component explains 32\% of the variance, while the second component explains 13\% of the variance. This means that we can explain 45\% of the total variance by using the two first principal components. Furthermore one can see from the graph that we need 5 principal components in order to explain 75\% of the variance, and at least 7 components to explain 90\% of the variance.
 
@@ -13,9 +13,9 @@ In Figure \ref{VariancePCA}, we can see how the variance is explained by the pri
 \label{VariancePCA}
 \end{figure}
 
-\subsubsection{Direction of the principal components}
+\subsection{Direction of the principal components}
 
-Below in Figure \ref{PCADirections}, we can see the directions of the principal components. The most interesting components are the first ones, as these describe the biggest part of the variance. Looking at the first principal component, we see that obesity, adiposity and age are very relevant, while the second principal component is mostly (??: Bad word to use?) described by alcohol and tobacco. We see that all the attributes effect the principal components, meaning they all have impact, however some attributes have larger impact than others. Eg. typea and family history are not heavily described by the first two principal components.
+Below in Figure \ref{PCADirections}, we can see the directions of the principal components. The most interesting components are the first ones, as these describe the biggest part of the variance. Looking at the first principal component, we see that obesity, adiposity and age are very relevant, while the most dominant attributes in the second principal component are alcohol and tobacco. We see that all the attributes effect the principal components, meaning they all have impact, however some attributes have larger impact than others. Eg. typea and family history are not heavily described by the first two principal components.
 
 \begin{figure}[H]
 \begin{longtable}{ l c c c c c c c c c}
@@ -35,7 +35,7 @@ PC9 & -0.0141 & -0.0478 & 0.0719 & -0.7575 & -0.0288 & -0.0406 & 0.5040 & 0.0331
 \label{PCADirections}
 \end{figure}
 
-\subsubsection{Projection of data onto Principal Components}
+\subsection{Projection of data onto Principal Components}
 
 We can see the data projected onto the first two principal components in Figure \ref{PCAProjected}. At first glance it is hard to see a pattern. However one can see that most of the sick people are located in a direction, where the first principal component is negative. By comparing to how the attributes are described in this component, as shown in Figure \ref{PCADirections}, we see that this principal component are pointing in the negative direction for all the attributes, except typea which is hardly described in this component. And since we have a lot of ill subjects in this negative direction of principal component 1, it indicates that these people have high values in these attributes. Meaning these subjects have a tendency to have high adiposity for instance. The data has been standardized for doing this principal component analysis, meaning that Figure \ref{PCAProjected} indicates that many of the ill subjects has values above the mean in most attributes.
 
