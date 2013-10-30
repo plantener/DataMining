@@ -105,7 +105,7 @@ print(X)
 
 #artificialNeuralNetwork(XStandardized,y,N,noAttributes)
 
-artificialNeuralNetworkByPC(XStandardized,y,N)
+#artificialNeuralNetworkByPC(XStandardized,y,N)
 
-
+decisionTree(X,y,attributeNames,classNames)
 

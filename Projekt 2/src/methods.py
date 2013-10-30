@@ -10,6 +10,7 @@ import sklearn.linear_model as lm
 from sklearn import cross_validation
 from toolbox_02450 import feature_selector_lr, bmplot
 import neurolab as nl
+from sklearn import tree
 
 def sortByChd(X,y):
     XPositive = X[y.A.ravel()==1,:]
@@ -305,3 +306,32 @@ def artificialNeuralNetworkByPC(X,y,N,K=4):
     
     
     show()
+    
+    
+def decisionTree(X,y,attributeNames,classNames):
+    # Fit regression tree classifier, Gini split criterion, pruning enabled
+    dtc = tree.DecisionTreeClassifier(criterion='gini', min_samples_split=100)
+    dtc = dtc.fit(X,y)
+    
+    # Export tree graph for visualization purposes:
+    # (note: you can use i.e. Graphviz application to visualize the file)
+    out = tree.export_graphviz(dtc, out_file='tree_gini_CHD_data.gvz', feature_names=attributeNames)
+    out.close()
+    
+    # Define a new data object (new type of wine) with the attributes given in the text
+    #x = np.array([138.33, 3.64, 4.74, 25.41, 0, 53.10, 26.04, 17.04, 42.82])
+    #x = np.array([138.33*2, 3.64*2, 4.74*2, 25.41*2, 1, 53.10*2, 26.04*2, 17.04*2, 42.82])
+    x = np.array([138.33, 3.64, 4.74, 25.41, 1, 20, 26.04, 17.04*1, 40])
+     
+    # Evaluate the classification tree for the new data object
+    x_class = dtc.predict(x)[0]
+    
+    # Print results
+    print '\nNew object attributes:'
+    for attr in attributeNames:
+        print attr[0]
+    print '\nClassification result:'
+    if classNames[x_class] > 0.5:
+        print "Positive"
+    else:
+        print "Negative"
