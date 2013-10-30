@@ -9,6 +9,7 @@ from pylab import *
 import sklearn.linear_model as lm
 from sklearn import cross_validation
 from toolbox_02450 import feature_selector_lr, bmplot
+import neurolab as nl
 
 def sortByChd(X,y):
     XPositive = X[y.A.ravel()==1,:]
@@ -24,7 +25,7 @@ def sortByChd(X,y):
     
     
     
-def linearRegression(X,y):
+def logisticRegression(X,y):
     # Fit logistic regression model
     model = lm.logistic.LogisticRegression()
     model = model.fit(X, y.A.ravel())
@@ -154,3 +155,153 @@ def forwardSelection(X,y,N,M,K,attributeNames):
     
     
     show()    
+
+
+def artificialNeuralNetwork(X,y,N,noAttributes,K=4):
+    # Parameters for neural network classifier
+    n_hidden_units = 1      # number of hidden units
+    n_train = 2             # number of networks trained in each k-fold
+    
+    # These parameters are usually adjusted to: (1) data specifics, (2) computational constraints
+    #learning_rate = 0.01    # rate of weights adaptation
+    learning_goal = 2.0     # stop criterion 1 (train mse to be reached)
+    max_epochs = 200        # stop criterion 2 (max epochs in training)
+    
+    # K-fold CrossValidation (4 folds here to speed up this example)
+    CV = cross_validation.KFold(N,K,shuffle=True)
+    
+    # Variable for classification error
+    errors = np.zeros(K)
+    error_hist = np.zeros((max_epochs,K))
+    bestnet = list()
+    k=0
+    for train_index, test_index in CV:
+        print('\nCrossvalidation fold: {0}/{1}'.format(k+1,K))    
+        
+        # extract training and test set for current CV fold
+        X_train = X[train_index,:]
+        y_train = y[train_index,:]
+        X_test = X[test_index,:]
+        y_test = y[test_index,:]
+        
+        best_train_error = 1e100
+        for i in range(n_train):
+            # Create randomly initialized network with 2 layers
+            ann = nl.net.newff([[0, 1]]*noAttributes, [n_hidden_units, 1], [nl.trans.LogSig(),nl.trans.LogSig()])
+            # train network
+            train_error = ann.train(X_train, y_train, goal=learning_goal, epochs=max_epochs, show=round(max_epochs/8))
+            if train_error[-1]<best_train_error:
+                bestnet.append(ann)
+                best_train_error = train_error[-1]
+                error_hist[range(len(train_error)),k] = train_error
+        
+        y_est = bestnet[k].sim(X_test)
+        y_est = (y_est>.5).astype(int)
+        errors[k] = (y_est!=y_test).sum().astype(float)/y_test.shape[0]
+        k+=1
+        
+    
+    # Print the average classification error rate
+    print('Error rate: {0}%'.format(100*mean(errors)))
+    
+    # Display exemplary networks learning curve (best network of each fold)
+    figure(2); hold(True)
+    bn_id = argmax(error_hist[-1,:])
+    error_hist[error_hist==0] = learning_goal
+    for bn_id in range(K):
+        plot(error_hist[:,bn_id]); xlabel('epoch'); ylabel('train error (mse)'); title('Learning curve (best for each CV fold)')
+    
+    plot(range(max_epochs), [learning_goal]*max_epochs, '-.')
+    
+    
+    show()
+
+
+def artificialNeuralNetworkByPC(X,y,N,K=4):
+    
+    Y = X - np.ones((len(X),1))*X.mean(0)
+    
+    U,S,V = linalg.svd(Y,full_matrices=False)
+    
+    U = U[:,0:2]
+    
+    # Parameters for neural network classifier
+    n_hidden_units = 1      # number of hidden units
+    n_train = 2             # number of networks trained in each k-fold
+    
+    # These parameters are usually adjusted to: (1) data specifics, (2) computational constraints
+    learning_goal = 2.0     # stop criterion 1 (train mse to be reached)
+    max_epochs = 200        # stop criterion 2 (max epochs in training)
+    
+    # K-fold CrossValidation (4 folds here to speed up this example)
+    CV = cross_validation.KFold(N,K,shuffle=True)
+    
+    # Variable for classification error
+    errors = np.zeros(K)
+    error_hist = np.zeros((max_epochs,K))
+    bestnet = list()
+    k=0
+    for train_index, test_index in CV:
+        print('\nCrossvalidation fold: {0}/{1}'.format(k+1,K))    
+        
+        # extract training and test set for current CV fold
+        X_train = U[train_index,:]
+        y_train = y[train_index,:]
+        X_test = U[test_index,:]
+        y_test = y[test_index,:]
+        
+        best_train_error = 1e100
+        for i in range(n_train):
+            # Create randomly initialized network with 2 layers
+            ann = nl.net.newff([[0, 1], [0, 1]], [n_hidden_units, 1], [nl.trans.LogSig(),nl.trans.LogSig()])
+            # train network
+            train_error = ann.train(X_train, y_train, goal=learning_goal, epochs=max_epochs, show=round(max_epochs/8))
+            if train_error[-1]<best_train_error:
+                bestnet.append(ann)
+                best_train_error = train_error[-1]
+                error_hist[range(len(train_error)),k] = train_error
+        
+        y_est = bestnet[k].sim(X_test)
+        y_est = (y_est>.5).astype(int)
+        errors[k] = (y_est!=y_test).sum().astype(float)/y_test.shape[0]
+        k+=1
+        
+    
+    # Print the average classification error rate
+    print('Error rate: {0}%'.format(100*mean(errors)))
+    
+    
+    # Display the decision boundary for the several crossvalidation folds.
+    # (create grid of points, compute network output for each point, color-code and plot).
+    grid_range = [-0.25, 0.25, -0.25, 0.25]; delta = 0.001; levels = 100
+    a = arange(grid_range[0],grid_range[1],delta)
+    b = arange(grid_range[2],grid_range[3],delta)
+    A, B = meshgrid(a, b)
+    values = np.zeros(A.shape)
+    
+    figure(1,figsize=(18,9)); hold(True)
+    for k in range(K):
+        subplot(2,2,k+1)
+        cmask = (y==0).A.ravel(); plot(U[cmask,0], U[cmask,1],'.r')
+        cmask = (y==1).A.ravel(); plot(U[cmask,0], U[cmask,1],'.b')
+        title('Model prediction and decision boundary (kfold={0})'.format(k+1))
+        xlabel('PC 1'); ylabel('PC 2');
+        for i in range(len(a)):
+            for j in range(len(b)):
+                values[i,j] = bestnet[k].sim( np.mat([a[i],b[j]]) )[0,0]
+        contour(A, B, values, levels=[.5], colors=['k'], linestyles='dashed')
+        contourf(A, B, values, levels=linspace(values.min(),values.max(),levels), cmap=cm.RdBu)
+        if k==0: colorbar(); legend(['Class A (y=0)', 'Class B (y=1)'])
+    
+    
+    # Display exemplary networks learning curve (best network of each fold)
+    figure(2); hold(True)
+    bn_id = argmax(error_hist[-1,:])
+    error_hist[error_hist==0] = learning_goal
+    for bn_id in range(K):
+        plot(error_hist[:,bn_id]); xlabel('epoch'); ylabel('train error (mse)'); title('Learning curve (best for each CV fold)')
+    
+    plot(range(max_epochs), [learning_goal]*max_epochs, '-.')
+    
+    
+    show()

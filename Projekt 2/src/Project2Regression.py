@@ -11,6 +11,8 @@ import xlrd
 import sklearn.linear_model as lm
 from pylab import *
 from methods import *
+from scipy.stats import zscore
+import scipy
 
 #Converts Present and Absent into numbers.
 def convert(s):
@@ -83,7 +85,7 @@ print(X)
 #linearRegression(X,y)
 
 
-forwardSelection(X,y,N,M,5,attributeNames)
+#forwardSelection(X,y,N,M,5,attributeNames)
 
 #forwardSelection(XStandardized,y,N,M,5,attributeNames)
 
@@ -99,7 +101,11 @@ forwardSelection(X,y,N,M,5,attributeNames)
 #X = scipy.delete(X,1,1) # Tobacco
 #X = scipy.delete(X,0,1) # SBP
 
-linearRegression(X,y)
+#linearRegression(X,y)
+
+#artificialNeuralNetwork(XStandardized,y,N,noAttributes)
+
+artificialNeuralNetworkByPC(XStandardized,y,N)
 
 
 
