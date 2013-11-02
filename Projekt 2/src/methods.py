@@ -12,8 +12,17 @@ from toolbox_02450 import feature_selector_lr, bmplot
 import neurolab as nl
 from sklearn import tree
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import confusion_matrix
 
 
+
+#Converting for legend
+def convertToWord(n):
+   if (n < 0.5):
+        return "Negative CHD"
+   else:
+        return "Positive CHD"
+        
 def sortByChd(X,y):
     XPositive = X[y.A.ravel()==1,:]
     XNegative = X[y.A.ravel()==0,:]
@@ -245,15 +254,24 @@ def artificialNeuralNetwork(X,y,N,noAttributes,K=4):
     
     
     show()
-
-
-def artificialNeuralNetworkByPC(X,y,N,K=4):
     
+    
+def getTwoPrincipalComponents(X):
     Y = X - np.ones((len(X),1))*X.mean(0)
     
     U,S,V = linalg.svd(Y,full_matrices=False)
     
-    U = U[:,0:2]
+    return U[:,0:2]
+
+
+def artificialNeuralNetworkByPC(X,y,N,K=4):
+    
+    #Y = X - np.ones((len(X),1))*X.mean(0)
+    
+    #U,S,V = linalg.svd(Y,full_matrices=False)
+    
+    #U = U[:,0:2]
+    U = getTwoPrincipalComponents(X)
     
     # Parameters for neural network classifier
     n_hidden_units = 1      # number of hidden units
@@ -399,3 +417,99 @@ def kNearestNeighbours(X, y, N, C, L=40):
     imshow(nclass, cmap='binary', interpolation='None'); xlabel("k'th neighbor"); ylabel('data point'); title("Neighbors class matrix");
     
     show()
+
+def getTestAndTrainingSet(X,y,K=5):
+    N = len(X)
+    
+    CV = cross_validation.KFold(N,K,shuffle=True)
+    
+    k=0
+    
+    for train_index, test_index in CV:
+        print('\nCrossvalidation fold: {0}/{1}'.format(k+1,K))    
+        
+        # extract training and test set for current CV fold
+        X_train = X[train_index,:]
+        y_train = y[train_index,:]
+        X_test = X[test_index,:]
+        y_test = y[test_index,:]
+        k+=1
+        
+        if(k==K):
+            return (X_train,y_train),(X_test,y_test)
+    
+
+def confusionMatrix(X,y,C,K=5):
+    (X_train,y_train),(X_test,y_test) = getTestAndTrainingSet(X,y,K)
+    knclassifier = KNeighborsClassifier(n_neighbors=K, p=2);
+    knclassifier.fit(X_train, y_train);
+    y_est = knclassifier.predict(X_test);
+    cm = confusion_matrix(y_test.A.ravel(), y_est);
+    accuracy = 100*cm.diagonal().sum()/cm.sum(); error_rate = 100-accuracy;
+    figure(2);
+    imshow(cm, cmap='binary', interpolation='None');
+    colorbar()
+    xticks(range(C)); yticks(range(C));
+    xlabel('Predicted class'); ylabel('Actual class');
+    title('Confusion matrix (Accuracy: {0}%, Error Rate: {1}%)'.format(accuracy, error_rate));
+    
+    show()
+
+def plotKNearestNeighbours(classNames,X, y, C, K=5, attribute1 = 0, attribute2 = 1, DoPrincipalComponentAnalysis = False):
+    if DoPrincipalComponentAnalysis:
+        U = getTwoPrincipalComponents(X)
+        a1 = 0
+        a2 = 1
+    else:
+        a1 = attribute1
+        a2 = attribute2
+        U = X
+    (X_train,y_train),(X_test,y_test) = getTestAndTrainingSet(U,y,K)
+    
+    # Plot the training data points (color-coded) and test data points.
+    figure(1);
+    hold(True);
+    styles = ['.b', '.r']
+    for c in range(C):
+        class_mask = (y_train==c).A.ravel()
+        plot(X_train[class_mask,a1], X_train[class_mask,a2], styles[c])
+    
+    
+    # K-nearest neighbors
+    K=5
+    
+    # Distance metric (corresponds to 2nd norm, euclidean distance).
+    # You can set dist=1 to obtain manhattan distance (cityblock distance).
+    dist=2
+    
+    # Fit classifier and classify the test points
+    knclassifier = KNeighborsClassifier(n_neighbors=K, p=dist);
+    knclassifier.fit(X_train, y_train);
+    y_est = knclassifier.predict(X_test);
+    
+    
+    # Plot the classfication results
+    styles = ['ob', 'or']
+    for c in range(C):
+        class_mask = (y_est==c)
+        plot(X_test[class_mask,a1], X_test[class_mask,a2], styles[c], markersize=10)
+        plot(X_test[class_mask,a1], X_test[class_mask,a2], 'kx', markersize=8)
+    title('Synthetic data classification - KNN');
+    legend([convertToWord(i) for i in classNames])
+    show()
+
+    cm = confusion_matrix(y_test.A.ravel(), y_est);
+    accuracy = 100*cm.diagonal().sum()/cm.sum(); error_rate = 100-accuracy;
+    figure(2);
+    imshow(cm, cmap='binary', interpolation='None');
+    colorbar()
+    xticks(range(C)); yticks(range(C));
+    xlabel('Predicted class'); ylabel('Actual class');
+    title('Confusion matrix (Accuracy: {0}%, Error Rate: {1}%)'.format(accuracy, error_rate));
+    
+    show()
+
+
+#def splitIntoTestAndTraining(X, testSize, trainingSize):
+ #   for i in range(testSize):
+        

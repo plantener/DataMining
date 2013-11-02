@@ -110,7 +110,7 @@ print(X)
 #X = scipy.delete(X,1,1) # Tobacco
 #X = scipy.delete(X,0,1) # SBP
 
-linearRegression(X,y,attributeNames)
+#linearRegression(X,y,attributeNames)
 
 #artificialNeuralNetwork(XStandardized,y,N,noAttributes)
 
@@ -118,4 +118,13 @@ linearRegression(X,y,attributeNames)
 
 #decisionTree(X,y,attributeNames,classNames)
 
-kNearestNeighbours(X,y,N,C,99)
+#kNearestNeighbours(X,y,N,C,99)
+
+#confusionMatrix(getTwoPrincipalComponents(X),y,C,5)
+
+#plotKNearestNeighbours(getTwoPrincipalComponents(XStandardized),y,C,5)
+#plotKNearestNeighbours(X,y,C,5)
+
+#plotKNearestNeighbours(X,y,C)
+
+plotKNearestNeighbours(classNames,XStandardized,y,C,DoPrincipalComponentAnalysis=True)
