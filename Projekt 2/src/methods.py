@@ -61,10 +61,11 @@ def logisticRegression(X,y):
     show()
     
 def linearRegression(X,y,attributeNames):
-    chd_idx = attributeNames.index('chd')
-    y = X[:,chd_idx]
+   # Split dataset into features and target vector
+    alcohol_idx = attributeNames.index('ldl')
+    y = X[:,alcohol_idx]
     
-    X_cols = range(0,chd_idx) + range(chd_idx+1,len(attributeNames))
+    X_cols = range(0,alcohol_idx) + range(alcohol_idx+1,len(attributeNames))
     X_rows = range(0,len(y))
     X = X[ix_(X_rows,X_cols)]
     
@@ -80,7 +81,7 @@ def linearRegression(X,y,attributeNames):
     figure()
     subplot(2,1,1)
     plot(y, y_est, '.')
-    xlabel('Alcohol content (true)'); ylabel('Alcohol content (estimated)');
+    xlabel('ldl content (true)'); ylabel('ldl content (estimated)');
     subplot(2,1,2)
     hist(residual,40)
     
