@@ -37,12 +37,18 @@ classDict = dict(zip(classNames,range(2)))
 y = np.mat([classDict[value] for value in classLabels]).T
 
 X = np.mat(np.empty((size-1,noAttributes)))
-for i, col_id in enumerate(range(1,noAttributes+1)):
+X2 =np.mat(np.empty((size-1,noAttributes+1)))
+
+for i, col_id in enumerate(range(1,noAttributes+1+1)):
     if(i < len(attributeNames) and attributeNames[i] == "famhist"):
         temp12 = [convert(i2) for i2 in doc.col_values(col_id,1,size)]
-        X[:,i] = np.mat(temp12).T
+        if i < noAttributes:
+            X[:,i] = np.mat(temp12).T
+        X2[:,i] = np.mat(temp12).T
     else:
-        X[:,i] = np.mat(doc.col_values(col_id,1,size)).T
+        if i < noAttributes:
+            X[:,i] = np.mat(doc.col_values(col_id,1,size)).T
+        X2[:,i] = np.mat(doc.col_values(col_id,1,size)).T
 
 M = len(attributeNames) 
 N = len(y)
