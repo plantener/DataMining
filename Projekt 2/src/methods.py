@@ -60,6 +60,32 @@ def logisticRegression(X,y):
     
     show()
     
+def linearRegression(X,y,attributeNames):
+    chd_idx = attributeNames.index('chd')
+    y = X[:,chd_idx]
+    
+    X_cols = range(0,chd_idx) + range(chd_idx+1,len(attributeNames))
+    X_rows = range(0,len(y))
+    X = X[ix_(X_rows,X_cols)]
+    
+    # Fit ordinary least squares regression model
+    model = lm.LinearRegression()
+    model.fit(X,y)
+    
+    # Predict alcohol content
+    y_est = model.predict(X)
+    residual = y_est-y
+    
+    # Display scatter plot
+    figure()
+    subplot(2,1,1)
+    plot(y, y_est, '.')
+    xlabel('Alcohol content (true)'); ylabel('Alcohol content (estimated)');
+    subplot(2,1,2)
+    hist(residual,40)
+    
+    show()
+
     
     
     

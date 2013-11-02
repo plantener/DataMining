@@ -101,11 +101,11 @@ print(X)
 #X = scipy.delete(X,1,1) # Tobacco
 #X = scipy.delete(X,0,1) # SBP
 
-#linearRegression(X,y)
+linearRegression(X,y,attributeNames)
 
 #artificialNeuralNetwork(XStandardized,y,N,noAttributes)
 
 #artificialNeuralNetworkByPC(XStandardized,y,N)
 
-decisionTree(X,y,attributeNames,classNames)
+#decisionTree(X,y,attributeNames,classNames)
 
