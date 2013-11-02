@@ -52,6 +52,7 @@ for i, col_id in enumerate(range(1,noAttributes+1+1)):
 
 M = len(attributeNames) 
 N = len(y)
+C = len(classNames)
 
 XStandardized = zscore(X, ddof=1)
 
@@ -113,5 +114,7 @@ print(X)
 
 #artificialNeuralNetworkByPC(XStandardized,y,N)
 
-decisionTree(X,y,attributeNames,classNames)
+#decisionTree(X,y,attributeNames,classNames)
+
+kNearestNeighbours(X,y,N,C,99)
 
