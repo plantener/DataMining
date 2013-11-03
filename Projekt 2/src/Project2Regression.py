@@ -59,72 +59,31 @@ C = len(classNames)
 XStandardized = zscore(X, ddof=1)
 
 
-#X = sortByChd(X,y)
+linearRegression(X,y,attributeNames,'ldl')
+forwardSelection(X,y,N,M,5,attributeNames,classNames)
+artificialNeuralNetwork(X,y,N,noAttributes)
 
-#X.sort(key=lambda x: x[1])
+forwardSelection(XStandardized,y,N,M,5,attributeNames,classNames)
+artificialNeuralNetworkByPC(XStandardized,y,N)
 
-print(X)
+Xad = np.copy(X)
 
-#Split dataset into features and data vector
-#ldl_idx = attributeNames.index('ldl')
-#y = X[:,ldl_idx]
+#Xad = scipy.delete(Xad,8,1) # Age
+#Xad = scipy.delete(Xad,7,1) # Alcohol
+Xad = scipy.delete(Xad,6,1) # Obesity
+#Xad = scipy.delete(Xad,5,1) # TypeA
+#Xad = scipy.delete(Xad,4,1) # Famhist
+Xad = scipy.delete(Xad,3,1) # Adiposity
+#Xad = scipy.delete(Xad,2,1) # LDL
+Xad = scipy.delete(Xad,1,1) # Tobacco
+Xad = scipy.delete(Xad,0,1) # SBP
 
-#X_cols = range(0,ldl_idx) + range(ldl_idx+1,len(attributeNames))
-#X_rows = range(0,len(y))
-#X = X[ix_(X_rows,X_cols)]
+artificialNeuralNetwork(Xad, y, N, noAttributes-4)
 
-# Fit ordinary least squares regression model
-#model = lm.LinearRegression()
-#model.fit(X,y)
-
-# Predict ldl value
-#y_est = model.predict(X)
-#residual = y_est-y
-
-# Display scatter plot
-#figure()
-#subplot(2,1,1)
-#plot(y, y_est, '.')
-#xlabel('ldl value (true)'); ylabel('ldl value (estimated)');
-#subplot(2,1,2)
-#hist(residual,40)
-
-#show()
-
-#linearRegression(X,y)
-
-
-#forwardSelection(X,y,N,M,5,attributeNames)
-
-#forwardSelection(XStandardized,y,N,M,5,attributeNames)
-
-#X = XStandardized
-
-#X = scipy.delete(X,8,1) # Age
-#X = scipy.delete(X,7,1) # Alcohol
-#X = scipy.delete(X,6,1) # Obesity
-#X = scipy.delete(X,5,1) # TypeA
-#X = scipy.delete(X,4,1) # Famhist
-#X = scipy.delete(X,3,1) # Adiposity
-#X = scipy.delete(X,2,1) # LDL
-#X = scipy.delete(X,1,1) # Tobacco
-#X = scipy.delete(X,0,1) # SBP
-
-#linearRegression(X,y,attributeNames)
-
-#artificialNeuralNetwork(XStandardized,y,N,noAttributes)
-
-#artificialNeuralNetworkByPC(XStandardized,y,N)
-
-#decisionTree(X,y,attributeNames,classNames)
-
-#kNearestNeighbours(X,y,N,C,99)
-
-#confusionMatrix(getTwoPrincipalComponents(X),y,C,5)
-
-#plotKNearestNeighbours(getTwoPrincipalComponents(XStandardized),y,C,5)
-#plotKNearestNeighbours(X,y,C,5)
-
-#plotKNearestNeighbours(X,y,C)
-
-plotKNearestNeighbours(classNames,XStandardized,y,C,DoPrincipalComponentAnalysis=True)
+logisticRegression(X,y)
+logisticRegression(Xad,y)
+decisionTree(X,y,attributeNames,classNames)
+kNearestNeighbours(X,y,N,C)
+decisionTree(X, y, attributeNames, classNames)
+plotKNearestNeighbours(classNames, X, y, C)
+plotKNearestNeighbours(classNames, X, y, C, DoPrincipalComponentAnalysis = True)

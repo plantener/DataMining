@@ -43,7 +43,7 @@ def logisticRegression(X,y):
     model = model.fit(X, y.A.ravel())
     
     
-    # Classify wine as CHD Negative/Positive (0/1)
+    # Classify objects as CHD Negative/Positive (0/1)
     y_est = model.predict(X)
     y_est_chd_prob = model.predict_proba(X)[:, 1]
     
@@ -67,32 +67,34 @@ def logisticRegression(X,y):
     plot(class1_ids, y_est_chd_prob[class1_ids], '.r', c = 'blue')
     xlabel('Data object'); ylabel('Predicted prob. of having chd');
     legend(['Negative', 'Positive'])
+    title("Logistic regression")
     #ylim(-0.5,1.5)
     
     show()
     
-def linearRegression(X,y,attributeNames):
+def linearRegression(X,y,attributeNames,attribute):
    # Split dataset into features and target vector
-    alcohol_idx = attributeNames.index('ldl')
+    alcohol_idx = attributeNames.index(attribute)
     y = X[:,alcohol_idx]
     
     X_cols = range(0,alcohol_idx) + range(alcohol_idx+1,len(attributeNames))
     X_rows = range(0,len(y))
-    X = X[ix_(X_rows,X_cols)]
+    U = X[ix_(X_rows,X_cols)]
     
     # Fit ordinary least squares regression model
     model = lm.LinearRegression()
-    model.fit(X,y)
+    model.fit(U,y)
     
     # Predict alcohol content
-    y_est = model.predict(X)
+    y_est = model.predict(U)
     residual = y_est-y
     
     # Display scatter plot
     figure()
     subplot(2,1,1)
+    
     plot(y, y_est, '.')
-    xlabel('ldl content (true)'); ylabel('ldl content (estimated)');
+    xlabel(attribute + ' value (true)'); ylabel(attribute + ' value (estimated)');
     subplot(2,1,2)
     hist(residual,40)
     
@@ -101,7 +103,7 @@ def linearRegression(X,y,attributeNames):
     
     
     
-def forwardSelection(X,y,N,M,K,attributeNames):
+def forwardSelection(X,y,N,M,K,attributeNames, classNames):
     # Add offset attribute
     X2 = np.concatenate((np.ones((X.shape[0],1)),X),1)
     attributeNames2 = [u'Offset']+attributeNames
@@ -126,16 +128,26 @@ def forwardSelection(X,y,N,M,K,attributeNames):
         # extract training and test set for current CV fold
         X_train = X2[train_index]
         y_train = y[train_index]
-        #X_test = X2[test_index]
-        #y_test = y[test_index]
+        X_test = X2[test_index]
+        y_test = y[test_index]
         internal_cross_validation = 10
         
         
+        
+        # Compute squared error without using the input data at all
+        Error_train_nofeatures[k] = np.square(y_train-y_train.mean()).sum()/y_train.shape[0]
+        Error_test_nofeatures[k] = np.square(y_test-y_test.mean()).sum()/y_test.shape[0]
+
         # Compute squared error with feature subset selection
         selected_features, features_record, loss_record = feature_selector_lr(X_train, y_train, internal_cross_validation)
         Features[selected_features,k]=1
+            # .. alternatively you could use module sklearn.feature_selection
+        m = lm.LinearRegression().fit(X_train[:,selected_features], y_train)
+        Error_train_fs[k] = np.square(y_train-m.predict(X_train[:,selected_features])).sum()/y_train.shape[0]
+        Error_test_fs[k] = np.square(y_test-m.predict(X_test[:,selected_features])).sum()/y_test.shape[0]
+
         
-        figure(k)
+        figure()
         subplot(1,2,1)
         plot(range(1,len(loss_record)), loss_record[1:])
         xlabel('Iteration')
@@ -147,27 +159,19 @@ def forwardSelection(X,y,N,M,K,attributeNames):
         xlabel('Iteration')
     
         print('Cross validation fold {0}/{1}'.format(k+1,K))
-        print('Train indices: {0}'.format(train_index))
-        print('Test indices: {0}'.format(test_index))
-        print('Features no: {0}\n'.format(selected_features.size))
     
         k+=1
     
     
     # Display results
     print('\n')
-    #print('Linear regression without feature selection:\n')
-    #print('- Training error: {0}'.format(Error_train.mean()))
-    #print('- Test error:     {0}'.format(Error_test.mean()))
-    #print('- R^2 train:     {0}'.format((Error_train_nofeatures.sum()-Error_train.sum())/Error_train_nofeatures.sum()))
-    #print('- R^2 test:     {0}'.format((Error_test_nofeatures.sum()-Error_test.sum())/Error_test_nofeatures.sum()))
     print('Linear regression with feature selection:\n')
     print('- Training error: {0}'.format(Error_train_fs.mean()))
     print('- Test error:     {0}'.format(Error_test_fs.mean()))
     print('- R^2 train:     {0}'.format((Error_train_nofeatures.sum()-Error_train_fs.sum())/Error_train_nofeatures.sum()))
     print('- R^2 test:     {0}'.format((Error_test_nofeatures.sum()-Error_test_fs.sum())/Error_test_nofeatures.sum()))
     
-    figure(k)
+    figure()
     subplot(1,3,2)
     bmplot(attributeNames2, range(1,Features.shape[1]+1), -Features)
     clim(-1.5,0)
@@ -184,11 +188,13 @@ def forwardSelection(X,y,N,M,K,attributeNames):
     y_est= m.predict(X2[:,ff])
     residual=y-y_est
     
-    figure(k+1)
+    figure()
     title('Residual error vs. Attributes for features selected in cross-validation fold {0}'.format(f))
     for i in range(0,len(ff)):
        subplot(2,ceil(len(ff)/2.0),i+1)
-       plot(X2[:,ff[i]],residual,'.')
+       for c in classNames:
+           class_mask = (y_est==c)
+           plot(X2[:,ff[i]],residual,'.')
        xlabel(attributeNames2[ff[i]])
        ylabel('residual error')
     
@@ -244,7 +250,7 @@ def artificialNeuralNetwork(X,y,N,noAttributes,K=4):
     print('Error rate: {0}%'.format(100*mean(errors)))
     
     # Display exemplary networks learning curve (best network of each fold)
-    figure(2); hold(True)
+    figure(); hold(True)
     bn_id = argmax(error_hist[-1,:])
     error_hist[error_hist==0] = learning_goal
     for bn_id in range(K):
@@ -265,12 +271,6 @@ def getTwoPrincipalComponents(X):
 
 
 def artificialNeuralNetworkByPC(X,y,N,K=4):
-    
-    #Y = X - np.ones((len(X),1))*X.mean(0)
-    
-    #U,S,V = linalg.svd(Y,full_matrices=False)
-    
-    #U = U[:,0:2]
     U = getTwoPrincipalComponents(X)
     
     # Parameters for neural network classifier
@@ -321,13 +321,13 @@ def artificialNeuralNetworkByPC(X,y,N,K=4):
     
     # Display the decision boundary for the several crossvalidation folds.
     # (create grid of points, compute network output for each point, color-code and plot).
-    grid_range = [-0.25, 0.25, -0.25, 0.25]; delta = 0.001; levels = 100
+    grid_range = [-0.25, 0.25, -0.25, 0.25]; delta = 0.05; levels = 100
     a = arange(grid_range[0],grid_range[1],delta)
     b = arange(grid_range[2],grid_range[3],delta)
     A, B = meshgrid(a, b)
     values = np.zeros(A.shape)
     
-    figure(1,figsize=(18,9)); hold(True)
+    figure(figsize=(18,9)); hold(True)
     for k in range(K):
         subplot(2,2,k+1)
         cmask = (y==0).A.ravel(); plot(U[cmask,0], U[cmask,1],'.r')
@@ -343,12 +343,13 @@ def artificialNeuralNetworkByPC(X,y,N,K=4):
     
     
     # Display exemplary networks learning curve (best network of each fold)
-    figure(2); hold(True)
+    figure(); hold(True)
     bn_id = argmax(error_hist[-1,:])
     error_hist[error_hist==0] = learning_goal
+    colors = ['red','blue','green','orange']
     for bn_id in range(K):
-        plot(error_hist[:,bn_id]); xlabel('epoch'); ylabel('train error (mse)'); title('Learning curve (best for each CV fold)')
-    
+        plot(error_hist[:,bn_id],c=colors[bn_id]); xlabel('epoch'); ylabel('train error (mse)'); title('Learning curve (best for each CV fold)')
+    legend(['Round 1', 'Round 2', 'Round 3', 'Round 4'])
     plot(range(max_epochs), [learning_goal]*max_epochs, '-.')
     
     
@@ -408,12 +409,12 @@ def kNearestNeighbours(X, y, N, C, L=40):
     
         
     # Plot the classification error rate
-    figure(1)
+    figure()
     plot(100*errors/N)
     xlabel('Number of neighbors')
     ylabel('Classification error rate (%)')
     
-    figure(2)
+    figure()
     imshow(nclass, cmap='binary', interpolation='None'); xlabel("k'th neighbor"); ylabel('data point'); title("Neighbors class matrix");
     
     show()
@@ -438,23 +439,6 @@ def getTestAndTrainingSet(X,y,K=5):
         if(k==K):
             return (X_train,y_train),(X_test,y_test)
     
-
-def confusionMatrix(X,y,C,K=5):
-    (X_train,y_train),(X_test,y_test) = getTestAndTrainingSet(X,y,K)
-    knclassifier = KNeighborsClassifier(n_neighbors=K, p=2);
-    knclassifier.fit(X_train, y_train);
-    y_est = knclassifier.predict(X_test);
-    cm = confusion_matrix(y_test.A.ravel(), y_est);
-    accuracy = 100*cm.diagonal().sum()/cm.sum(); error_rate = 100-accuracy;
-    figure(2);
-    imshow(cm, cmap='binary', interpolation='None');
-    colorbar()
-    xticks(range(C)); yticks(range(C));
-    xlabel('Predicted class'); ylabel('Actual class');
-    title('Confusion matrix (Accuracy: {0}%, Error Rate: {1}%)'.format(accuracy, error_rate));
-    
-    show()
-
 def plotKNearestNeighbours(classNames,X, y, C, K=5, attribute1 = 0, attribute2 = 1, DoPrincipalComponentAnalysis = False):
     if DoPrincipalComponentAnalysis:
         U = getTwoPrincipalComponents(X)
@@ -467,16 +451,13 @@ def plotKNearestNeighbours(classNames,X, y, C, K=5, attribute1 = 0, attribute2 =
     (X_train,y_train),(X_test,y_test) = getTestAndTrainingSet(U,y,K)
     
     # Plot the training data points (color-coded) and test data points.
-    figure(1);
+    figure();
     hold(True);
     styles = ['.b', '.r']
     for c in range(C):
-        class_mask = (y_train==c).A.ravel()
-        plot(X_train[class_mask,a1], X_train[class_mask,a2], styles[c])
+        class_mask = y.A.ravel()==c
+        plot(X_train[:,a1], X_train[:,a2], styles[c])
     
-    
-    # K-nearest neighbors
-    K=5
     
     # Distance metric (corresponds to 2nd norm, euclidean distance).
     # You can set dist=1 to obtain manhattan distance (cityblock distance).
@@ -494,13 +475,13 @@ def plotKNearestNeighbours(classNames,X, y, C, K=5, attribute1 = 0, attribute2 =
         class_mask = (y_est==c)
         plot(X_test[class_mask,a1], X_test[class_mask,a2], styles[c], markersize=10)
         plot(X_test[class_mask,a1], X_test[class_mask,a2], 'kx', markersize=8)
-    title('Synthetic data classification - KNN');
+    title('Data classification - KNN');
     legend([convertToWord(i) for i in classNames])
     show()
 
     cm = confusion_matrix(y_test.A.ravel(), y_est);
     accuracy = 100*cm.diagonal().sum()/cm.sum(); error_rate = 100-accuracy;
-    figure(2);
+    figure();
     imshow(cm, cmap='binary', interpolation='None');
     colorbar()
     xticks(range(C)); yticks(range(C));
@@ -508,8 +489,4 @@ def plotKNearestNeighbours(classNames,X, y, C, K=5, attribute1 = 0, attribute2 =
     title('Confusion matrix (Accuracy: {0}%, Error Rate: {1}%)'.format(accuracy, error_rate));
     
     show()
-
-
-#def splitIntoTestAndTraining(X, testSize, trainingSize):
- #   for i in range(testSize):
-        
+    
