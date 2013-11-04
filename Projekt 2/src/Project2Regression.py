@@ -59,12 +59,12 @@ C = len(classNames)
 XStandardized = zscore(X, ddof=1)
 
 
-#linearRegression(X,y,attributeNames,'ldl')
-#forwardSelection(X,y,N,M,5,attributeNames,classNames)
-#artificialNeuralNetwork(X,y,N,noAttributes)
+linearRegression(X,y,attributeNames,'ldl')
+forwardSelection(X,y,N,M,5,attributeNames,classNames)
+artificialNeuralNetwork(X,y,N,noAttributes)
 
-#forwardSelection(XStandardized,y,N,M,5,attributeNames,classNames)
-#artificialNeuralNetworkByPC(XStandardized,y,N)
+forwardSelection(XStandardized,y,N,M,5,attributeNames,classNames)
+artificialNeuralNetworkByPC(XStandardized,y,N)
 
 Xad = np.copy(X)
 
