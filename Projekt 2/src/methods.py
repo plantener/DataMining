@@ -115,8 +115,8 @@ def forwardSelection(X,y,N,M,K,attributeNames, classNames):
     
     # Initialize variables
     Features = np.zeros((M2,K))
-    #Error_train = np.empty((K,1))
-    #Error_test = np.empty((K,1))
+    Error_train = np.empty((K,1))
+    Error_test = np.empty((K,1))
     Error_train_fs = np.empty((K,1))
     Error_test_fs = np.empty((K,1))
     Error_train_nofeatures = np.empty((K,1))
@@ -130,18 +130,23 @@ def forwardSelection(X,y,N,M,K,attributeNames, classNames):
         y_train = y[train_index]
         X_test = X2[test_index]
         y_test = y[test_index]
-        internal_cross_validation = 10
+        internal_cross_validation = 2
         
-        
-        
+     
         # Compute squared error without using the input data at all
         Error_train_nofeatures[k] = np.square(y_train-y_train.mean()).sum()/y_train.shape[0]
         Error_test_nofeatures[k] = np.square(y_test-y_test.mean()).sum()/y_test.shape[0]
+
+          # Compute squared error with all features selected (no feature selection)
+        m = lm.LinearRegression().fit(X_train, y_train)
+        Error_train[k] = np.square(y_train-m.predict(X_train)).sum()/y_train.shape[0]
+        Error_test[k] = np.square(y_test-m.predict(X_test)).sum()/y_test.shape[0]
 
         # Compute squared error with feature subset selection
         selected_features, features_record, loss_record = feature_selector_lr(X_train, y_train, internal_cross_validation)
         Features[selected_features,k]=1
             # .. alternatively you could use module sklearn.feature_selection
+
         m = lm.LinearRegression().fit(X_train[:,selected_features], y_train)
         Error_train_fs[k] = np.square(y_train-m.predict(X_train[:,selected_features])).sum()/y_train.shape[0]
         Error_test_fs[k] = np.square(y_test-m.predict(X_test[:,selected_features])).sum()/y_test.shape[0]
@@ -165,11 +170,20 @@ def forwardSelection(X,y,N,M,K,attributeNames, classNames):
     
     # Display results
     print('\n')
+    print('Linear regression without feature selection:\n')
+    print('- Training error: {0}'.format(Error_train.mean()))
+    print('- Test error:     {0}'.format(Error_test.mean()))
+    print('- R^2 train:     {0}'.format((Error_train_nofeatures.sum()-Error_train.sum())/Error_train_nofeatures.sum()))
+    print('- R^2 test:     {0}'.format((Error_test_nofeatures.sum()-Error_test.sum())/Error_test_nofeatures.sum()))
+    print('\n')
     print('Linear regression with feature selection:\n')
     print('- Training error: {0}'.format(Error_train_fs.mean()))
     print('- Test error:     {0}'.format(Error_test_fs.mean()))
     print('- R^2 train:     {0}'.format((Error_train_nofeatures.sum()-Error_train_fs.sum())/Error_train_nofeatures.sum()))
     print('- R^2 test:     {0}'.format((Error_test_nofeatures.sum()-Error_test_fs.sum())/Error_test_nofeatures.sum()))
+    
+    
+    
     
     figure()
     subplot(1,3,2)

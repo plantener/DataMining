@@ -22,7 +22,7 @@ def convert(s):
         return 0
 
 #Load dataset
-doc = xlrd.open_workbook('../../dataset_sorted.xls').sheet_by_index(0)
+doc = xlrd.open_workbook('../../dataset.xls').sheet_by_index(0)
 
 size = 463
 noAttributes = 9
@@ -59,14 +59,16 @@ C = len(classNames)
 XStandardized = zscore(X, ddof=1)
 
 
-linearRegression(X,y,attributeNames,'ldl')
-forwardSelection(X,y,N,M,5,attributeNames,classNames)
-artificialNeuralNetwork(X,y,N,noAttributes)
+#linearRegression(X,y,attributeNames,'ldl')
 
-forwardSelection(XStandardized,y,N,M,5,attributeNames,classNames)
-artificialNeuralNetworkByPC(XStandardized,y,N)
+forwardSelection(X,y,N,M,5,attributeNames,classNames)
+#artificialNeuralNetwork(X,y,N,noAttributes)
+
+#forwardSelection(XStandardized,y,N,M,5,attributeNames,classNames)
+#artificialNeuralNetworkByPC(XStandardized,y,N)
 
 Xad = np.copy(X)
+Xnames = np.copy(attributeNames)
 
 #Xad = scipy.delete(Xad,8,1) # Age
 #Xad = scipy.delete(Xad,7,1) # Alcohol
@@ -78,12 +80,24 @@ Xad = scipy.delete(Xad,3,1) # Adiposity
 Xad = scipy.delete(Xad,1,1) # Tobacco
 Xad = scipy.delete(Xad,0,1) # SBP
 
-artificialNeuralNetwork(Xad, y, N, noAttributes-4)
+#Xad = scipy.delete(Xad,8,1) # Age
+#Xad = scipy.delete(Xad,7,1) # Alcohol
+#Xnames = scipy.delete(Xnames,6,1) # Obesity
+#Xad = scipy.delete(Xad,5,1) # TypeA
+#Xad = scipy.delete(Xad,4,1) # Famhist
+#Xnames = scipy.delete(Xnames,3,1) # Adiposity
+#Xad = scipy.delete(Xad,2,1) # LDL
+#Xnames = scipy.delete(Xnames,1,1) # Tobacco
+#Xnames = scipy.delete(Xnames,0,1) # SBP
 
-logisticRegression(X,y)
-logisticRegression(Xad,y)
-decisionTree(X,y,attributeNames,classNames)
-kNearestNeighbours(X,y,N,C)
-decisionTree(X, y, attributeNames, classNames)
-plotKNearestNeighbours(classNames, X, y, C)
-plotKNearestNeighbours(classNames, X, y, C, DoPrincipalComponentAnalysis = True)
+#linearRegression(Xad,y,Xnames,'ldl')
+
+#artificialNeuralNetwork(Xad, y, N, noAttributes-4)
+
+#logisticRegression(X,y)
+#logisticRegression(Xad,y)
+#decisionTree(X,y,attributeNames,classNames)
+#kNearestNeighbours(X,y,N,C)
+#decisionTree(X, y, attributeNames, classNames)
+#plotKNearestNeighbours(classNames, X, y, C)
+#plotKNearestNeighbours(classNames, X, y, C, DoPrincipalComponentAnalysis = True)
