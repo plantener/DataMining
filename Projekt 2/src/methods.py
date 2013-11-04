@@ -14,7 +14,7 @@ from sklearn import tree
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import confusion_matrix
 import scipy
-
+import numpy
 
 
 
@@ -37,6 +37,44 @@ def sortByChd(X,y):
         i = i+1
     return X
     
+    
+def predictLinearRegression(X,y,s=""):
+    print "Doing linear regression for: "
+    print s
+    # Fit linear regression model
+    model = lm.LinearRegression()
+    model = model.fit(X, y.A.ravel())
+    
+    
+    # Classify objects as CHD Negative/Positive (0/1)
+    y_est = model.predict(X)
+   # y_est_chd_prob = model.predict_proba(X)[:, 1]
+    
+    # Evaluate classifier's misclassification rate over entire training data
+    misclass_rate = sum(np.abs(np.mat(y_est).T - y)) / float(len(y_est))
+    
+    # Define a new data object
+    #x = np.array([138.33, 3.64*2, 4.74, 25.41, 0, 53.10, 26.04, 17.04, 42.82])
+    # Evaluate athe probability of x being possitive of CHD
+    #x_class = model.predict_proba(x)[0,1]
+    
+    
+    #print('\nProbability of given sample being positive for CHD: {0:.4f}'.format(x_class))
+    
+    print('\nOverall misclassification rate: {0:.3f}'.format(misclass_rate))
+    print "\n"
+    
+    f = figure(); f.hold(True)
+    class0_ids = nonzero(y==0)[0].tolist()[0]
+    plot(class0_ids, y_est[class0_ids], '.y', c= 'red')
+    class1_ids = nonzero(y==1)[0].tolist()[0]
+    plot(class1_ids, y_est[class1_ids], '.r', c = 'blue')
+    xlabel('Data object'); ylabel('Predicted prob. of having chd');
+    legend(['Negative', 'Positive'])
+    title("Logistic regression")
+    #ylim(-0.5,1.5)
+    
+    show()    
     
     
 def logisticRegression(X,y,s=""):
@@ -72,7 +110,7 @@ def logisticRegression(X,y,s=""):
     plot(class1_ids, y_est_chd_prob[class1_ids], '.r', c = 'blue')
     xlabel('Data object'); ylabel('Predicted prob. of having chd');
     legend(['Negative', 'Positive'])
-    title("Logistic regression")
+    title("Linear regression")
     #ylim(-0.5,1.5)
     
     show()
@@ -85,7 +123,8 @@ def linearRegression(X,y,attributeNames,attribute):
     X_cols = range(0,alcohol_idx) + range(alcohol_idx+1,len(attributeNames))
     X_rows = range(0,len(y))
     U = X[ix_(X_rows,X_cols)]
-    
+#    
+  #  U = X
     # Fit ordinary least squares regression model
     model = lm.LinearRegression()
     model.fit(U,y)
@@ -108,20 +147,22 @@ def linearRegression(X,y,attributeNames,attribute):
     
     
     
-def forwardSelection(X,y,N,M,K,attributeNames, classNames):
+def forwardSelection(X,y,N,K,attributeNames, classNames):
     # Add offset attribute
     X2 = np.concatenate((np.ones((X.shape[0],1)),X),1)
     attributeNames2 = [u'Offset']+attributeNames
-    M2 = M+1
+    M2 = len(attributeNames)+1
+    
     
     ## Crossvalidation
     # Create crossvalidation partition for evaluation
+
     CV = cross_validation.KFold(N,K,shuffle=True)
     
     # Initialize variables
     Features = np.zeros((M2,K))
-    #Error_train = np.empty((K,1))
-    #Error_test = np.empty((K,1))
+    Error_train = np.empty((K,1))
+    Error_test = np.empty((K,1))
     Error_train_fs = np.empty((K,1))
     Error_test_fs = np.empty((K,1))
     Error_train_nofeatures = np.empty((K,1))
@@ -135,13 +176,19 @@ def forwardSelection(X,y,N,M,K,attributeNames, classNames):
         y_train = y[train_index]
         X_test = X2[test_index]
         y_test = y[test_index]
-        internal_cross_validation = 10
+        internal_cross_validation = 5
         
         
         
         # Compute squared error without using the input data at all
         Error_train_nofeatures[k] = np.square(y_train-y_train.mean()).sum()/y_train.shape[0]
         Error_test_nofeatures[k] = np.square(y_test-y_test.mean()).sum()/y_test.shape[0]
+        
+         # Compute squared error with all features selected (no feature selection)
+        m = lm.LinearRegression().fit(X_train, y_train)
+        Error_train[k] = np.square(y_train-m.predict(X_train)).sum()/y_train.shape[0]
+        Error_test[k] = np.square(y_test-m.predict(X_test)).sum()/y_test.shape[0]
+
 
         # Compute squared error with feature subset selection
         selected_features, features_record, loss_record = feature_selector_lr(X_train, y_train, internal_cross_validation)
@@ -169,6 +216,12 @@ def forwardSelection(X,y,N,M,K,attributeNames, classNames):
     
     
     # Display results
+    print('\n')
+    print('Linear regression without feature selection:\n')
+    print('- Training error: {0}'.format(Error_train.mean()))
+    print('- Test error:     {0}'.format(Error_test.mean()))
+    print('- R^2 train:     {0}'.format((Error_train_nofeatures.sum()-Error_train.sum())/Error_train_nofeatures.sum()))
+    print('- R^2 test:     {0}'.format((Error_test_nofeatures.sum()-Error_test.sum())/Error_test_nofeatures.sum()))
     print('\n')
     print('Linear regression with feature selection:\n')
     print('- Training error: {0}'.format(Error_train_fs.mean()))
@@ -531,9 +584,11 @@ def plotKNearestNeighbours(classNames,X, y, C, K=5, attribute1 = 0, attribute2 =
     
     show()
     
-def removeAttribute(X,y,attribute):
+def removeAttribute(X,y,attribute,attributeNames):
+    attributeNamesWithoutAttr = np.copy(attributeNames)
+    attributeNamesWithoutAttr = numpy.delete(attributeNames,attribute).tolist()
     yWithoutAttr = X[:,attribute]
     XWithoutAttr = np.copy(X)
     XWithoutAttr = scipy.delete(XWithoutAttr,attribute,1)
-    return (XWithoutAttr, yWithoutAttr)
+    return (XWithoutAttr, yWithoutAttr,attributeNamesWithoutAttr)
     

@@ -56,24 +56,29 @@ M = len(attributeNames)
 N = len(y)
 C = len(classNames)
 
+
 XStandardized = zscore(X, ddof=1)
+
 XPC = getTwoPrincipalComponents(XStandardized)
 
-(XWithoutLDL,yWithoutLDL) = removeAttribute(X,y,2)
+(XWithoutLDL,yWithoutLDL,attributeNamesWithoutAttr) = removeAttribute(X,y,2,attributeNames)
 
-forwardSelection(XWithoutLDL,yWithoutLDL,N,M,5,attributeNames,classNames)
-
+XWithoutLDLStandardized = zscore(XWithoutLDL, ddof=1)
 
 (X_train,y_train),(X_test,y_test) = getTestAndTrainingSet(X,y)
 (X_train_std,y_train_std),(X_test_std,y_test_std) = getTestAndTrainingSet(XStandardized,y)
 
-
+#linearRegression(X,y,attributeNames,'chd')
+#linearRegression(X,y,attributeNamesWithoutAttr,'ldl')
 #linearRegression(X,y,attributeNames,'ldl')
 #print(y)
-#forwardSelection(X,y,N,M,5,attributeNames,classNames)
+#forwardSelection(X,y,N,5,attributeNames,classNames)
+#forwardSelection(XWithoutLDL,yWithoutLDL,N,5,attributeNamesWithoutAttr,classNames)
+#forwardSelection(XStandardized,y,N,5,attributeNames,classNames)
+
 #artificialNeuralNetwork(X,y,N,noAttributes)
 
-#forwardSelection(XStandardized,y,N,M,5,attributeNames,classNames)
+#forwardSelection(XWithoutLDLStandardized,yWithoutLDL,N,5,attributeNamesWithoutAttr,classNames)
 #artificialNeuralNetworkByPC(XStandardized,y,N)
 
 Xad = np.copy(X)
@@ -98,6 +103,8 @@ Xad = scipy.delete(Xad,0,1) # SBP
 s1 = "X not modified."
 s2 = "Attributes of X selected according to result of forward selection."
 s3 = "X represented by two most important principal components."
+
+predictLinearRegression(X,y)
 
 #logisticRegression(X,y,s=s1)
 #logisticRegression(Xad,y,s=s2)
