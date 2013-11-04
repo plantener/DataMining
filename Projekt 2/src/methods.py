@@ -448,7 +448,7 @@ def getTestAndTrainingSet(X,y,K=5):
         if(k==K):
             return (X_train,y_train),(X_test,y_test)
     
-def plotKNearestNeighbours(classNames,X, y, C, K=5, attribute1 = 0, attribute2 = 1, DoPrincipalComponentAnalysis = False, s="", neighbours = 5, X_train = [], y_train = [], X_test = [], y_test = []):
+def plotKNearestNeighbours(classNames,X, y, C, K=5, attribute1 = 0, attribute2 = 1, DoPrincipalComponentAnalysis = False, s="", neighbours = 5, X_train = None, y_train = None, X_test = None, y_test = None):
     print "Plotting k-nearest neighbours for: "
     print s
     if DoPrincipalComponentAnalysis:
@@ -459,7 +459,8 @@ def plotKNearestNeighbours(classNames,X, y, C, K=5, attribute1 = 0, attribute2 =
         a1 = attribute1
         a2 = attribute2
         U = X
-    (X_train,y_train),(X_test,y_test) = getTestAndTrainingSet(U,y,K)
+    if (X_train is None or y_train is None or X_test is None or y_test is None):
+        (X_train,y_train),(X_test,y_test) = getTestAndTrainingSet(U,y,K)
     
     #figure();
     #hold(True);

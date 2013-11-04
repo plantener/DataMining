@@ -59,7 +59,7 @@ C = len(classNames)
 XStandardized = zscore(X, ddof=1)
 XPC = getTwoPrincipalComponents(XStandardized)
 
-(XWithoutLDL,yWithoutLDL) = removeAttribute(X,y,2)
+(XWithoutLDL,yWithoutLDL) = removeAttribute(X,y,4)
 
 forwardSelection(XWithoutLDL,yWithoutLDL,N,M,5,attributeNames,classNames)
 
