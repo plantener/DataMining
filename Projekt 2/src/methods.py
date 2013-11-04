@@ -212,7 +212,7 @@ def artificialNeuralNetwork(X,y,N,noAttributes,K=4):
     learning_goal = 2.0     # stop criterion 1 (train mse to be reached)
     max_epochs = 200        # stop criterion 2 (max epochs in training)
     
-    # K-fold CrossValidation (4 folds here to speed up this example)
+    # K-fold CrossValidation
     CV = cross_validation.KFold(N,K,shuffle=True)
     
     # Variable for classification error
@@ -281,7 +281,7 @@ def artificialNeuralNetworkByPC(X,y,N,K=4):
     learning_goal = 2.0     # stop criterion 1 (train mse to be reached)
     max_epochs = 200        # stop criterion 2 (max epochs in training)
     
-    # K-fold CrossValidation (4 folds here to speed up this example)
+    # K-fold CrossValidation
     CV = cross_validation.KFold(N,K,shuffle=True)
     
     # Variable for classification error
@@ -300,7 +300,7 @@ def artificialNeuralNetworkByPC(X,y,N,K=4):
         
         best_train_error = 1e100
         for i in range(n_train):
-            # Create randomly initialized network with 2 layers
+            # Create randomly initialized network
             ann = nl.net.newff([[0, 1], [0, 1]], [n_hidden_units, 1], [nl.trans.LogSig(),nl.trans.LogSig()])
             # train network
             train_error = ann.train(X_train, y_train, goal=learning_goal, epochs=max_epochs, show=round(max_epochs/8))
