@@ -53,7 +53,9 @@ def logisticRegression(X,y,s=""):
     correct = 0
     wrong = 0
     for i in range(0,len(y)):
-        if((y[i] > 0.5 and y_est_chd_prob[i] > 0.5) or(y[i] < 0.5 and y_est_chd_prob[i])):
+        temp = random()
+        if((y[i] > 0.5 and temp < 2*0.346) or (y[i]<0.5 and temp > 2*0.346)):
+        #if((y[i] > 0.5 and y_est_chd_prob[i] > 0.5) or(y[i] < 0.5 and y_est_chd_prob[i] < 0.5)):
             correct += 1
         else:
             wrong += 1
@@ -393,7 +395,7 @@ def artificialNeuralNetworkByPC(X,y,N,K=4, s=""):
     show()
     
     
-def decisionTree(X,y,attributeNames,classNames,s=""):
+def decisionTree(X,y,attributeNames,classNames,fileName,s=""):
     print "Doing decision tree for: "
     print s
     # Fit regression tree classifier, Gini split criterion, pruning enabled
@@ -402,7 +404,7 @@ def decisionTree(X,y,attributeNames,classNames,s=""):
     
     # Export tree graph for visualization purposes:
     # (note: you can use i.e. Graphviz application to visualize the file)
-    out = tree.export_graphviz(dtc, out_file='tree_gini_CHD_data.gvz', feature_names=attributeNames)
+    out = tree.export_graphviz(dtc, out_file=fileName, feature_names=attributeNames)
     out.close()
     
     correct = 0
@@ -420,24 +422,6 @@ def decisionTree(X,y,attributeNames,classNames,s=""):
     print rate
     print '\n'
     
-    # Define a new data object (new type of wine) with the attributes given in the text
-    #x = np.array([138.33, 3.64, 4.74, 25.41, 0, 53.10, 26.04, 17.04, 42.82])
-    #x = np.array([138.33*2, 3.64*2, 4.74*2, 25.41*2, 1, 53.10*2, 26.04*2, 17.04*2, 42.82])
-    #x = np.array([138.33, 3.64, 4.74, 25.41, 1, 20, 26.04, 17.04*1, 40])
-     
-    # Evaluate the classification tree for the new data object
-    #x_class = dtc.predict(x)[0]
-    
-    # Print results
-    #print '\nNew object attributes:'
-    #for attr in attributeNames:
-    #    print attr[0]
-    #print '\nClassification result:'
-    #if classNames[x_class] > 0.5:
-    #    print "Positive"
-    #else:
-    #    print "Negative"
-        
         
 
 def kNearestNeighbours(X, y, N, C, L=40, s=""):    

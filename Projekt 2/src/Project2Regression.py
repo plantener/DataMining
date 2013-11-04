@@ -89,14 +89,15 @@ Xad = scipy.delete(Xad,1,1) # Tobacco
 Xad = scipy.delete(Xad,0,1) # SBP
 
 X2PC = np.copy(XPC)
+X2PC = X2PC[:,0:1]
 
-X2PC = scipy.delete(X2PC,8,1) # PC9
-X2PC = scipy.delete(X2PC,7,1) # PC8
-X2PC = scipy.delete(X2PC,6,1) # PC7
-X2PC = scipy.delete(X2PC,5,1) # PC6
-X2PC = scipy.delete(X2PC,4,1) # PC5
-X2PC = scipy.delete(X2PC,3,1) # PC4
-X2PC = scipy.delete(X2PC,2,1) # PC3
+#X2PC = scipy.delete(X2PC,8,1) # PC9
+#X2PC = scipy.delete(X2PC,7,1) # PC8
+#X2PC = scipy.delete(X2PC,6,1) # PC7
+#X2PC = scipy.delete(X2PC,5,1) # PC6
+#X2PC = scipy.delete(X2PC,4,1) # PC5
+#X2PC = scipy.delete(X2PC,3,1) # PC4
+#X2PC = scipy.delete(X2PC,2,1) # PC3
 
 
 (X_train_ad,y_train_ad),(X_test_ad,y_test_ad) = getTestAndTrainingSet(Xad,y)
@@ -119,15 +120,15 @@ K = 4
 #artificialNeuralNetwork(X2PC,y,N,2, K=K, s=s4)
 
 
-logisticRegression(X,y,s=s1)
-logisticRegression(Xad,y,s=s2)
-logisticRegression(XPC,y,s=s3)
-logisticRegression(X2PC,y,s=s4)
+#logisticRegression(X,y,s=s1)
+#logisticRegression(Xad,y,s=s2)
+#logisticRegression(XPC,y,s=s3)
+#logisticRegression(X2PC,y,s=s4)
 
-#decisionTree(X,y,attributeNames,classNames,s=s1)
-#decisionTree(Xad,y,attributeNames,classNames,s=s2)
-#decisionTree(XPC,y,attributeNames,classNames,s=s3)
-#decisionTree(X2PC,y,attributeNames,classNames,s=s4)
+decisionTree(X,y,attributeNames,classNames,"Decision_Tree_X.gvz",s=s1)
+decisionTree(Xad,y,attributeNames,classNames,"Decision_Tree_Xad.gvz",s=s2)
+decisionTree(XPC,y,attributeNames,classNames,"Decision_Tree_XPC.gvz",s=s3)
+decisionTree(X2PC,y,attributeNames,classNames,"Decision_Tree_X2PC.gvz",s=s4)
 #
 #kNearestNeighbours(X,y,N,C,s=s1)
 #kNearestNeighbours(Xad,y,N,C,s=s2)
