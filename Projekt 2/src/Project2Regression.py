@@ -88,7 +88,7 @@ Xad = scipy.delete(Xad,3,1) # Adiposity
 Xad = scipy.delete(Xad,1,1) # Tobacco
 Xad = scipy.delete(Xad,0,1) # SBP
 
-(X_train_ad,y_train_ad),(X_test_ad,y_test_ad) = getTestAndTrainingSet(XStandardized,y)
+(X_train_ad,y_train_ad),(X_test_ad,y_test_ad) = getTestAndTrainingSet(Xad,y)
 
 
 #artificialNeuralNetwork(Xad, y, N, noAttributes-4)
