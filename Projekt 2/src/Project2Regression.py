@@ -56,75 +56,96 @@ M = len(attributeNames)
 N = len(y)
 C = len(classNames)
 
+
 XStandardized = zscore(X, ddof=1)
 
+XPC = getPrincipalComponents(XStandardized)
 
-#X = sortByChd(X,y)
+XPC = getTwoPrincipalComponents(XStandardized)
 
-#X.sort(key=lambda x: x[1])
+(XWithoutLDL,yWithoutLDL,attributeNamesWithoutAttr) = removeAttribute(X,y,2,attributeNames)
+#forwardSelection(XWithoutLDL,yWithoutLDL,N,M,5,attributeNames,classNames)
 
-print(X)
+XWithoutLDLStandardized = zscore(XWithoutLDL, ddof=1)
 
-#Split dataset into features and data vector
-#ldl_idx = attributeNames.index('ldl')
-#y = X[:,ldl_idx]
+(X_train,y_train),(X_test,y_test) = getTestAndTrainingSet(X,y)
+(X_train_std,y_train_std),(X_test_std,y_test_std) = getTestAndTrainingSet(XStandardized,y)
 
-#X_cols = range(0,ldl_idx) + range(ldl_idx+1,len(attributeNames))
-#X_rows = range(0,len(y))
-#X = X[ix_(X_rows,X_cols)]
+#linearRegression(X,y,attributeNames,'chd')
+#linearRegression(X,y,attributeNamesWithoutAttr,'ldl')
+#linearRegression(X,y,attributeNames,'ldl')
+#print(y)
+#forwardSelection(X,y,N,5,attributeNames,classNames)
+#forwardSelection(XWithoutLDL,yWithoutLDL,N,5,attributeNamesWithoutAttr,classNames)
+#forwardSelection(XStandardized,y,N,5,attributeNames,classNames)
 
-# Fit ordinary least squares regression model
-#model = lm.LinearRegression()
-#model.fit(X,y)
+#artificialNeuralNetwork(X,y,N,noAttributes)
 
-# Predict ldl value
-#y_est = model.predict(X)
-#residual = y_est-y
-
-# Display scatter plot
-#figure()
-#subplot(2,1,1)
-#plot(y, y_est, '.')
-#xlabel('ldl value (true)'); ylabel('ldl value (estimated)');
-#subplot(2,1,2)
-#hist(residual,40)
-
-#show()
-
-#linearRegression(X,y)
-
-
-#forwardSelection(X,y,N,M,5,attributeNames)
-
-#forwardSelection(XStandardized,y,N,M,5,attributeNames)
-
-#X = XStandardized
-
-#X = scipy.delete(X,8,1) # Age
-#X = scipy.delete(X,7,1) # Alcohol
-#X = scipy.delete(X,6,1) # Obesity
-#X = scipy.delete(X,5,1) # TypeA
-#X = scipy.delete(X,4,1) # Famhist
-#X = scipy.delete(X,3,1) # Adiposity
-#X = scipy.delete(X,2,1) # LDL
-#X = scipy.delete(X,1,1) # Tobacco
-#X = scipy.delete(X,0,1) # SBP
-
-#linearRegression(X,y,attributeNames)
-
-#artificialNeuralNetwork(XStandardized,y,N,noAttributes)
-
+#forwardSelection(XWithoutLDLStandardized,yWithoutLDL,N,5,attributeNamesWithoutAttr,classNames)
 #artificialNeuralNetworkByPC(XStandardized,y,N)
 
-#decisionTree(X,y,attributeNames,classNames)
+Xad = np.copy(X)
 
-#kNearestNeighbours(X,y,N,C,99)
+#Xad = scipy.delete(Xad,8,1) # Age
+#Xad = scipy.delete(Xad,7,1) # Alcohol
+Xad = scipy.delete(Xad,6,1) # Obesity
+#Xad = scipy.delete(Xad,5,1) # TypeA
+#Xad = scipy.delete(Xad,4,1) # Famhist
+Xad = scipy.delete(Xad,3,1) # Adiposity
+#Xad = scipy.delete(Xad,2,1) # LDL
+Xad = scipy.delete(Xad,1,1) # Tobacco
+Xad = scipy.delete(Xad,0,1) # SBP
 
-#confusionMatrix(getTwoPrincipalComponents(X),y,C,5)
+X2PC = np.copy(XPC)
+X2PC = X2PC[:,0:1]
 
-#plotKNearestNeighbours(getTwoPrincipalComponents(XStandardized),y,C,5)
-#plotKNearestNeighbours(X,y,C,5)
+#X2PC = scipy.delete(X2PC,8,1) # PC9
+#X2PC = scipy.delete(X2PC,7,1) # PC8
+#X2PC = scipy.delete(X2PC,6,1) # PC7
+#X2PC = scipy.delete(X2PC,5,1) # PC6
+#X2PC = scipy.delete(X2PC,4,1) # PC5
+#X2PC = scipy.delete(X2PC,3,1) # PC4
+#X2PC = scipy.delete(X2PC,2,1) # PC3
 
-#plotKNearestNeighbours(X,y,C)
 
-plotKNearestNeighbours(classNames,XStandardized,y,C,DoPrincipalComponentAnalysis=True)
+(X_train_ad,y_train_ad),(X_test_ad,y_test_ad) = getTestAndTrainingSet(Xad,y)
+
+
+#artificialNeuralNetwork(Xad, y, N, noAttributes-4)
+
+
+# Classification
+s1 = "X not modified."
+s2 = "Attributes of X selected according to result of forward selection."
+s3 = "X represented by principal components"
+s4 = "X represented by two most important principal components."
+#
+K = 4
+
+#artificialNeuralNetwork(X,y,N,noAttributes, K=K, s=s1)
+#artificialNeuralNetwork(Xad,y,N,noAttributes-4, K=K, s=s2)
+#artificialNeuralNetwork(XPC,y,N,noAttributes, K=K, s=s3)
+#artificialNeuralNetwork(X2PC,y,N,2, K=K, s=s4)
+
+
+predictLinearRegression(X,y)
+
+#logisticRegression(X,y,s=s1)
+#logisticRegression(Xad,y,s=s2)
+#logisticRegression(XPC,y,s=s3)
+#logisticRegression(X2PC,y,s=s4)
+
+decisionTree(X,y,attributeNames,classNames,"Decision_Tree_X.gvz",s=s1)
+decisionTree(Xad,y,attributeNames,classNames,"Decision_Tree_Xad.gvz",s=s2)
+decisionTree(XPC,y,attributeNames,classNames,"Decision_Tree_XPC.gvz",s=s3)
+decisionTree(X2PC,y,attributeNames,classNames,"Decision_Tree_X2PC.gvz",s=s4)
+#
+#kNearestNeighbours(X,y,N,C,s=s1)
+#kNearestNeighbours(Xad,y,N,C,s=s2)
+#kNearestNeighbours(XPC,y,N,C,s=s3)
+#kNearestNeighbours(X2PC,y,N,C,s=s4)
+#
+#plotKNearestNeighbours(classNames, X, y, C, s=s1, k=15)
+#plotKNearestNeighbours(classNames, Xad, y, C, s=s2, k=14)
+#plotKNearestNeighbours(classNames, XPC, y, C, s=s3, k=24)
+#plotKNearestNeighbours(classNames, X2PC, y, C, DoPrincipalComponentAnalysis = True,s=s4,neighbours=30)
