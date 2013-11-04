@@ -13,6 +13,8 @@ import neurolab as nl
 from sklearn import tree
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import confusion_matrix
+import scipy
+
 
 
 
@@ -37,7 +39,9 @@ def sortByChd(X,y):
     
     
     
-def logisticRegression(X,y):
+def logisticRegression(X,y,s=""):
+    print "Doing logistic regression for: "
+    print s
     # Fit logistic regression model
     model = lm.logistic.LogisticRegression()
     model = model.fit(X, y.A.ravel())
@@ -59,6 +63,7 @@ def logisticRegression(X,y):
     #print('\nProbability of given sample being positive for CHD: {0:.4f}'.format(x_class))
     
     print('\nOverall misclassification rate: {0:.3f}'.format(misclass_rate))
+    print "\n"
     
     f = figure(); f.hold(True)
     class0_ids = nonzero(y==0)[0].tolist()[0]
@@ -356,7 +361,9 @@ def artificialNeuralNetworkByPC(X,y,N,K=4):
     show()
     
     
-def decisionTree(X,y,attributeNames,classNames):
+def decisionTree(X,y,attributeNames,classNames,s=""):
+    print "Doing decision tree for: "
+    print s
     # Fit regression tree classifier, Gini split criterion, pruning enabled
     dtc = tree.DecisionTreeClassifier(criterion='gini', min_samples_split=100)
     dtc = dtc.fit(X,y)
@@ -369,24 +376,26 @@ def decisionTree(X,y,attributeNames,classNames):
     # Define a new data object (new type of wine) with the attributes given in the text
     #x = np.array([138.33, 3.64, 4.74, 25.41, 0, 53.10, 26.04, 17.04, 42.82])
     #x = np.array([138.33*2, 3.64*2, 4.74*2, 25.41*2, 1, 53.10*2, 26.04*2, 17.04*2, 42.82])
-    x = np.array([138.33, 3.64, 4.74, 25.41, 1, 20, 26.04, 17.04*1, 40])
+    #x = np.array([138.33, 3.64, 4.74, 25.41, 1, 20, 26.04, 17.04*1, 40])
      
     # Evaluate the classification tree for the new data object
-    x_class = dtc.predict(x)[0]
+    #x_class = dtc.predict(x)[0]
     
     # Print results
-    print '\nNew object attributes:'
-    for attr in attributeNames:
-        print attr[0]
-    print '\nClassification result:'
-    if classNames[x_class] > 0.5:
-        print "Positive"
-    else:
-        print "Negative"
+    #print '\nNew object attributes:'
+    #for attr in attributeNames:
+    #    print attr[0]
+    #print '\nClassification result:'
+    #if classNames[x_class] > 0.5:
+    #    print "Positive"
+    #else:
+    #    print "Negative"
         
         
 
-def kNearestNeighbours(X, y, N, C, L=40):    
+def kNearestNeighbours(X, y, N, C, L=40, s=""):    
+    print "Doing k-nearest neighbours for: " 
+    print s
     
     # Cross-validation not necessary. Instead, compute matrix of nearest neighbor
     # distances between each pair of data points ..
@@ -439,7 +448,9 @@ def getTestAndTrainingSet(X,y,K=5):
         if(k==K):
             return (X_train,y_train),(X_test,y_test)
     
-def plotKNearestNeighbours(classNames,X, y, C, K=5, attribute1 = 0, attribute2 = 1, DoPrincipalComponentAnalysis = False):
+def plotKNearestNeighbours(classNames,X, y, C, K=5, attribute1 = 0, attribute2 = 1, DoPrincipalComponentAnalysis = False, s="", neighbours = 5, X_train = [], y_train = [], X_test = [], y_test = []):
+    print "Plotting k-nearest neighbours for: "
+    print s
     if DoPrincipalComponentAnalysis:
         U = getTwoPrincipalComponents(X)
         a1 = 0
@@ -450,13 +461,15 @@ def plotKNearestNeighbours(classNames,X, y, C, K=5, attribute1 = 0, attribute2 =
         U = X
     (X_train,y_train),(X_test,y_test) = getTestAndTrainingSet(U,y,K)
     
-    # Plot the training data points (color-coded) and test data points.
-    figure();
-    hold(True);
-    styles = ['.b', '.r']
-    for c in range(C):
-        class_mask = y.A.ravel()==c
-        plot(X_train[:,a1], X_train[:,a2], styles[c])
+    #figure();
+    #hold(True);
+    #styles = ['.b', '.r']
+    #for c in range(C):
+    #    class_mask = (y_train == c).A.ravel()
+        #class_mask = (y_train == c)
+    #    plot(X_train[class_mask,a1], X_train[class_mask,a2], styles[c])
+    #styles = ['ob', 'or']
+    
     
     
     # Distance metric (corresponds to 2nd norm, euclidean distance).
@@ -470,14 +483,42 @@ def plotKNearestNeighbours(classNames,X, y, C, K=5, attribute1 = 0, attribute2 =
     
     
     # Plot the classfication results
+    
+    # Plot the training data points (color-coded) and test data points.
+    figure();
+    hold(True);
+    styles = ['.b', '.r']
+    for c in range(C):
+        class_mask = y_train.A.ravel()==c
+        #class_mask = y_train == c
+        plot(X_train[class_mask,a1], X_train[class_mask,a2], styles[c])    
     styles = ['ob', 'or']
+    # Plot result of classification
     for c in range(C):
         class_mask = (y_est==c)
         plot(X_test[class_mask,a1], X_test[class_mask,a2], styles[c], markersize=10)
         plot(X_test[class_mask,a1], X_test[class_mask,a2], 'kx', markersize=8)
-    title('Data classification - KNN');
+    title('Data classification Results - KNN');
     legend([convertToWord(i) for i in classNames])
     show()
+    
+    #Plot actual values of objects
+    figure();
+    hold(True);
+    styles = ['.b', '.r']
+    for c in range(C):
+        class_mask = y_train.A.ravel()==c
+        #class_mask = (y_train == c)
+        plot(X_train[class_mask,a1], X_train[class_mask,a2], styles[c])
+    styles = ['ob', 'or']
+    for c in range(C):
+        class_mask = y_test.A.ravel() == c
+        plot(X_test[class_mask,a1], X_test[class_mask,a2], styles[c], markersize=10)
+        plot(X_test[class_mask,a1], X_test[class_mask,a2], 'kx', markersize=8)
+    title('Actual value of objects - KNN');
+    legend([convertToWord(i) for i in classNames])
+    show()
+
 
     cm = confusion_matrix(y_test.A.ravel(), y_est);
     accuracy = 100*cm.diagonal().sum()/cm.sum(); error_rate = 100-accuracy;
@@ -489,4 +530,10 @@ def plotKNearestNeighbours(classNames,X, y, C, K=5, attribute1 = 0, attribute2 =
     title('Confusion matrix (Accuracy: {0}%, Error Rate: {1}%)'.format(accuracy, error_rate));
     
     show()
+    
+def removeAttribute(X,y,attribute):
+    yWithoutAttr = X[:,attribute]
+    XWithoutAttr = np.copy(X)
+    XWithoutAttr = scipy.delete(XWithoutAttr,attribute,1)
+    return (XWithoutAttr, yWithoutAttr)
     

@@ -57,14 +57,24 @@ N = len(y)
 C = len(classNames)
 
 XStandardized = zscore(X, ddof=1)
+XPC = getTwoPrincipalComponents(XStandardized)
+
+(XWithoutLDL,yWithoutLDL) = removeAttribute(X,y,2)
+
+forwardSelection(XWithoutLDL,yWithoutLDL,N,M,5,attributeNames,classNames)
 
 
-linearRegression(X,y,attributeNames,'ldl')
-forwardSelection(X,y,N,M,5,attributeNames,classNames)
-artificialNeuralNetwork(X,y,N,noAttributes)
+(X_train,y_train),(X_test,y_test) = getTestAndTrainingSet(X,y)
+(X_train_std,y_train_std),(X_test_std,y_test_std) = getTestAndTrainingSet(XStandardized,y)
 
-forwardSelection(XStandardized,y,N,M,5,attributeNames,classNames)
-artificialNeuralNetworkByPC(XStandardized,y,N)
+
+#linearRegression(X,y,attributeNames,'ldl')
+#print(y)
+#forwardSelection(X,y,N,M,5,attributeNames,classNames)
+#artificialNeuralNetwork(X,y,N,noAttributes)
+
+#forwardSelection(XStandardized,y,N,M,5,attributeNames,classNames)
+#artificialNeuralNetworkByPC(XStandardized,y,N)
 
 Xad = np.copy(X)
 
@@ -78,15 +88,28 @@ Xad = scipy.delete(Xad,3,1) # Adiposity
 Xad = scipy.delete(Xad,1,1) # Tobacco
 Xad = scipy.delete(Xad,0,1) # SBP
 
-artificialNeuralNetwork(Xad, y, N, noAttributes-4)
+(X_train_ad,y_train_ad),(X_test_ad,y_test_ad) = getTestAndTrainingSet(XStandardized,y)
+
+
+#artificialNeuralNetwork(Xad, y, N, noAttributes-4)
 
 
 # Classification
+s1 = "X not modified."
+s2 = "Attributes of X selected according to result of forward selection."
+s3 = "X represented by two most important principal components."
 
-logisticRegression(X,y)
-logisticRegression(Xad,y)
-decisionTree(X,y,attributeNames,classNames)
-kNearestNeighbours(X,y,N,C)
-decisionTree(X, y, attributeNames, classNames)
-plotKNearestNeighbours(classNames, X, y, C)
-plotKNearestNeighbours(classNames, X, y, C, DoPrincipalComponentAnalysis = True)
+#logisticRegression(X,y,s=s1)
+#logisticRegression(Xad,y,s=s2)
+#logisticRegression(XPC,y,s=s3)
+
+#decisionTree(X,y,attributeNames,classNames,s=s1)
+#decisionTree(Xad,y,attributeNames,classNames,s=s2)
+#decisionTree(XPC,y,attributeNames,classNames,s=s3)
+
+#kNearestNeighbours(X,y,N,C,s=s1)
+#kNearestNeighbours(Xad,y,N,C,s=s2)
+#kNearestNeighbours(XPC,y,N,C,s=s3)
+
+#plotKNearestNeighbours(classNames, X, y, C)
+#plotKNearestNeighbours(classNames, XStandardized, y, C, DoPrincipalComponentAnalysis = True,s=s3,neighbours=30)
