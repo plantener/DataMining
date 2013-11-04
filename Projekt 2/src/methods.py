@@ -50,6 +50,15 @@ def logisticRegression(X,y,s=""):
     # Classify objects as CHD Negative/Positive (0/1)
     y_est = model.predict(X)
     y_est_chd_prob = model.predict_proba(X)[:, 1]
+    correct = 0
+    wrong = 0
+    for i in range(0,len(y)):
+        if((y[i] > 0.5 and y_est_chd_prob[i] > 0.5) or(y[i] < 0.5 and y_est_chd_prob[i])):
+            correct += 1
+        else:
+            wrong += 1
+    rate = double(wrong) / double(correct + wrong)
+    print rate
     
     # Evaluate classifier's misclassification rate over entire training data
     misclass_rate = sum(np.abs(np.mat(y_est).T - y)) / float(len(y_est))
@@ -78,7 +87,7 @@ def logisticRegression(X,y,s=""):
     show()
     
 def linearRegression(X,y,attributeNames,attribute):
-   # Split dataset into features and target vector
+    # Split dataset into features and target vector
     alcohol_idx = attributeNames.index(attribute)
     y = X[:,alcohol_idx]
     
@@ -113,6 +122,9 @@ def forwardSelection(X,y,N,M,K,attributeNames, classNames):
     X2 = np.concatenate((np.ones((X.shape[0],1)),X),1)
     attributeNames2 = [u'Offset']+attributeNames
     M2 = M+1
+    
+    #X3 = np.copy(X)
+    X2[:,2] = np.power(X2[:,2],2)    
     
     ## Crossvalidation
     # Create crossvalidation partition for evaluation
@@ -207,10 +219,12 @@ def forwardSelection(X,y,N,M,K,attributeNames, classNames):
     show()    
 
 
-def artificialNeuralNetwork(X,y,N,noAttributes,K=4):
+def artificialNeuralNetwork(X,y,N,noAttributes,K=4, s=""):
+    print "Doing Artificial Neural Network for:"
+    print s    
     # Parameters for neural network classifier
     n_hidden_units = 1      # number of hidden units
-    n_train = 2             # number of networks trained in each k-fold
+    n_train = 5             # number of networks trained in each k-fold
     
     # These parameters are usually adjusted to: (1) data specifics, (2) computational constraints
     #learning_rate = 0.01    # rate of weights adaptation
@@ -225,6 +239,7 @@ def artificialNeuralNetwork(X,y,N,noAttributes,K=4):
     error_hist = np.zeros((max_epochs,K))
     bestnet = list()
     k=0
+    rate = []#np.zeros(K+1)
     for train_index, test_index in CV:
         print('\nCrossvalidation fold: {0}/{1}'.format(k+1,K))    
         
@@ -249,6 +264,16 @@ def artificialNeuralNetwork(X,y,N,noAttributes,K=4):
         y_est = (y_est>.5).astype(int)
         errors[k] = (y_est!=y_test).sum().astype(float)/y_test.shape[0]
         k+=1
+
+        wrong = 0
+        correct = 0        
+        for i in range(0,len(y_est)):
+            if((y_test[i] < 0.5 and y_est[i] < 0.5) or (y_test[i] > 0.5 and y_est[i] > 0.5)):
+                correct += 1
+            else:
+                wrong += 1
+        rate.append( double(wrong) / double(correct + wrong) )
+        #print(rate[k])
         
     
     # Print the average classification error rate
@@ -266,18 +291,25 @@ def artificialNeuralNetwork(X,y,N,noAttributes,K=4):
     
     show()
     
+    #for i in range(0,K):
+    for e in rate:
+        print e
     
-def getTwoPrincipalComponents(X):
+    
+def getPrincipalComponents(X):
     Y = X - np.ones((len(X),1))*X.mean(0)
     
     U,S,V = linalg.svd(Y,full_matrices=False)
     
-    return U[:,0:2]
+    return U
 
 
-def artificialNeuralNetworkByPC(X,y,N,K=4):
-    U = getTwoPrincipalComponents(X)
+def artificialNeuralNetworkByPC(X,y,N,K=4, s=""):
+    print "Doing Artificial Neural Network for:"
+    print s    
     
+    #U = getTwoPrincipalComponents(X)
+    U = X
     # Parameters for neural network classifier
     n_hidden_units = 1      # number of hidden units
     n_train = 2             # number of networks trained in each k-fold
@@ -373,6 +405,21 @@ def decisionTree(X,y,attributeNames,classNames,s=""):
     out = tree.export_graphviz(dtc, out_file='tree_gini_CHD_data.gvz', feature_names=attributeNames)
     out.close()
     
+    correct = 0
+    wrong = 0
+    
+    for i in range(0,len(X)):
+        x = X[i,:]
+        x_class = dtc.predict(x)[0]
+        if((x_class < 0.5 and y[i] < 0.5) or (x_class > 0.5 and y[i] > 0.5)):
+            correct += 1
+        else:
+            wrong += 1
+            
+    rate = double(wrong) / double(correct + wrong)            
+    print rate
+    print '\n'
+    
     # Define a new data object (new type of wine) with the attributes given in the text
     #x = np.array([138.33, 3.64, 4.74, 25.41, 0, 53.10, 26.04, 17.04, 42.82])
     #x = np.array([138.33*2, 3.64*2, 4.74*2, 25.41*2, 1, 53.10*2, 26.04*2, 17.04*2, 42.82])
@@ -427,6 +474,8 @@ def kNearestNeighbours(X, y, N, C, L=40, s=""):
     imshow(nclass, cmap='binary', interpolation='None'); xlabel("k'th neighbor"); ylabel('data point'); title("Neighbors class matrix");
     
     show()
+    
+    print '\n'
 
 def getTestAndTrainingSet(X,y,K=5):
     N = len(X)
@@ -436,7 +485,6 @@ def getTestAndTrainingSet(X,y,K=5):
     k=0
     
     for train_index, test_index in CV:
-        print('\nCrossvalidation fold: {0}/{1}'.format(k+1,K))    
         
         # extract training and test set for current CV fold
         X_train = X[train_index,:]
@@ -451,16 +499,16 @@ def getTestAndTrainingSet(X,y,K=5):
 def plotKNearestNeighbours(classNames,X, y, C, K=5, attribute1 = 0, attribute2 = 1, DoPrincipalComponentAnalysis = False, s="", neighbours = 5, X_train = None, y_train = None, X_test = None, y_test = None):
     print "Plotting k-nearest neighbours for: "
     print s
-    if DoPrincipalComponentAnalysis:
-        U = getTwoPrincipalComponents(X)
-        a1 = 0
-        a2 = 1
-    else:
-        a1 = attribute1
-        a2 = attribute2
-        U = X
+    #if DoPrincipalComponentAnalysis:
+        #U = getTwoPrincipalComponents(X)
+    #    a1 = 0
+    #    a2 = 1
+    #else:
+    #    a1 = attribute1
+    #    a2 = attribute2
+        #U = X
     if (X_train is None or y_train is None or X_test is None or y_test is None):
-        (X_train,y_train),(X_test,y_test) = getTestAndTrainingSet(U,y,K)
+        (X_train,y_train),(X_test,y_test) = getTestAndTrainingSet(X,y,K)
     
     #figure();
     #hold(True);
@@ -492,13 +540,13 @@ def plotKNearestNeighbours(classNames,X, y, C, K=5, attribute1 = 0, attribute2 =
     for c in range(C):
         class_mask = y_train.A.ravel()==c
         #class_mask = y_train == c
-        plot(X_train[class_mask,a1], X_train[class_mask,a2], styles[c])    
+        plot(X_train[class_mask,attribute1], X_train[class_mask,attribute2], styles[c])    
     styles = ['ob', 'or']
     # Plot result of classification
     for c in range(C):
         class_mask = (y_est==c)
-        plot(X_test[class_mask,a1], X_test[class_mask,a2], styles[c], markersize=10)
-        plot(X_test[class_mask,a1], X_test[class_mask,a2], 'kx', markersize=8)
+        plot(X_test[class_mask,attribute1], X_test[class_mask,attribute2], styles[c], markersize=10)
+        plot(X_test[class_mask,attribute1], X_test[class_mask,attribute2], 'kx', markersize=8)
     title('Data classification Results - KNN');
     legend([convertToWord(i) for i in classNames])
     show()
@@ -510,12 +558,12 @@ def plotKNearestNeighbours(classNames,X, y, C, K=5, attribute1 = 0, attribute2 =
     for c in range(C):
         class_mask = y_train.A.ravel()==c
         #class_mask = (y_train == c)
-        plot(X_train[class_mask,a1], X_train[class_mask,a2], styles[c])
+        plot(X_train[class_mask,attribute1], X_train[class_mask,attribute2], styles[c])
     styles = ['ob', 'or']
     for c in range(C):
         class_mask = y_test.A.ravel() == c
-        plot(X_test[class_mask,a1], X_test[class_mask,a2], styles[c], markersize=10)
-        plot(X_test[class_mask,a1], X_test[class_mask,a2], 'kx', markersize=8)
+        plot(X_test[class_mask,attribute1], X_test[class_mask,attribute2], styles[c], markersize=10)
+        plot(X_test[class_mask,attribute1], X_test[class_mask,attribute2], 'kx', markersize=8)
     title('Actual value of objects - KNN');
     legend([convertToWord(i) for i in classNames])
     show()
@@ -530,7 +578,18 @@ def plotKNearestNeighbours(classNames,X, y, C, K=5, attribute1 = 0, attribute2 =
     xlabel('Predicted class'); ylabel('Actual class');
     title('Confusion matrix (Accuracy: {0}%, Error Rate: {1}%)'.format(accuracy, error_rate));
     
+    wrong = 0
+    correct = 0
+    for i in range(0,len(y_test)):
+        if((y_test[i] > 0.5 and y_est[i] > 0.5) or (y_test[i] < 0.5 and y_est[i] < 0.5)):
+            correct += 1
+        else:
+            wrong += 1
+    rate = double(wrong) / double(correct + wrong)
+    print rate
+    
     show()
+    print '\n'
     
 def removeAttribute(X,y,attribute):
     yWithoutAttr = X[:,attribute]
