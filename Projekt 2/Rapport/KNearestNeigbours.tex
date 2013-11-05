@@ -27,13 +27,28 @@ The data set has been exposed to classification by looking at the k nearest neig
 \caption{These figure shows results of performing KNN for different input.}
 \label{knnResults}
 \end{figure}
-The first figure shows the estimated error using all available attributes. The lowest error of 32\% is found when using 15 nearest neighbours.
 
-The next figure shows the estimated error using only the selected attributes from the forward selection done in the linear regression analysis. This indicates a slightly higher estimated error of 33\%, using 14 neighbours.
+The misclassification rates for these can be seen in Table \ref{knnErrorRate}.
 
-The next figure uses all the principal components. This indicates a lower estimated error of around 28\%, using 24 neighbours.
+\begin{table}[H]
+\begin{longtable}{lc} \hline
+Result from: & Mis-classification rate \\ \hline
+Figure \ref{knnResultX} & 32\% \\ 
+Figure \ref{knnResultXad} & 33\% \\ 
+Figure \ref{knnResultXPA} & 28\% \\ 
+Figure \ref{knnResultX2PA} & 30,5\% \\ \hline
+\end{longtable}
+\caption{Mis-classification rate for the logistic regressions.}
+\label{knnErrorRate}
+\end{table}
 
-The last figure uses only the two most important principal components. This gives an error of 30.5\% using 30 neighbours.
+%The first figure shows the estimated error using all available attributes. The lowest error of 32\% is found when using 15 nearest neighbours.
+
+%The next figure shows the estimated error using only the selected attributes from the forward selection done in the linear regression analysis. This indicates a slightly higher estimated error of 33\%, using 14 neighbours.
+
+%The next figure uses all the principal components. This indicates a lower estimated error of around 28\%, using 24 neighbours.
+
+%The last figure uses only the two most important principal components. This gives an error of 30.5\% using 30 neighbours.
 
 \begin{figure}[H]
 	\begin{subfigure}[b]{0.5\textwidth}
