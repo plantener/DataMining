@@ -77,23 +77,33 @@ def predictLinearRegression(X,y,s=""):
     show()    
     
     
-def logisticRegression(X,y,s=""):
+def logisticRegression(X,y,X_train,y_train, X_test, y_test, s=""):
     print "Doing logistic regression for: "
     print s
+    if(X_train is None or y_train is None or X_test is None or y_test is None):
+        X_train = X
+        y_train = y
+        X_test = X
+        y_test = y
+    
+    
     # Fit logistic regression model
     model = lm.logistic.LogisticRegression()
-    model = model.fit(X, y.A.ravel())
+    model = model.fit(X_train, y_train.A.ravel())
     
     
     # Classify objects as CHD Negative/Positive (0/1)
     y_est = model.predict(X)
     y_est_chd_prob = model.predict_proba(X)[:, 1]
+    
+    y_est_test = model.predict(X_test)
+    y_est_chd_prob_test = model.predict_proba(X)[:,1]
     correct = 0
     wrong = 0
-    for i in range(0,len(y)):
-        temp = random()
-        if((y[i] > 0.5 and temp < 2*0.346) or (y[i]<0.5 and temp > 2*0.346)):
-        #if((y[i] > 0.5 and y_est_chd_prob[i] > 0.5) or(y[i] < 0.5 and y_est_chd_prob[i] < 0.5)):
+    for i in range(0,len(y_test)):
+        #temp = random()
+        #if((y_test[i] > 0.5 and temp < 2*0.346) or (y_test[i]<0.5 and temp > 2*0.346)):
+        if((y_test[i] > 0.5 and y_est_chd_prob_test[i] > 0.5) or(y_test[i] < 0.5 and y_est_chd_prob_test[i] < 0.5)):
             correct += 1
         else:
             wrong += 1
@@ -125,6 +135,8 @@ def logisticRegression(X,y,s=""):
     #ylim(-0.5,1.5)
     
     show()
+    
+    return rate
     
 def linearRegression(X,y,attributeNames,attribute):
     # Split dataset into features and target vector
@@ -448,12 +460,19 @@ def artificialNeuralNetworkByPC(X,y,N,K=4, s=""):
     show()
     
     
-def decisionTree(X,y,attributeNames,classNames,fileName,s=""):
+def decisionTree(X,y,attributeNames,classNames,fileName,s="",X_train=None,y_train=None, X_test=None, y_test=None):
     print "Doing decision tree for: "
     print s
+    
+    if(X_train is None or X_test is None or y_train is None or y_test is None):
+        X_train = X
+        X_test = X
+        y_train = y
+        y_test = y
+        
     # Fit regression tree classifier, Gini split criterion, pruning enabled
     dtc = tree.DecisionTreeClassifier(criterion='gini', min_samples_split=100)
-    dtc = dtc.fit(X,y)
+    dtc = dtc.fit(X_train,y_train)
     
     # Export tree graph for visualization purposes:
     # (note: you can use i.e. Graphviz application to visualize the file)
@@ -463,10 +482,10 @@ def decisionTree(X,y,attributeNames,classNames,fileName,s=""):
     correct = 0
     wrong = 0
     
-    for i in range(0,len(X)):
-        x = X[i,:]
+    for i in range(0,len(X_test)):
+        x = X_test[i,:]
         x_class = dtc.predict(x)[0]
-        if((x_class < 0.5 and y[i] < 0.5) or (x_class > 0.5 and y[i] > 0.5)):
+        if((x_class < 0.5 and y_test[i] < 0.5) or (x_class > 0.5 and y_test[i] > 0.5)):
             correct += 1
         else:
             wrong += 1
@@ -475,11 +494,16 @@ def decisionTree(X,y,attributeNames,classNames,fileName,s=""):
     print rate
     print '\n'
     
+    return rate
+    
         
 
-def kNearestNeighbours(X, y, N, C, L=40, s=""):    
+def kNearestNeighbours(X, y, C, L=40, s=""):    
     print "Doing k-nearest neighbours for: " 
     print s
+    minError = 500
+    bestK = -1
+    N = len(X)
     
     # Cross-validation not necessary. Instead, compute matrix of nearest neighbor
     # distances between each pair of data points ..
@@ -499,6 +523,9 @@ def kNearestNeighbours(X, y, N, C, L=40, s=""):
             nclass_count[:,c] = sum(nclass[:,1:l+1]==c,1).A.ravel()
         y_est = np.argmax(nclass_count,1);
         errors[l-1] = (y_est!=y.A.ravel()).sum()
+        if errors[l-1] < minError:
+            minError = errors[l-1]
+            bestK = l
     
         
     # Plot the classification error rate
@@ -513,8 +540,10 @@ def kNearestNeighbours(X, y, N, C, L=40, s=""):
     show()
     
     print '\n'
+    
+    return (bestK, minError / N)
 
-def getTestAndTrainingSet(X,y,K=5):
+def getTestAndTrainingSet(X,y,K=10):
     N = len(X)
     
     CV = cross_validation.KFold(N,K,shuffle=True)
@@ -575,7 +604,7 @@ def plotKNearestNeighbours(classNames,X, y, C, K=5, attribute1 = 0, attribute2 =
     hold(True);
     styles = ['.b', '.r']
     for c in range(C):
-        class_mask = y_train.A.ravel()==c
+        class_mask = (y_train == c).A.ravel()
         #class_mask = y_train == c
         plot(X_train[class_mask,attribute1], X_train[class_mask,attribute2], styles[c])    
     styles = ['ob', 'or']
@@ -627,6 +656,7 @@ def plotKNearestNeighbours(classNames,X, y, C, K=5, attribute1 = 0, attribute2 =
     
     show()
     print '\n'
+    return rate
     
 def removeAttribute(X,y,attribute,attributeNames):
     attributeNamesWithoutAttr = np.copy(attributeNames)
