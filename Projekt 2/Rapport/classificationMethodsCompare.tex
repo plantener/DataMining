@@ -1,0 +1,28 @@
+\subsection{Comparison}
+We have compared the tree methods of classification with each other. For each method, we have looked at and calculated the misclassification rate. However here we use the whole data set to describe the classification. And we then check the misclassification rate using the same data objects. Therefore we have also for these 3 approaches created random train and test sets. So we use a subset of our data set to train a classifier, and then we use another subset of the data set to estimate the misclassification. We have done this for 5 randomly generated sets. The results of this can be seen in \ref{misclasRes}. This figure indicates that Logical Regression (LR) is not very suitable for our data set. We also see that the misclassification results of Section \ref{classification} are quite different from these. The table for instance shows us that Decision Trees might be better than eg. Logical Regression for our set.
+
+\begin{table}[H]
+\begin{longtable}{lcccccc}
+\hline
+Method & test1 & test2 & test3 & test4 & test5 & Mean \\ \hline
+LR / All attributes & 0.4792 & 0.2917 & 0.5 &   0.375 & 0.3333 & 0.3958\\ 
+LR / According to FF & 0.3333 & 0.5208 & 0.4375 & 0.3125  &  0.3958 & 0.4    \\ 
+LR / Principal Components & 0.4375  &  0.3333 & 0.4583 & 0.4167 & 0.3125 &     0.3917 \\ 
+LR / Two most influence PC & 0.2917 & 0.3542 & 0.4167 & 0.3958 & 0.375    &   0.3667 \\ \hline
+
+DT / All attributes & 0.3125  &    0.2917 & 0.4167 &  0.1875  &    0.25    &    0.2917 \\ 
+DT / According to FF & 0.25    &    0.25 &    0.3958 & 0.3542 &  0.25    &    0.3        \\ 
+DT / Principal Components & 0.2917 & 0.3958 & 0.3333 &  0.3542 &  0.2292 &  0.3208\\ 
+DT / Two most influence PC &  0.3333 & 0.3542 & 0.2917 & 0.3542 &  0.3542 &  0.3375  \\ \hline
+
+KNN / All attributes & 0.3542 &  0.1458 & 0.5208 & 0.25 &    0.25 &       0.3042 \\ 
+KNN / According to FF &  0.3333 &  0.3958 &  0.3958 &  0.4167 & 0.3125  &    0.3708 \\ 
+KNN / Principal Components & 0.3333 &  0.3333 & 0.3333 &  0.3125   &   0.1875 &     0.3    \\ 
+KNN / Two most influence PC & 0.2292 &  0.3333 &  0.3125  &  0.3333 &  0.3542 &  0.3125   \\ \hline
+
+\end{longtable}
+\caption{Calculating average misclassification for the methods.}
+\label{misclasRes}
+\end{table}
+
+%In Figure \ref{misclasRes} we can see the results of c

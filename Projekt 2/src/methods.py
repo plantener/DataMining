@@ -77,7 +77,7 @@ def predictLinearRegression(X,y,s=""):
     show()    
     
     
-def logisticRegression(X,y,X_train,y_train, X_test, y_test, s=""):
+def logisticRegression(X,y,X_train = None,y_train = None, X_test = None, y_test = None, s=""):
     print "Doing logistic regression for: "
     print s
     if(X_train is None or y_train is None or X_test is None or y_test is None):

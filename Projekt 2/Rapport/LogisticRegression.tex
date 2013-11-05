@@ -47,3 +47,4 @@ Figure \ref{logicalRegressionResultX2PA} & 34,6\% \\ \hline
 \label{logicalRegressionErrorRate}
 \end{table}
 We see that we actually get the smallest misclassification rate, when we look at the results from when we do not use principal component analysis, but we also see that in this case, we can use the results from our forward selection to decrease the misclassification result. For comparing these misclassification rates, we should compare to just classifying all objects to be negative. For this we get a misclassification rate of $\frac{160}{462}=34,6\%$, as we have 160 positive samples from a total of 462 samples. We see that this misclassification rate corresponds to the results described in Figures \ref{logicalRegressionResultXPA} and \ref{logicalRegressionResultX2PA}. This makes sense, since the predicted probability of all subjects in these cases are below 50\%.
+Using forward selection, the error rate is actually a bit lower.
