@@ -15,22 +15,31 @@ from scipy.stats import zscore
 import scipy
 
 class ResultHolder:
-    resultNo = 0    
-    results = []
+    resultNo = 0
+    size = 1
+    results = np.zeros(0)
     
-    def init(__self__):
-        results = []
-        resultNo = 0
+    def __init__(self, iterations):
+        self.results = np.zeros(iterations)
+        self.size = iterations
+        self.resultNo = 0
         
-    def addResult(__self__, res):
-        results.add(res)
-        resultNo += 1
+    def addResult(self, res):
+        self.results[self.resultNo] = res
+        self.resultNo += 1
         
-    def printMeanResult(__self__):
+    def getMeanResult(self):
         sum = 0.0
-        for e in results:
-            sum += e
-        return double(sum) / double(resultNo)
+        for i in range(0,self.size):
+            sum += self.results[i]
+        return double(sum) / double(self.size)
+        
+    def getResults(self):
+        res = np.zeros(self.size+1)
+        for i in range(0,self.size):
+            res[i] = self.results[i]
+        res[self.size] = self.getMeanResult()
+        return res
 
 #Converts Present and Absent into numbers.
 def convert(s):
@@ -126,21 +135,21 @@ X2PC = X2PC[:,0:2]
 #X2PC = scipy.delete(X2PC,2,1) # PC3
 
 
-(X_train_ad,y_train_ad),(X_test_ad,y_test_ad) = getTestAndTrainingSet(Xad,y)
-(X_train_2PC,y_train_2PC),(X_test_2PC,y_test_2PC) = getTestAndTrainingSet(X2PC,y)
 
 (_,_,attributeNamesXad) = removeAttribute(X,y,6,attributeNames)
 (_,_,attributeNamesXad) = removeAttribute(X,y,3,attributeNamesXad)
 (_,_,attributeNamesXad) = removeAttribute(X,y,1,attributeNamesXad)
 (_,_,attributeNamesXad) = removeAttribute(X,y,0,attributeNamesXad)
 
-(_,_,attributeNamesX2PC) = removeAttribute(X,y,8,attributeNames)
-(_,_,attributeNamesX2PC) = removeAttribute(X,y,7,attributeNames)
-(_,_,attributeNamesX2PC) = removeAttribute(X,y,6,attributeNames)
-(_,_,attributeNamesX2PC) = removeAttribute(X,y,5,attributeNames)
-(_,_,attributeNamesX2PC) = removeAttribute(X,y,4,attributeNames)
-(_,_,attributeNamesX2PC) = removeAttribute(X,y,3,attributeNames)
-(_,_,attributeNamesX2PC) = removeAttribute(X,y,2,attributeNames)
+PCNames = ['PC1', 'PC2', 'PC3', 'PC4', 'PC5', 'PC6', 'PC7', 'PC8', 'PC9']
+
+(_,_,attributeNamesX2PC) = removeAttribute(X,y,8,PCNames)
+(_,_,attributeNamesX2PC) = removeAttribute(X,y,7,attributeNamesX2PC)
+(_,_,attributeNamesX2PC) = removeAttribute(X,y,6,attributeNamesX2PC)
+(_,_,attributeNamesX2PC) = removeAttribute(X,y,5,attributeNamesX2PC)
+(_,_,attributeNamesX2PC) = removeAttribute(X,y,4,attributeNamesX2PC)
+(_,_,attributeNamesX2PC) = removeAttribute(X,y,3,attributeNamesX2PC)
+(_,_,attributeNamesX2PC) = removeAttribute(X,y,2,attributeNamesX2PC)
 
 
 #artificialNeuralNetwork(Xad, y, N, noAttributes-4)
@@ -153,31 +162,62 @@ s3 = "X represented by principal components"
 s4 = "X represented by two most important principal components."
 #
 
-#K=4
-#artificialNeuralNetwork(X,y,N,noAttributes, K=K, s=s1)
-#artificialNeuralNetwork(Xad,y,N,noAttributes-4, K=K, s=s2)
-#artificialNeuralNetwork(XPC,y,N,noAttributes, K=K, s=s3)
-#artificialNeuralNetwork(X2PC,y,N,2, K=K, s=s4)
-
-
-#predictLinearRegression(X,y)
-
-#logisticRegression(X,y,X_train, y_train, X_test, y_test, s=s1)
-#logisticRegression(Xad,y,X_train_ad, y_train_ad, X_test_ad, y_test_ad, s=s2)
-#logisticRegression(XPC,y,X_train_PC, y_train_PC, X_test_PC, y_test_PC, s=s3)
-#logisticRegression(X2PC,y,X_train_2PC, y_train_2PC, X_test_2PC, y_test_2PC, s=s4)
-#
-#decisionTree(X,y,attributeNames,classNames,"Decision_Tree_X.gvz",s=s1)#X,X_train,y_train,X_test,y_test)
-#decisionTree(Xad,y,attributeNamesXad,classNames,"Decision_Tree_Xad.gvz",s=s1)#,X_train_ad,y_train_ad,X_test_ad,y_test_ad)
-#decisionTree(XPC,y,attributeNames,classNames,"Decision_Tree_XPC.gvz",s=s1)#,X_train_PC,y_train_PC,X_test_PC,y_test_PC)
-#decisionTree(X2PC,y,attributeNamesX2PC,classNames,"Decision_Tree_X2PC.gvz",s=s1)#,X_train_2PC,y_train_2PC,X_test_2PC,y_test_2PC)
-#
 (XK,e1) = kNearestNeighbours(X,y,C,s=s1)
 (XKad,e2) = kNearestNeighbours(Xad,y,C,s=s2)
 (XKPC,e3) = kNearestNeighbours(XPC,y,C,s=s3)
 (XK2PC,e4) = kNearestNeighbours(X2PC,y,C,s=s4)
-#
-plotKNearestNeighbours(classNames, X, y, C, s=s1, K=15)
-plotKNearestNeighbours(classNames, Xad, y, C, s=s2, K=14)
-plotKNearestNeighbours(classNames, XPC, y, C, s=s3, K=24)
-plotKNearestNeighbours(classNames, X2PC, y, C, DoPrincipalComponentAnalysis = True,s=s4,K=30)
+
+iterations = 5
+
+lrH = ResultHolder(iterations)
+lrHad = ResultHolder(iterations)
+lrHPC = ResultHolder(iterations)
+lrH2PC = ResultHolder(iterations)
+
+dcH = ResultHolder(iterations)
+dcHad = ResultHolder(iterations)
+dcHPC = ResultHolder(iterations)
+dcH2PC = ResultHolder(iterations)
+
+knH = ResultHolder(iterations)
+knHad = ResultHolder(iterations)
+knHPC = ResultHolder(iterations)
+knH2PC = ResultHolder(iterations)
+
+#predictLinearRegression(X,y)
+for i in range(0,iterations):
+    (X_train,y_train),(X_test,y_test) = getTestAndTrainingSet(X,y)
+    (X_train_PC,y_train_PC),(X_test_PC,y_test_PC) = getTestAndTrainingSet(XStandardized,y)
+
+    (X_train_ad,y_train_ad),(X_test_ad,y_test_ad) = getTestAndTrainingSet(Xad,y)
+    (X_train_2PC,y_train_2PC),(X_test_2PC,y_test_2PC) = getTestAndTrainingSet(X2PC,y)
+
+    lrH.addResult(logisticRegression(X,y,X_train = X_train, y_train = y_train, X_test = X_test, y_test = y_test, s=s1))
+    lrHad.addResult(logisticRegression(Xad,y,X_train = X_train_ad, y_train = y_train_ad, X_test = X_test_ad, y_test = y_test_ad, s=s2))
+    lrHPC.addResult(logisticRegression(XPC,y,X_train = X_train_PC, y_train = y_train_PC, X_test = X_test_PC, y_test = y_test_PC, s=s3))
+    lrH2PC.addResult(logisticRegression(X2PC,y,X_train = X_train_2PC, y_train = y_train_2PC, X_test = X_test_2PC, y_test = y_test_2PC, s=s4))
+    
+    dcH.addResult(decisionTree(X,y,attributeNames,classNames,"Decision_Tree_X.gvz",s=s1, X_train = X_train, y_train = y_train, X_test = X_test, y_test = y_test))
+    dcHad.addResult(decisionTree(Xad,y,attributeNamesXad,classNames,"Decision_Tree_Xad.gvz",s=s1,X_train = X_train_ad,y_train = y_train_ad,X_test = X_test_ad,y_test = y_test_ad))
+    dcHPC.addResult(decisionTree(XPC,y,PCNames,classNames,"Decision_Tree_XPC.gvz",s=s1,X_train = X_train_PC,y_train = y_train_PC,X_test = X_test_PC,y_test = y_test_PC))
+    dcH2PC.addResult(decisionTree(X2PC,y,attributeNamesX2PC,classNames,"Decision_Tree_X2PC.gvz",s=s1,X_train = X_train_2PC,y_train = y_train_2PC,X_test = X_test_2PC, y_test = y_test_2PC))
+    
+    knH.addResult(plotKNearestNeighbours(classNames, X, y, C, s=s1, K=15,X_train = X_train, y_train = y_train, X_test = X_test, y_test = y_test))
+    knHad.addResult(plotKNearestNeighbours(classNames, Xad, y, C, s=s2, K=14,X_train = X_train_ad, y_train = y_train_ad, X_test = X_test_ad, y_test = y_test_ad))
+    knHPC.addResult(plotKNearestNeighbours(classNames, XPC, y, C, s=s3, K=24,X_train = X_train_PC, y_train = y_train_PC, X_test = X_test_PC, y_test = y_test_PC))
+    knH2PC.addResult(plotKNearestNeighbours(classNames, X2PC, y, C, DoPrincipalComponentAnalysis = True,s=s4,K=30,X_train = X_train_2PC, y_train = y_train_2PC, X_test = X_test_2PC, y_test = y_test_2PC))
+
+print lrH.getResults()
+print lrHad.getResults()
+print lrHPC.getResults()
+print lrH2PC.getResults()
+
+print dcH.getResults()
+print dcHad.getResults()
+print dcHPC.getResults()
+print dcH2PC.getResults()
+
+print knH.getResults()
+print knHad.getResults()
+print knHPC.getResults()
+print knH2PC.getResults()
