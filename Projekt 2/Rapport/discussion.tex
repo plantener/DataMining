@@ -1,0 +1,9 @@
+\section{Discussion}
+
+For our data set, we have performed forward selection in order to find which attributes are the most relevant for calculating whether a subject is CHD positive. Furthermore, we have used the result of this to for instance do linear regression based on the most relevant attributes. We saw for our set that using forward selection, we did not get much more error rate, in fact in some cases, the error rate was reduced when only looking at some attributes compared to looking at all of them.
+
+%Furthermore we have created an artificial neural network, in order to train our classification to get the best er
+
+Futhermore we have applied artificial neural network for our data set, which performed with a better error rate compared to the linear regression. However this can be because of over-fitting/under-fitting.
+
+For classifying objects in our data set, we have looked at Logistic Regression, Decision Trees and K-Nearest Neighbours. Here we often had close to $\frac{1}{3}$, which is not very good, as this can be reached by just selecting all objects to be CHD-negative, as $\frac{2}{3}$ of the objects in the data set are CHD-negative. When we used the whole data set to train the classifier, and then used the whole data set again to test it, we got okay misclassification error. However when we tried to use two independent sets for training and testing, the misclassification error increased.
