@@ -72,4 +72,6 @@ XBin = Grimm(X)
 WriteAprioriFile(XBin,filename="DanskeEventyr.txt")
 #WriteAprioriFile(X,titles=attributeNames,filename="DanskeEventyr.txt")
 
-BjarneReuter(XBin,"DanskeEventyr.txt",minSup=30,minConf = 55)
+#BjarneReuter(XBin,"DanskeEventyr.txt",minSup=30,minConf = 55)
+
+DanTurell(X)
