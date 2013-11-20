@@ -2,6 +2,7 @@
 from sklearn.mixture import GMM
 from pylab import *
 from toolbox_02450 import clusterplot
+from sklearn import cross_validation
 
 
 def gmm(X,y,M):
@@ -88,3 +89,42 @@ def getPrincipalComponents(X):
     U,S,V = linalg.svd(Y,full_matrices=False)
     
     return U
+    
+def CVK(X,KRange,covar_type,reps):
+    N, M = X.shape
+    T = len(KRange)
+    
+    CVE = np.zeros((T,1))
+    
+    # K-fold crossvalidation
+    CV = cross_validation.KFold(N,10,shuffle=True)
+
+    for t,K in enumerate(KRange):
+            print('Fitting model for K={0}\n'.format(K))
+    
+            # Fit Gaussian mixture model
+            gmm = GMM(n_components=K, covariance_type=covar_type, n_init=reps, params='wmc').fit(X)
+            
+             # For each crossvalidation fold
+            for train_index, test_index in CV:
+    
+                # extract training and test set for current CV fold
+                X_train = X[train_index]
+                X_test = X[test_index]
+    
+                # Fit Gaussian mixture model to X_train
+                gmm = GMM(n_components=K, covariance_type=covar_type, n_init=reps, params='wmc').fit(X_train)
+    
+                # compute negative log likelihood of X_test
+                CVE[t] += -gmm.score(X_test).sum()
+                print CVE[t]
+                
+        # Plot results
+    
+    figure(1); hold(True)
+    #plot(KRange, BIC)
+    #plot(KRange, AIC)
+    plot(KRange, 2*CVE)
+    legend(['BIC', 'AIC', 'Crossvalidation'])
+    xlabel('K')
+    show()

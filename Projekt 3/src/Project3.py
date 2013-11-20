@@ -53,4 +53,6 @@ X2PC = np.copy(XPC)
 
 
 
-gmm(XPC,y,M)
+#gmm(XPC,y,M)
+
+CVK(X,range(1,51),"diag",3)
