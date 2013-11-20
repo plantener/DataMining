@@ -1,0 +1,6 @@
+
+10.3
+Analyze your data by the GMM and use cross-validation to estimate the number of clusters. (If your encounter the problem "Ill-condition covariance" set the regularization parameter mit_covar of gmm to a small constant, in fact it defaults to 10e-3). Evaluate how well the clusters of the GMM model correspond to class labels using the cluster validity measures from last week by assigning observations to the cluster having highest probability. Investigate further how attributes associate based on mining for association using the Apriori algorithm (Eksemple i toolbox). You can use the function binarize() from similarity.py file to convert continues data into a binary matrix based on one-out-of-K coding where each class correspond to a .txt file, for instance using f = open('file.txt','w') to create a file and looped f.write(str(x)) function to store the array/matrix values.
+
+11.4
+Apply the outlier scoriing from last excercise in order to rank all the observations in terms of Gaussian Kernel density (using the efficient leave one out density estimation approach), KNN density, KNN average relative density and distance to K'th nearest neighbor for some suitable K. Discuss wheter it seems there may be outliers in your data according to the four scoring methods.
