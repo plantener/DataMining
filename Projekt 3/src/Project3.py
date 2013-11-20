@@ -2,6 +2,7 @@ import xlrd
 from scipy.stats import zscore
 from methods import *
 from pylab import *
+from writeapriorifile import *
 
 
 #Converts Present and Absent into numbers.
@@ -29,15 +30,19 @@ classDict = dict(zip(classNames,range(2)))
 y = np.mat([classDict[value] for value in classLabels]).T
 
 X = np.mat(np.empty((size-1,noAttributes)))
+XCHD =np.mat(np.empty((size-1,noAttributes+1)))
 
 for i, col_id in enumerate(range(1,noAttributes+1+1)):
     if(i < len(attributeNames) and attributeNames[i] == "famhist"):
         temp12 = [convert(i2) for i2 in doc.col_values(col_id,1,size)]
         if i < noAttributes:
             X[:,i] = np.mat(temp12).T
+        XCHD[:,i] = np.mat(temp12).T
     else:
         if i < noAttributes:
             X[:,i] = np.mat(doc.col_values(col_id,1,size)).T
+        XCHD[:,i] = np.mat(doc.col_values(col_id,1,size)).T
+
 
 M = len(attributeNames) 
 N = len(y)
@@ -57,4 +62,14 @@ X2PC = np.copy(XPC)
 
 #CVK(X,range(1,51),"diag",3)
 
-HCANDERSEN(X,y,9)
+#HCANDERSEN(X,y,9)
+
+XBin = Grimm(X)
+#for i in range(0,len(y)):
+#XBin = np.insert(XBin, 0, y[i], axis=1)
+#XBin = [XBin[i] + y[i] for i in range(len(XBin))]#s + y#[x + y for x in XBin]
+
+WriteAprioriFile(XBin,filename="DanskeEventyr.txt")
+#WriteAprioriFile(X,titles=attributeNames,filename="DanskeEventyr.txt")
+
+BjarneReuter(XBin,"DanskeEventyr.txt",minSup=50,minConf = 55)
