@@ -1,0 +1,41 @@
+\input{preamble}
+\setlength{\headheight}{14pt}
+\usepackage[utf8]{inputenc}
+%\usepackage[danish]{babel}
+
+\lhead{02450 - Introduction to machine learning and data modeling}%
+\rhead{\today}
+\lfoot{}
+\cfoot{}
+\rfoot{\thepage}
+
+\let\oldlongtable\longtable
+\let\endoldlongtable\endlongtable
+\renewenvironment{longtable}{\rowcolors{0}{white}{myColor}\oldlongtable} {
+\endoldlongtable}
+
+\begin{document}
+%\newtheorem{korollar}{Korollar}[section]
+%\newtheorem{saetning}{Sætning}[section]
+
+\input{Frontpage}
+\newpage
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\tableofcontents
+
+\newpage
+\setcounter{secnumdepth}{3}
+
+\newpage
+%\include{introduction}
+%\input{explainRegression}
+
+
+%\newpage
+%\setcounter{secnumdepth}{2}
+%\addcontentsline{toc}{section}{Litteraturliste}
+%\bibliographystyle{plain}
+%\bibliography{bibliography} \label{bib}
+%\input{Appendix}
+
+\end{document}

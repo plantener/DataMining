@@ -1,0 +1,141 @@
+\documentclass[11pt,a4paper,english]{article}
+%\usepackage[ansinew]{inputenc}
+\usepackage[T1]{fontenc}
+%\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[danish]{babel}
+\usepackage{amsmath,dcolumn,booktabs} %%,cellspace}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\newtheorem{mydef}{Definition}
+\usepackage{marvosym}
+\usepackage{tocloft}
+\usepackage{a4wide}
+\usepackage{graphicx}
+\usepackage{float}
+%%\usepackage{threeparttable}
+\usepackage[tableposition=top]{caption}
+\usepackage{enumerate}
+\usepackage{clrscode}
+\usepackage{longtable}
+\usepackage[table]{xcolor}
+\usepackage{lastpage}
+\usepackage{caption}
+\usepackage{mathtools}
+%%\usepackage{stmaryrd}
+%\usepackage{ulem}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\usepackage{array}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{colortbl}
+\usepackage{multirow}
+%%\usepackage{blkarray}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+\usepackage{hhline,array}
+\usepackage{footnote}
+%\usepackage{pdfpages}
+\usepackage[official]{eurosym}
+\usepackage{rotating}
+\usepackage{boxedminipage}
+\addtolength\tabcolsep{-3pt}%
+\usepackage{cellspace,amsmath}
+\addtolength\cellspacetoplimit{2pt}
+\addtolength\cellspacebottomlimit{2pt}
+\usepackage{subcaption}
+\usepackage{array}
+
+\definecolor{myColor}{RGB}{232,238,246}
+\definecolor{comcol}{rgb}{0.1, 0.5, 0.1}
+\definecolor{stringcol}{rgb}{0.75, 0.1, 0.95}
+
+\newenvironment{changemargin}[2]{%
+\begin{list}{}{%
+\setlength{\topsep}{0pt}%
+\setlength{\leftmargin}{#1}%
+\setlength{\rightmargin}{#2}%
+\setlength{\listparindent}{\parindent}%
+\setlength{\itemindent}{\parindent}%
+\setlength{\parsep}{\parskip}%
+}%
+\item[]}{\end{list}}
+
+\lstset{language=java, keywordstyle=\color{blue}, commentstyle=\color{comcol}, stringstyle=\color{stringcol}, breaklines=true, showstringspaces=false}
+
+%----------Define color: ------------
+\definecolor{Gray}{rgb}{0.5,0.5,0.5}
+
+%\usepackage{program}
+%\numberwithin{algorithm}{chapter} hvis algoritmer skal gives navn efter kapitel
+\usepackage[official]{eurosym}
+%%\addtolength\cellspacetoplimit{4pt}
+%%\addtolength\cellspacebottomlimit{4pt}
+%%\usepackage{cite}
+%\bibliographystyle{plane}
+\usepackage{natbib}
+\usepackage[pdftex]{hyperref}
+\hypersetup{ %bookmarks in latex
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+
+\newcommand{\insertfigure}[4]
+{
+    \begin{figure}[!hbt]
+    \begin{center}
+    \includegraphics[scale=#3]{#1}
+    \end{center}
+    \caption{#2}
+    \label{#4}
+    \end{figure}
+}
+%til listing pakken
+\lstset{ %
+%language=,                % choose the language of the code
+basicstyle=\footnotesize,       % the size of the fonts that are used for the code
+numbers=none,                   % where to put the line-numbers
+numberstyle=\footnotesize,      % the size of the fonts that are used for the line-numbers
+stepnumber=2,                   % the step between two line-numbers. If it's 1 each line will be numbered
+numbersep=5pt,                  % how far the line-numbers are from the code
+backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+showspaces=false,               % show spaces adding particular underscores
+showstringspaces=false,         % underline spaces within strings
+showtabs=false,                 % show tabs within strings adding particular underscores
+frame=false,	                % adds a frame around the code
+tabsize=2,	                % sets default tabsize to 2 spaces
+captionpos=b,                   % sets the caption-position to bottom
+breaklines=true,                % sets automatic line breaking
+breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+escapeinside={\%*}{*)}          % if you want to add a comment within your code
+}
+
+
+\newfloat{mathmodel}{htbp}{lom}
+\floatname{mathmodel}{Model}
+
+\makeatletter \let\c@mathmodel\c@equation
+\newenvironment{model}[1]{%
+	\begin{mathmodel}%
+		\caption{#1}%
+		\protected@edef\theparentequation{\theequation}%
+  		\setcounter{parentequation}{\value{equation}}%
+  		\setcounter{equation}{0}%
+  		\def\theequation{\theparentequation\alph{equation}}%
+  		\ignorespaces%
+}%
+{%
+		\setcounter{equation}{\value{parentequation}}%
+	\end{mathmodel}%
+  	\ignorespacesafterend
+}
+
+\makeatother
+
+\newcommand{\Max}{\operatorname{Max}}
+\newcommand{\Min}{\operatorname{Min}}
+\newcommand{\St}{\operatorname{S.t.}}
