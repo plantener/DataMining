@@ -1,17 +1,17 @@
 \subsection{Decision Tree}
 
-We have created decision trees using the four different kinds of input as described in section \ref{classification} on page \pageref{classification}. Some of the output of these decision trees can be seen in Figure \ref{decisionTreeXPA}.
+We have created decision trees using the four different kinds of input as described in section \ref{classification} on page \pageref{classification}. Some of the output of these decision trees can be seen in Figure \ref{decisionTreeX}.
 
 \begin{figure}[H]
 \center
-	\includegraphics[scale=0.25]{pictures/Decision_Tree_XPC.png}
-	\caption{Decision tree looking at all principal components.}
-	\label{decisionTreeXPA}
+	\includegraphics[scale=0.25]{pictures/Decision_Tree_X.png}
+	\caption{Decision tree looking at all attributes.}
+	\label{decisionTreeX}
 \end{figure}
 
 Now one can use such decision trees to classify data objects, which is simply done by following branches of the tree, until one reaches a leaf, which then either represent people with negative or positive CHD.
 
-Therefore one can go through each data object, and compare how it will be classified according to the decision trees and which value it truly has. This way we have calculated the misclassification error, which can be seen in Figure \ref{decisionTreeErrorRate}
+Therefore one can go through each data object, and compare how it will be classified according to the decision trees and which value it truly has. This way we have calculated the misclassification error, which can be seen in Table \ref{decisionTreeErrorRate}
 
 The table below shows the error rate for the other computed decision trees. Unfortunately they would not fit into a report in a readable manor.
 \begin{table}[H]
@@ -19,7 +19,7 @@ The table below shows the error rate for the other computed decision trees. Unfo
 Result from: & Mis-classification rate \\ \hline
 All attributes & 25,1\% \\ 
 Feature selected attributes & 25,1\% \\ 
-Figure \ref{decisionTreeXPA} (PCA) & 21,4\% \\ 
+All principal components & 21,4\% \\ 
 Two most important PC & 28,8\% \\ \hline
 \end{longtable}
 \caption{Mis-classification rates of decision trees.}

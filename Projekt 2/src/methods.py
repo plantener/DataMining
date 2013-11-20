@@ -140,10 +140,10 @@ def logisticRegression(X,y,X_train = None,y_train = None, X_test = None, y_test 
     
 def linearRegression(X,y,attributeNames,attribute):
     # Split dataset into features and target vector
-    alcohol_idx = attributeNames.index(attribute)
-    y = X[:,alcohol_idx]
+    idx = attributeNames.index(attribute)
+    y = X[:,idx]
     
-    X_cols = range(0,alcohol_idx) + range(alcohol_idx+1,len(attributeNames))
+    X_cols = range(0,idx) + range(idx+1,len(attributeNames))
     X_rows = range(0,len(y))
     U = X[ix_(X_rows,X_cols)]
 #    
@@ -286,11 +286,11 @@ def forwardSelection(X,y,N,K,attributeNames, classNames):
     show()    
 
 
-def artificialNeuralNetwork(X,y,N,noAttributes,K=4, s=""):
+def artificialNeuralNetwork(X,y,N,noAttributes,K=10, s=""):
     print "Doing Artificial Neural Network for:"
     print s    
     # Parameters for neural network classifier
-    n_hidden_units = 1      # number of hidden units
+    n_hidden_units = 50      # number of hidden units
     n_train = 5             # number of networks trained in each k-fold
     
     # These parameters are usually adjusted to: (1) data specifics, (2) computational constraints
@@ -378,7 +378,7 @@ def artificialNeuralNetworkByPC(X,y,N,K=4, s=""):
     #U = getTwoPrincipalComponents(X)
     U = X
     # Parameters for neural network classifier
-    n_hidden_units = 1      # number of hidden units
+    n_hidden_units = 230      # number of hidden units
     n_train = 2             # number of networks trained in each k-fold
     
     # These parameters are usually adjusted to: (1) data specifics, (2) computational constraints
