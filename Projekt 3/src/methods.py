@@ -3,6 +3,7 @@ from sklearn.mixture import GMM
 from pylab import *
 from toolbox_02450 import clusterplot
 from sklearn import cross_validation
+from scipy.cluster.hierarchy import linkage, fcluster, dendrogram
 
 
 def gmm(X,y,M):
@@ -125,6 +126,24 @@ def CVK(X,KRange,covar_type,reps):
     #plot(KRange, BIC)
     #plot(KRange, AIC)
     plot(KRange, 2*CVE)
-    legend(['BIC', 'AIC', 'Crossvalidation'])
+    legend(['Crossvalidation'])
     xlabel('K')
+    show()
+    
+    
+def HCANDERSEN(X,y,Maxclust, Method = 'single', Metric = 'euclidean'):
+    # Perform hierarchical/agglomerative clustering on data matrix
+    
+    Z = linkage(X, method=Method, metric=Metric)
+    
+    # Compute and display clusters by thresholding the dendrogram
+    cls = fcluster(Z, criterion='maxclust', t=Maxclust)
+    figure()
+    clusterplot(X, cls.reshape(cls.shape[0],1), y=y)
+    
+    # Display dendrogram
+    max_display_levels=50
+    figure()
+    dendrogram(Z, truncate_mode='level', p=max_display_levels)
+    
     show()
