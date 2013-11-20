@@ -46,7 +46,7 @@ The data is sorted, so it is easier to see the switch from negative CHD to posit
 
 The plot of the prediction shows that the model is definately not doing an excellent job predicting whether a person has CHD or not, however it is possible too see a pattern, that most negative CHD cases are < 0.5, and most positive CHD cases are > 0.5
 
-The overall misclassification rate using linear regression without feature selection is 35.7\%, and a misclassification rate of 37.1\% with feature selection.
+The overall misclassification rate using linear regression without feature selection is 35.7\%, and a misclassification rate of 37.1\% with feature selection. This is not good, eg. if we just classify everybody as CHD negative, we would get an misclassification of $\frac{160}{462} = 34,6\%$ as we have 160 objects with positive CHD out of an total of 462 objects.
 
 In the following section we will discuss if model transformation could possibly enhance the model
 \subsubsection{Residual error plot}

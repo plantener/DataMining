@@ -28,7 +28,7 @@ The data set has been exposed to classification by looking at the k nearest neig
 \label{knnResults}
 \end{figure}
 
-The misclassification rates for these can be seen in Table \ref{knnErrorRate}.
+The misclassification rates for these, when choosing the best possible number of neighbours to look at, can be seen in Table \ref{knnErrorRate}.
 
 \begin{table}[H]
 \begin{longtable}{lc} \hline
@@ -50,6 +50,25 @@ Figure \ref{knnResultX2PA} & 30,5\% \\ \hline
 
 %The last figure uses only the two most important principal components. This gives an error of 30.5\% using 30 neighbours.
 
+For this method, we specify how many neighbours we will look at, and then for an object, we just look at the CHD-value of the nearest neighbours to decide the class of the element. In Figure \ref{performKNN}, we see the results of performing K-Nearest neighbours when only looking at the two most important principals components. The result of the classification is compared to their actual values. For this we have chosen to look at 30 neighbours which is the most optimal according to Figure \ref{knnResults}
+
+\begin{figure}[H]
+\begin{subfigure}[b]{0.5\textwidth}
+\includegraphics[scale=0.3]{pictures/knnUsedResult.png}
+\caption{Classification of objects according to neighbours.}
+\label{knnUsedResult}
+\end{subfigure}
+	\begin{subfigure}[b]{0.5\textwidth}
+\includegraphics[scale=0.3]{pictures/knnUsedActual.png}
+\caption{Actual value of objects.}
+\label{knnUsedResult}
+	\end{subfigure}
+\caption{Shows result of performing K-Nearest Neighbours and compares to actual values.}
+\label{performKNN}
+\end{figure}
+
+We have performed K-Nearest neighbouring for all the 4 kinds of input set. Each time this is done, we get a confusion matrix, and these can be seen in Figure \ref{cmResults}. These confusion matrixes shows the accuracy and error rate for the K-Nearest Neighbours performed before. For this we have chosen to look at the most optimal numbers of neighbours according to Figure \ref{knnResults}
+
 \begin{figure}[H]
 	\begin{subfigure}[b]{0.5\textwidth}
 	\includegraphics[scale=0.2]{pictures/cmX.png}
@@ -58,13 +77,13 @@ Figure \ref{knnResultX2PA} & 30,5\% \\ \hline
 	\end{subfigure}
 	\begin{subfigure}[b]{0.5\textwidth}
 	\includegraphics[scale=0.2]{pictures/cmXAD.png}	
-	\caption{Looking at attributes selected by forward selection.  Giving an accuracy of 54\%}
+	\caption{Looking at attributes selected by forward selection.  Giving an accuracy of 75\%}
 	\label{cmResultXad}
 	\end{subfigure}
 
 	\begin{subfigure}[b]{0.5\textwidth}
 	\includegraphics[scale=0.2]{pictures/cmPC.png}
-	\caption{Looking at all principal components. \newline Giving an accuracy of 72\%}
+	\caption{Looking at all principal components. \newline Giving an accuracy of 60\%}
 	\label{cmResultXPA}
 	\end{subfigure}
 	\begin{subfigure}[b]{0.5\textwidth}
@@ -75,5 +94,5 @@ Figure \ref{knnResultX2PA} & 30,5\% \\ \hline
 \caption{This figure shows results of doing a confusion matrix for different inputs}
 \label{cmResults}
 \end{figure}
-The above confusion matrixes shows the accuracy and error rate for the K-Nearest Neighbours performed before.
+%The above confusion matrixes shows the accuracy and error rate for the K-Nearest Neighbours performed before.
 
