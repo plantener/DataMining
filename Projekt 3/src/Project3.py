@@ -56,22 +56,21 @@ XPC = getPrincipalComponents(XStandardized)
 
 X2PC = np.copy(XPC)
 
-
-
-#gmm(XPC,y,M)
+#XPC = XPC[:,0:2]
+#X = X[:,0:2]
+gmm(XPC,y,9,C)
 
 #CVK(X,range(1,51),"diag",3)
 
 #HCANDERSEN(X,y,9)
 
-XBin = Grimm(X)
+#XBin = convertToBinary(X)
 #for i in range(0,len(y)):
 #XBin = np.insert(XBin, 0, y[i], axis=1)
 #XBin = [XBin[i] + y[i] for i in range(len(XBin))]#s + y#[x + y for x in XBin]
 
-WriteAprioriFile(XBin,filename="DanskeEventyr.txt")
-#WriteAprioriFile(X,titles=attributeNames,filename="DanskeEventyr.txt")
+#WriteAprioriFile(XBin,titles=attributeNames,filename="AprioriFile.txt")
 
-#BjarneReuter(XBin,"DanskeEventyr.txt",minSup=30,minConf = 55)
+#doApriori("AprioriFile.txt",minSup=30,minConf = 55)
 
-DanTurell(X)
+#outlierDetection(XStandardized,objects = 5)

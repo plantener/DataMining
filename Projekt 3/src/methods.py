@@ -8,17 +8,18 @@ from subprocess import call
 import re
 import os
 from toolbox_02450 import gausKernelDensity
+from toolbox_02450 import gauss_2d
 from sklearn.neighbors import NearestNeighbors
 
 
-def gmm(X,y,M):
+def gmm(X,y,M,C):
     #X = X[:,0:2]
     #y = y[:,:]
     #M=2
     #M += 3
     # Number of clusters
     
-    K = 4
+    K = 3
     
     cov_type = 'full'       # type of covariance, you can try out 'diag' as well
     
@@ -63,14 +64,16 @@ def gmm(X,y,M):
     # Plot results:
     
     figure(figsize=(14,9))
-    X2 = X[:,0:2]
-    M=2
+    #X2 = X[:,0:2]
+    #M=2
     
     #for c in range(C):
     #    class_mask = y.A.ravel()==c
     #    plot(X[class_mask,attr1], X[class_mask,attr2], 'o')
-    ncolors = K
+    ncolors = K+2
     y2 = np.asarray(y)
+    
+    centroids = cds
 
     hold(True)
     colors = [0]*ncolors
@@ -79,12 +82,35 @@ def gmm(X,y,M):
     for i,cs in enumerate(np.unique(y2)):
         plot(X[(y2==cs).ravel(),0], X[(y2==cs).ravel(),1], 'o', markeredgecolor='k', markerfacecolor=colors[i],markersize=6, zorder=2)
     for i,cr in enumerate(np.unique(cls)):
-        plot(X[(cls==cr).ravel(),0], X[(cls==cr).ravel(),1], 'o', markersize=12, markeredgecolor=colors[i], markerfacecolor='None', markeredgewidth=3, zorder=1)
-    if False:#centroids!='None':        
+        plot(X[(cls==cr).ravel(),0], X[(cls==cr).ravel(),1], 'o', markersize=12, markeredgecolor=colors[i+2], markerfacecolor='None', markeredgewidth=3, zorder=1)
+    if centroids!='None':        
         for cd in range(centroids.shape[0]):
-            plot(centroids[cd,0], centroids[cd,1], '*', markersize=22, markeredgecolor='k', markerfacecolor=colors[cd], markeredgewidth=2, zorder=3)
+            plot(centroids[cd,0], centroids[cd,1], '*', markersize=22, markeredgecolor='k', markerfacecolor=colors[cd+2], markeredgewidth=2, zorder=3)
+            
+    covars = covs[:,0:2,0:2]
+    centroids2 = centroids[:,0:2]
+    if covars!='None':
+        for cd in range(centroids2.shape[0]):
+            x1, x2 = gauss_2d(centroids2[cd],covars[cd,:,0:2])
+            plot(x1,x2,'-', color=colors[cd+2], linewidth=3, zorder=5)
+    hold(False)
+            
+    legend_items = ["Negative","Positive"]
+    for i in range(K):
+        legend_items.append(i) 
+    for i in range(K):
+        legend_items.append(i)
+    #legend_items = np.unique(y2).tolist()+np.unique(cls).tolist()+np.unique(cls).tolist()
+    for i in range(len(legend_items)):
+        if i<C: legend_items[i] = 'Class: {0}'.format(legend_items[i]);
+        elif i<C+K: legend_items[i] = 'Cluster: {0}'.format(legend_items[i]);
+        else: legend_items[i] = 'Centroid: {0}'.format(legend_items[i]);
+    legend(legend_items, numpoints=1, markerscale=.75, prop={'size': 9})
+
 
     #clusterplot(X2, clusterid=cls, centroids=cds, y=y, covars=covs)
+
+
     
     show()
 
@@ -153,7 +179,7 @@ def HCANDERSEN(X,y,Maxclust, Method = 'single', Metric = 'euclidean'):
     
     show()
     
-def Grimm(X,Y=None):
+def convertToBinary(X,Y=None):
     ''' Force binary representation of the matrix, according to X>median(X) '''
     if Y==None:
         X = np.matrix(X)
@@ -173,7 +199,7 @@ def Grimm(X,Y=None):
         return [X,Y]
         
 
-def BjarneReuter(X,filename, minSup = 80, minConf = 100, maxRule = 4):    
+def doApriori(filename, minSup = 80, minConf = 100, maxRule = 4):    
     # Run Apriori Algorithm
     print('Mining for frequent itemsets by the Apriori algorithm')
     status1 = call('apriori.exe -f"," -s{0} -v"[Sup. %0S]" {1} apriori_temp1.txt'.format(minSup, filename))
@@ -232,7 +258,7 @@ def BjarneReuter(X,filename, minSup = 80, minConf = 100, maxRule = 4):
         print('Rule: {0}'.format(item))
     
     
-def DanTurell(X):
+def outlierDetection(X, objects = 20):
     
 
     ### Gausian Kernel density estimator
@@ -259,16 +285,18 @@ def DanTurell(X):
     
     # Plot density estimate of outlier score
     figure()
-    bar(range(20),density[:20])
+    bar(range(objects),density[:objects])
     title('Density estimate')
     
     # Plot possible outliers
-    figure()
-    for k in range(1,21):
-        subplot(4,5,k)
-        imshow(np.reshape(X[i[k],:], (1,9)).T, cmap=cm.binary)
-        xticks([]); yticks([])
-        if k==3: title('Gaussian Kernel Density: Possible outliers')
+    #figure()
+    print "For Gaussian Kernel Density"
+    for k in range(1,objects + 1):
+        print i[k]
+        #subplot(4,5,k)
+        #imshow(np.reshape(X[i[k],:], (1,9)).T, cmap=cm.binary)
+        #xticks([]); yticks([])
+        #if k==3: title('Gaussian Kernel Density: Possible outliers')
     
     
     
@@ -288,15 +316,18 @@ def DanTurell(X):
     
     # Plot k-neighbor estimate of outlier score (distances)
     figure()
-    bar(range(20),density[:20])
+    bar(range(objects),density[:objects])
     title('KNN density: Outlier score')
     # Plot possible outliers
-    figure()
-    for k in range(1,21):
-        subplot(4,5,k)
-        imshow(np.reshape(X[i[k],:], (1,9)).T, cmap=cm.binary)
-        xticks([]); yticks([])
-        if k==3: title('KNN density: Possible outliers')
+    #figure()
+    print "\n"
+    print "For KNN density"
+    for k in range(1,objects + 1):
+        print i[k]        
+        #subplot(4,5,k)
+        #imshow(np.reshape(X[i[k],:], (1,9)).T, cmap=cm.binary)
+        #xticks([]); yticks([])
+        #if k==3: title('KNN density: Possible outliers')
     
     
     
@@ -314,15 +345,18 @@ def DanTurell(X):
     
     # Plot k-neighbor estimate of outlier score (distances)
     figure()
-    bar(range(20),avg_rel_density[:20])
+    bar(range(objects),avg_rel_density[:objects])
     title('KNN average relative density: Outlier score')
     # Plot possible outliers
-    figure()
-    for k in range(1,21):
-        subplot(4,5,k)
-        imshow(np.reshape(X[i_avg_rel[k],:], (1,9)).T, cmap=cm.binary)
-        xticks([]); yticks([])
-        if k==3: title('KNN average relative density: Possible outliers')
+    #figure()
+    print "\n"
+    print "For KNN average relative density"
+    for k in range(1,objects + 1):
+        print i_avg_rel[k]        
+        #subplot(4,5,k)
+        #imshow(np.reshape(X[i_avg_rel[k],:], (1,9)).T, cmap=cm.binary)
+        #xticks([]); yticks([])
+        #if k==3: title('KNN average relative density: Possible outliers')
     
     
     
@@ -341,25 +375,28 @@ def DanTurell(X):
     
     # Plot k-neighbor estimate of outlier score (distances)
     figure()
-    bar(range(20),score[:20])
+    bar(range(objects),score[:objects])
     title('5th neighbor distance: Outlier score')
     # Plot possible outliers
-    figure()
-    for k in range(1,21):
-        subplot(4,5,k)
-        imshow(np.reshape(X[i[k],:], (1,9)).T, cmap=cm.binary); 
-        xticks([]); yticks([])
-        if k==3: title('5th neighbor distance: Possible outliers')
+    #figure()
+    print "\n"
+    print "For 5'th neighbour distance"
+    for k in range(1,objects + 1):
+        print i[k]        
+        #subplot(4,5,k)
+        #imshow(np.reshape(X[i[k],:], (1,9)).T, cmap=cm.binary); 
+        #xticks([]); yticks([])
+        #if k==3: title('5th neighbor distance: Possible outliers')
     
     
     
     # Plot random digits (the first 20 in the data set), for comparison
-    figure()
-    for k in range(1,21):
-        subplot(4,5,k);
-        imshow(np.reshape(X[k,:], (1,9)).T, cmap=cm.binary); 
-        xticks([]); yticks([])
-        if k==3: title('Random digits from data set')    
-    show()
+    #figure()
+    #for k in range(1,objects + 1):
+    #    subplot(4,5,k);
+    #    imshow(np.reshape(X[k,:], (1,9)).T, cmap=cm.binary); 
+    #    xticks([]); yticks([])
+    #    if k==3: title('Random digits from data set')    
+    #show()
     
 
