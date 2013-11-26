@@ -11,15 +11,25 @@ from toolbox_02450 import gausKernelDensity
 from toolbox_02450 import gauss_2d
 from sklearn.neighbors import NearestNeighbors
 
+def max(x1,x2):
+    if x1 > x2:
+        return x1
+    else:
+        return x2
+        
+def min(x1,x2):
+    if x1 < x2:
+        return x1
+    else:
+        return x2
 
-def gmm(X,y,M,C):
+
+def gmm(X,y,M,C,K=4):
     #X = X[:,0:2]
     #y = y[:,:]
     #M=2
     #M += 3
     # Number of clusters
-    
-    K = 3
     
     cov_type = 'full'       # type of covariance, you can try out 'diag' as well
     
@@ -58,9 +68,12 @@ def gmm(X,y,M,C):
             count += 1
     
         covs = new_covs
+        
+    clusterPlot(X,cls,K,C,y,cds,covs)
     
     
-    
+
+def clusterPlot(X,cls,K,C,y=None,centroids=None,covars=None):
     # Plot results:
     
     figure(figsize=(14,9))
@@ -73,25 +86,51 @@ def gmm(X,y,M,C):
     ncolors = K+2
     y2 = np.asarray(y)
     
-    centroids = cds
 
     hold(True)
     colors = [0]*ncolors
+    wrong = 0
+    correct = 0
     for color in range(ncolors):
         colors[color] = cm.jet.__call__(color*255/(ncolors-1))[:3]
     for i,cs in enumerate(np.unique(y2)):
         plot(X[(y2==cs).ravel(),0], X[(y2==cs).ravel(),1], 'o', markeredgecolor='k', markerfacecolor=colors[i],markersize=6, zorder=2)
     for i,cr in enumerate(np.unique(cls)):
         plot(X[(cls==cr).ravel(),0], X[(cls==cr).ravel(),1], 'o', markersize=12, markeredgecolor=colors[i+2], markerfacecolor='None', markeredgewidth=3, zorder=1)
-    if centroids!='None':        
+        Z = X[(cls==cr).ravel(),:]
+        y3 = y2[cls==cr.ravel()]
+        Z1 = None
+        Z2 = None
+        for i,cs in enumerate(np.unique(y3)):
+            #print i
+            if i == 0:
+                Z1 = Z[(y3==cs).ravel(),:]
+            else:
+                Z2 = Z[(y3==cs).ravel(),:]
+        if (Z1 is None):
+            negs = 0
+        else:
+            negs = len(Z1)
+        if (Z2 is None):
+            poss = 0
+        else:
+            poss = len(Z2)
+        correct += max(negs,poss)
+        wrong += min(negs,poss)
+        if negs == max(negs,poss):
+            print "Classified as negatives"
+        else:
+            print "Classified as possitives"
+    
+
+    if centroids!=None:
         for cd in range(centroids.shape[0]):
             plot(centroids[cd,0], centroids[cd,1], '*', markersize=22, markeredgecolor='k', markerfacecolor=colors[cd+2], markeredgewidth=2, zorder=3)
             
-    covars = covs[:,0:2,0:2]
-    centroids2 = centroids[:,0:2]
-    if covars!='None':
+    if covars!=None:
+        centroids2 = centroids[:,0:2]
         for cd in range(centroids2.shape[0]):
-            x1, x2 = gauss_2d(centroids2[cd],covars[cd,:,0:2])
+            x1, x2 = gauss_2d(centroids2[cd],covars[cd,0:2,0:2])
             plot(x1,x2,'-', color=colors[cd+2], linewidth=3, zorder=5)
     hold(False)
             
@@ -110,6 +149,9 @@ def gmm(X,y,M,C):
 
     #clusterplot(X2, clusterid=cls, centroids=cds, y=y, covars=covs)
 
+    print "Misclassification rate:"
+    print (wrong + correct)
+    print (double(wrong)/double(wrong + correct))
 
     
     show()
@@ -162,7 +204,7 @@ def CVK(X,KRange,covar_type,reps):
     show()
     
     
-def HCANDERSEN(X,y,Maxclust, Method = 'single', Metric = 'euclidean'):
+def hierarchicalClustering(X,y,Maxclust, C, Method = 'single', Metric = 'euclidean'):
     # Perform hierarchical/agglomerative clustering on data matrix
     
     Z = linkage(X, method=Method, metric=Metric)
@@ -171,6 +213,7 @@ def HCANDERSEN(X,y,Maxclust, Method = 'single', Metric = 'euclidean'):
     cls = fcluster(Z, criterion='maxclust', t=Maxclust)
     figure()
     clusterplot(X, cls.reshape(cls.shape[0],1), y=y)
+    #clusterPlot(X, cls.reshape(cls.shape[0],1), Maxclust, C, y=y)
     
     # Display dendrogram
     max_display_levels=50

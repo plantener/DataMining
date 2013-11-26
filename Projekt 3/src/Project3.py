@@ -58,11 +58,11 @@ X2PC = np.copy(XPC)
 
 #XPC = XPC[:,0:2]
 #X = X[:,0:2]
-gmm(XPC,y,9,C)
+gmm(XPC,y,9,C,K=3)
 
 #CVK(X,range(1,51),"diag",3)
 
-#HCANDERSEN(X,y,9)
+#hierarchicalClustering(XPC,y,9,C)
 
 #XBin = convertToBinary(X)
 #for i in range(0,len(y)):
