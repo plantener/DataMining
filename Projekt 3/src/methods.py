@@ -24,17 +24,7 @@ def min(x1,x2):
         return x2
 
 
-def gmm(X,y,M,C,K=4):
-    #X = X[:,0:2]
-    #y = y[:,:]
-    #M=2
-    #M += 3
-    # Number of clusters
-    
-    cov_type = 'full'       # type of covariance, you can try out 'diag' as well
-    
-    reps = 1                # number of fits with different initalizations, best result will be kept
-    
+def gmm(X,y,M,C,K=4,cov_type='diag',reps=10):
     
     
     # Fit Gaussian mixture model
@@ -88,16 +78,21 @@ def clusterPlot(X,cls,K,C,y=None,centroids=None,covars=None):
     
 
     hold(True)
-    colors = [0]*ncolors
     wrong = 0
     correct = 0
+    clusters = 0
+    colors = [0]*ncolors
     for color in range(ncolors):
         colors[color] = cm.jet.__call__(color*255/(ncolors-1))[:3]
     for i,cs in enumerate(np.unique(y2)):
         plot(X[(y2==cs).ravel(),0], X[(y2==cs).ravel(),1], 'o', markeredgecolor='k', markerfacecolor=colors[i],markersize=6, zorder=2)
     for i,cr in enumerate(np.unique(cls)):
+        clusters += 1
         plot(X[(cls==cr).ravel(),0], X[(cls==cr).ravel(),1], 'o', markersize=12, markeredgecolor=colors[i+2], markerfacecolor='None', markeredgewidth=3, zorder=1)
         Z = X[(cls==cr).ravel(),:]
+        print i
+        print "Size of cluster: " + str(len(Z))
+        
         y3 = y2[cls==cr.ravel()]
         Z1 = None
         Z2 = None
@@ -117,6 +112,8 @@ def clusterPlot(X,cls,K,C,y=None,centroids=None,covars=None):
             poss = len(Z2)
         correct += max(negs,poss)
         wrong += min(negs,poss)
+        print "Negatives: " + str(negs)
+        print "Positives: " + str(poss)
         if negs == max(negs,poss):
             print "Classified as negatives"
         else:
@@ -135,22 +132,24 @@ def clusterPlot(X,cls,K,C,y=None,centroids=None,covars=None):
     hold(False)
             
     legend_items = ["Negative","Positive"]
-    for i in range(K):
-        legend_items.append(i) 
-    for i in range(K):
+    for i in range(clusters):
+        legend_items.append(i)
+    for i in range(clusters):
         legend_items.append(i)
     #legend_items = np.unique(y2).tolist()+np.unique(cls).tolist()+np.unique(cls).tolist()
     for i in range(len(legend_items)):
         if i<C: legend_items[i] = 'Class: {0}'.format(legend_items[i]);
-        elif i<C+K: legend_items[i] = 'Cluster: {0}'.format(legend_items[i]);
+        elif i<C+clusters: legend_items[i] = 'Cluster: {0}'.format(legend_items[i]);
         else: legend_items[i] = 'Centroid: {0}'.format(legend_items[i]);
     legend(legend_items, numpoints=1, markerscale=.75, prop={'size': 9})
+    xlabel("PC1")
+    ylabel("PC2")
+    title("Plot of clusters")
 
 
     #clusterplot(X2, clusterid=cls, centroids=cds, y=y, covars=covs)
 
     print "Misclassification rate:"
-    print (wrong + correct)
     print (double(wrong)/double(wrong + correct))
 
     
@@ -164,7 +163,7 @@ def getPrincipalComponents(X):
     
     return U
     
-def CVK(X,KRange,covar_type,reps):
+def CVK(X,KRange,covar_type='diag',reps=10):
     N, M = X.shape
     T = len(KRange)
     
@@ -179,7 +178,7 @@ def CVK(X,KRange,covar_type,reps):
             # Fit Gaussian mixture model
             gmm = GMM(n_components=K, covariance_type=covar_type, n_init=reps, params='wmc').fit(X)
             
-             # For each crossvalidation fold
+            # For each crossvalidation fold
             for train_index, test_index in CV:
     
                 # extract training and test set for current CV fold
@@ -191,18 +190,29 @@ def CVK(X,KRange,covar_type,reps):
     
                 # compute negative log likelihood of X_test
                 CVE[t] += -gmm.score(X_test).sum()
-                print CVE[t]
+                #print CVE[t]
                 
         # Plot results
+    return CVE
     
-    figure(1); hold(True)
-    #plot(KRange, BIC)
-    #plot(KRange, AIC)
-    plot(KRange, 2*CVE)
-    legend(['Crossvalidation'])
-    xlabel('K')
+    #figure(); hold(True)
+    #plot(KRange, 2*CVE)
+    #legend(['Crossvalidation'])
+    #xlabel('K')
+    #show()
+    
+def plotCVK(X,KRange,iterations=1,covar_type='diag',reps=10):
+    figure()
+    hold(True)
+    legend_items = []
+    for i in range(iterations):
+        plot(KRange, 2*CVK(X,KRange,covar_type,reps))
+        s = 'Cross Validation ' + str(i)        
+        legend_items.append(s)
+    legend(legend_items)
+    xlabel('k')
+    title('Cross Validation by Gaussian Mixture Modelling')
     show()
-    
     
 def hierarchicalClustering(X,y,Maxclust, C, Method = 'single', Metric = 'euclidean'):
     # Perform hierarchical/agglomerative clustering on data matrix
@@ -212,15 +222,18 @@ def hierarchicalClustering(X,y,Maxclust, C, Method = 'single', Metric = 'euclide
     # Compute and display clusters by thresholding the dendrogram
     cls = fcluster(Z, criterion='maxclust', t=Maxclust)
     figure()
-    clusterplot(X, cls.reshape(cls.shape[0],1), y=y)
-    #clusterPlot(X, cls.reshape(cls.shape[0],1), Maxclust, C, y=y)
-    
+    #clusterplot(X, cls.reshape(cls.shape[0],1), y=y)
+    clusterPlot(X, cls.reshape(cls.shape[0],1), Maxclust, C, y=y)
+
     # Display dendrogram
-    max_display_levels=50
+    max_display_levels=7
     figure()
-    dendrogram(Z, truncate_mode='level', p=max_display_levels)
-    
+    dendrogram(Z, truncate_mode='level', p=max_display_levels, color_threshold=0.5*np.max(Z[:,2]))
+    title("Dendrgram of the Hierarchical Clustering")
     show()
+    
+def getColor(k,colors):
+    colors[k]
     
 def convertToBinary(X,Y=None):
     ''' Force binary representation of the matrix, according to X>median(X) '''
