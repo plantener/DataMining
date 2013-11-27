@@ -56,9 +56,11 @@ XPC = getPrincipalComponents(XStandardized)
 
 X2PC = np.copy(XPC)
 
+#CVK(XPC,range(1,21),"diag",3)
+
 #XPC = XPC[:,0:2]
 #X = X[:,0:2]
-gmm(XPC,y,9,C,K=3)
+#gmm(XPC,y,9,C,K=11)
 
 #CVK(X,range(1,51),"diag",3)
 

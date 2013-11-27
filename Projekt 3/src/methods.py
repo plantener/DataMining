@@ -171,7 +171,7 @@ def CVK(X,KRange,covar_type,reps):
     CVE = np.zeros((T,1))
     
     # K-fold crossvalidation
-    CV = cross_validation.KFold(N,10,shuffle=True)
+    CV = cross_validation.KFold(N,5,shuffle=True)
 
     for t,K in enumerate(KRange):
             print('Fitting model for K={0}\n'.format(K))
