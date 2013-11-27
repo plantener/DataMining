@@ -6,9 +6,10 @@ For doing clustering for our data, we have looked at Gaussian Mixture Model and 
 
 We have performed cross validation in order to find the number of clusters that is most optimal for our data set. We have used 5-fold cross-validation, which will result in a test set of size 92 data objects and training set of size 370 data objects. We have set that the range of $K$, meaning the number of clusters, we look at range from 1-20. For each of these values of $K$, we create 5 different training and test sets to evaluate for. For each time, we create a Gaussian Mixture Model, we set the number repetitions to 10, meaning we try 10 different ways of setting placing the centroids randomly in our initial guess.
 
-\begin{figure}[h]
+\begin{figure}[H]
+\center
 \includegraphics[scale=0.5]{pictures/CVKGaussian.png}
-\caption{This shows the results of performing cross-validation on our data set according to find number of clusters.}
+\caption{\footnotesize This shows the results of performing cross-validation on our data set according to find number of clusters.}
 \label{CVK}
 \end{figure}
 
@@ -18,9 +19,11 @@ In Figure \ref{CVK}, we plot the score of using different number of clusters. Ge
 
 For plotting the Gaussian Mixture Model, we have chosen to use 6 clusters, as this is where we see the most improvement according to Figure \ref{CVK}.
 
-\begin{figure}[h]
+\begin{figure}[H]
+\center
+\hspace*{-1.5cm}
 \includegraphics[scale=0.5]{pictures/GaussianK6.png}
-\caption{This shows the data points plotted onto the two most describing principal component. For each point is shown whether the subject in fact has or does not have the disease. Furthermore it is shown which cluster the subject is assigned to.}
+\caption{\footnotesize This shows the data points plotted onto the two most describing principal component. For each point is shown whether the subject in fact has or does not have the disease. Furthermore it is shown which cluster the subject is assigned to.}
 \label{GMM}
 \end{figure}
 
@@ -40,18 +43,18 @@ When doing hierarchical clustering, we have used euclidean distance measure. Fur
 
 We will not look at the single linkage method, as this is not very describing for our data set, but in Figure \ref{HCResults}, one can see the results of doing hierarchical clustering using either the average or complete method.
 
-\begin{figure}[h]
+\begin{figure}[H]
 \begin{subfigure}[b]{1\textwidth}
 \includegraphics[scale=0.5]{pictures/HCAvg.png}
-\caption{Hierarchical Clustering of data point using Average method.}
+\caption{\footnotesize Hierarchical Clustering of data point using Average method.}
 \label{HCResultsAVG}
 \end{subfigure}
 \begin{subfigure}[b]{1\textwidth}
 \includegraphics[scale=0.5]{pictures/HCCom.png}
-\caption{Hierarchical Clustering of data points using Complete method.}
+\caption{\footnotesize Hierarchical Clustering of data points using Complete method.}
 \label{HCResultsCOM}
 \end{subfigure}
-\caption{Hierarchical Clustering}
+\caption{\footnotesize Hierarchical Clustering}
 \label{HCResults}
 \end{figure}
 
@@ -61,13 +64,13 @@ Looking at Figure \ref{HCResultsCOM}, showing Hierarchical Clustering using the 
 
 Furthermore in Figure \ref{dendrogram}, we can see how the nodes hierarchically are clustered together when using the complete method. We see that the object located furthest to the left on the x-axis is not linked to any other nodes until the last step. This means that this objects lies far away from all the other nodes. This object must correspond to the only node located in cluster \HCCOMS{} in Figure \ref{HCResultsCOM} as this cluster is the only one to have only one object.
 
-\begin{figure}[h]
+\begin{figure}[H]
 \includegraphics[scale=0.5]{pictures/dendrogram.png}
-\caption{Dendrogram showing how the nodes are clustered hierarchically together.}
+\caption{\footnotesize Dendrogram showing how the nodes are clustered hierarchically together.}
 \label{dendrogram}
 \end{figure}
 
 
-\section{Evaluation}
+\subsection{Evaluation}
 
 As we can see, we can cluster our data objects into different clusters. However our data is not very well-suited for clustering, as in most cases, the majority of all points are located in the same cluster. This happens both when doing clustering using Gaussian Mixture Modelling and doing Hierarchical Clustering. However for both cases, we also see that we can model some clusters, where the majority of the data points are CHD-positive. This can be interesting, as this might indicate that subjects located in such clusters might have a higher possibility of being CHD-positive.
