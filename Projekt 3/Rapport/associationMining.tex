@@ -1,7 +1,7 @@
 \section{Association Mining}
-The follow section will cover discovered association rules in the data set. We will try to interpret the discovered rules using the apriori algorithm, and analyse them to see if they can uncover the reason to why a person gets CHD. We will also look at other rules discovered to see if the dataset shows any unexpected or expected correlation between data.
+The follow section will cover discovered association rules in the data set. We will try to interpret the discovered rules using the apriori algorithm, and analyse them to see if they can uncover the reason to why a person has CHD. We will also look at other rules discovered to see if the dataset shows any unexpected or expected correlation between data.
 
-All of the data has been converted to support the Apriori algorithm, where the data has to be binarized. This means that all values above the median are considered '1', while those below the median are considered '0'.
+All of the data has been converted to support the Apriori algorithm, where the data has to be binarized. This means that all values above the median are considered '1', while those below the median are considered '0'. This way for an object having '1' in an attribute, means that object has a high value for this attribute compared to other objects. For instance, if an object has age, it means that the object is older compared to the median of the attribute of the data set. As the CHD is already described as a binary attribute, having CHD, just means that the object is CHD-positive.
 
 \subsection{Running the algorithm}
 The main goal is to detect if we can find any association rules used to describe when a person has CHD. Since only around 1/3 of the objects in our dataset actually has CHD, we set the minimum support to 30\% to ensure that some of the rules actually contain CHD
@@ -95,16 +95,16 @@ Rule: obesity <- adiposity[Conf. 79,Sup. 41]
 Looking at the frequent itemsets first, it is easy to see that there is a correlation between adiposity (\ref{ItemAdi}) and obesity (\ref{ItemObe}), just as seen in report 1. 
 
 Analysing the rules predicting CHD, we see that rule (\ref{RuleChdAgeLdl}) is the one with most confidence. 
-From itemset (\ref{ItemAgeLdl}) we can see that age and LDL has 31\% support. Considering the subset of those with support, there is a 57\% confidence that the object has CHD, giving an overall support of 17\%
+From itemset (\ref{ItemAgeLdl}) we can see that age and LDL has 31\% support. Considering the subset of those with support, there is a 57\% confidence that the object has CHD, giving an overall support of 17\%.
 
 
-Rule (\ref{RuleChdAgeTobacco}) is similar to the above rule, but the itemset (\ref{ItemAgeTobacco} has a higher support of 34\%. However it has a lower confidence when taking CHD into account.
+Rule (\ref{RuleChdAgeTobacco}) is similar to the rule (\ref{RuleChdAgeLdl}), but the itemset (\ref{ItemAgeTobacco}) has a higher support of 34\%. However it has a lower confidence when taking CHD into account. Meaning the subset of objects having age, tobacco and CHD is bigger than the subset of objects having ldl, age and CHD. However if a person have age and ldl, he is more likely to be CHD-postive, compared to a person having age and tobacco.
 
-The rules concerning CHD have a low support, and a quite low confidence considering some of the other generated rules. Since the support is low, the rules are based on a small collection of dataobjects. The rules have a confidence below 60\%, which is not that good.
+The rules concerning CHD have a low support, and a quite low confidence considering some of the other generated rules. Since the support is low, the rules are based on a small collection of data objects. The rules have a confidence below 60\%, which is not that good.
 
-Considering some of the other generated rules, both the support and confidence is a lot better. Rule (\ref{RuleAdiAgeOb}) has a 90\% confidence, that is, the object is old and has a high obesity index, the object is likely to have a high adiposity index as well. Relating this to the fact that adiposity and obesity are closely correlated, this makes sense. This can also be seen from the itemset (\ref{ItemObeAdi}), and rule (\ref{RuleObeAdi}).
+Considering some of the other generated rules, both the support and confidence is a lot better. Rule (\ref{RuleAdiAgeOb}) has a 90\% confidence, that is, the object is old and has a high obesity index, the object is likely to have a high adiposity index as well. Relating this to the fact that adiposity and obesity are closely correlated, this makes sense. This can also be seen from the itemset (\ref{ItemObeAdi}), and especially rule (\ref{RuleObeAdi}).
 
-Rule (\ref{RuleAgeCHD}) is the rule generated with the highest confidence, containing CHD. CHD has an overall support of 36\% (\ref{ItemChd}). From this subset, 69\% are above the median.
+Rule (\ref{RuleAgeCHD}) is the rule generated with the highest confidence, containing CHD. CHD has an overall support of 36\% (\ref{ItemChd}). From this subset, 69\% are above the median. Meaning if one is CHD-positive, he has 69\% possibility of being old compared to the rest of the data set.
 
 \subsection{Conclusion on the analysis}
 From the association rules generated, we have seen that some of the attributes are correlating, just as we saw in report 1. Looking at the real problem, discoverering what causes CHD, our association rules does not say anything for sure. However, it points towards an increase in the chance of getting CHD, if you:
