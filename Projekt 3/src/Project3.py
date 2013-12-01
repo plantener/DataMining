@@ -2,7 +2,7 @@ import xlrd
 from scipy.stats import zscore
 from methods import *
 from pylab import *
-from writeapriorifile import *
+#from writeapriorifile import *
 
 
 #Converts Present and Absent into numbers.
@@ -75,4 +75,4 @@ X2PC = np.copy(XPC)
 
 #doApriori("AprioriFile.txt",minSup=30,minConf = 55)
 
-#outlierDetection(XStandardized,objects = 5)
+outlierDetection(XStandardized,objects = 461)

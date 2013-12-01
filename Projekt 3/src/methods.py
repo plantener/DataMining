@@ -348,7 +348,7 @@ def outlierDetection(X, objects = 20):
     K = 5
     
     # Find the k nearest neighbors
-    knn = NearestNeighbors(n_neighbors=K, warn_on_equidistant=False).fit(X)
+    knn = NearestNeighbors(n_neighbors=K).fit(X)
     D, i = knn.kneighbors(X)
     
     density = 1./(D.sum(axis=1)/K)
@@ -377,7 +377,7 @@ def outlierDetection(X, objects = 20):
     ### K-nearest neigbor average relative density
     # Compute the average relative density
     
-    knn = NearestNeighbors(n_neighbors=K, warn_on_equidistant=False).fit(X)
+    knn = NearestNeighbors(n_neighbors=K).fit(X)
     D, i = knn.kneighbors(X)
     density = 1./(D.sum(axis=1)/K)
     avg_rel_density = density/(density[i[:,1:]].sum(axis=1)/K)
@@ -407,7 +407,7 @@ def outlierDetection(X, objects = 20):
     K = 5
     
     # Find the k nearest neighbors
-    knn = NearestNeighbors(n_neighbors=K, warn_on_equidistant=False).fit(X)
+    knn = NearestNeighbors(n_neighbors=K).fit(X)
     D, i = knn.kneighbors(X)
     
     # Outlier score
@@ -440,6 +440,6 @@ def outlierDetection(X, objects = 20):
     #    imshow(np.reshape(X[k,:], (1,9)).T, cmap=cm.binary); 
     #    xticks([]); yticks([])
     #    if k==3: title('Random digits from data set')    
-    #show()
+    show()
     
 
