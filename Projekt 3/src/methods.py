@@ -417,7 +417,7 @@ def outlierDetection(X, objects = 20):
     
     
     ### Distance to 5'th nearest neighbor outlier score
-    K = 50
+    K = 5
     
     # Find the k nearest neighbors
     knn = NearestNeighbors(n_neighbors=K).fit(X)
@@ -438,7 +438,7 @@ def outlierDetection(X, objects = 20):
     print "\n"
     print "For 5'th neighbour distance"
     for k in range(1,objects + 1):
-        print i[k]        
+        print i[462-k]        
         #subplot(4,5,k)
         #imshow(np.reshape(X[i[k],:], (1,9)).T, cmap=cm.binary); 
         #xticks([]); yticks([])

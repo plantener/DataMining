@@ -92,4 +92,4 @@ X2PC = np.copy(XPC)
 
 #doApriori("AprioriFile.txt",minSup=30,minConf = 55)
 
-outlierDetection(XStandardized,objects = 461)
+outlierDetection(XStandardized,objects = 5)
