@@ -416,7 +416,7 @@ def outlierDetection(X, objects = 20):
     
     
     ### Distance to 5'th nearest neighbor outlier score
-    K = 5
+    K = 25
     
     # Find the k nearest neighbors
     knn = NearestNeighbors(n_neighbors=K).fit(X)
@@ -431,7 +431,7 @@ def outlierDetection(X, objects = 20):
     # Plot k-neighbor estimate of outlier score (distances)
     figure()
     bar(range(objects),score[:objects])
-    title('5th neighbor distance: Outlier score')
+    title('25th neighbor distance: Outlier score')
     # Plot possible outliers
     #figure()
     print "\n"
