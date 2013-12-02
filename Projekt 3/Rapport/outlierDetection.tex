@@ -1,4 +1,3 @@
-\newpage
 To be able to find anomalies and outliers we will in this section, use some different methods to be able find the most likely anomalies and outliers. Afterwards we will then compare the different methods we have done on our data, to get the most likely outliers from the different methods we have used.
 
 Using leave-one-out, we were able to find the optimal kernel width to $0.249458874459$.
@@ -42,11 +41,20 @@ As with Gaussian and KNN we start with to look at all the data objects score, an
 \label{avg}
 \end{figure}
 
-\subsection{Distance}
+\subsection{KNN Distance}
 
-When we take a look at the distance method, we see that this time we go from best score to worst score, but it show about the same as the density methods. That it around the numbers of high outlier score as with the density as well as low outlier scores, which can be seen in the 2 graphs below.
-\\\\
-???? indsæt billed her
+When we take a look at the distance method, we see that this time we go from best score to worst score, but it show about the same as the density methods. That it around the numbers of high outlier score as with the density as well as low outlier scores, which can be seen in the table below. You can also see that it is some of the same data objects that keeps showing up in all the different runs, that can be seen in the table below.
+
+\begin{center}
+\begin{tabular}{|r|c|c|c|c|c|}
+\hline
+   & 1   & 2   & 3   & 4   & 5   \\ \hline
+5  & 21  & 345 & 362 & 426 & 442 \\ \hline
+10 & 345 & 21  & 362 & 426 & 8   \\ \hline
+25 & 345 & 362 & 21  & 426 & 241 \\ \hline
+50 & 345 & 362 & 241 & 21  & 359 \\ \hline
+\end{tabular}
+\end{center}
 
 \subsection{Comparison of outlier score}
 
