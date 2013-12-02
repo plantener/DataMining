@@ -1,6 +1,6 @@
 To be able to find anomalies and outliers we will in this section, use some different methods to be able find the most likely anomalies and outliers. Afterwards we will then compare the different methods we have done on our data, to get the most likely outliers from the different methods we have used.
 
-Using leave-one-out, we were able to find the optimal kernel width to $0.249458874459$.
+Using leave-one-out, we were able to find the optimal kernel width to $0.25$.
 
 \subsection{Density Estimation}
 
@@ -45,29 +45,31 @@ As with Gaussian and KNN we start with to look at all the data objects score, an
 
 When we take a look at the distance method, we see that this time we go from best score to worst score, but it show about the same as the density methods. That it around the numbers of high outlier score as with the density as well as low outlier scores, which can be seen in the table below. You can also see that it is some of the same data objects that keeps showing up in all the different runs, that can be seen in the table below.
 
-\begin{center}
-\begin{tabular}{|r|c|c|c|c|c|}
+\begin{table}[H]
+\begin{longtable}{lccccc}
 \hline
    & 1   & 2   & 3   & 4   & 5   \\ \hline
-5  & 21  & 345 & 362 & 426 & 442 \\ \hline
-10 & 345 & 21  & 362 & 426 & 8   \\ \hline
-25 & 345 & 362 & 21  & 426 & 241 \\ \hline
+5  & 21  & 345 & 362 & 426 & 442 \\ 
+10 & 345 & 21  & 362 & 426 & 8   \\ 
+25 & 345 & 362 & 21  & 426 & 241 \\
 50 & 345 & 362 & 241 & 21  & 359 \\ \hline
-\end{tabular}
-\end{center}
+\end{longtable}
+\end{table}
+
 
 \subsection{Comparison of outlier score}
 
 When we compare the different outlier score and see which data objects the different methods found, we see that some of them are recurring. If we look at the first data object in all 4 methods, we see that the first have 345 but is in 2 row for the last data object, this properly means that this is an outlier since each method gave it a bad score. If we then take a look at some of the others we see that some of them is recurring in at least one of the other methods, this could mean that these is outliers to. If we take a look at the table below we can properly say that data object 345, 246, 362, 241 and 442 is outliers because of they have a low score and is recurring in at least one of the other methods.
 
-\begin{center}
-\begin{tabular}{|r|c|c|c|c|}
+
+\begin{table}[H]
+\begin{longtable}{lcccc}
 \hline
   & Gaussian & KNN & AVG KNN & Dist \\ \hline
-1 & 345      & 345 & 345     & 21 \\ \hline
-2 & 426      & 426 & 140     & 345 \\ \hline
-3 & 362      & 362 & 141     & 362 \\ \hline
-4 & 241      & 442 & 426     & 426 \\ \hline
+1 & 345      & 345 & 345     & 21 \\ 
+2 & 426      & 426 & 140     & 345 \\ 
+3 & 362      & 362 & 141     & 362 \\ 
+4 & 241      & 442 & 426     & 426 \\ 
 5 & 334      & 241 & 39      & 442 \\ \hline
-\end{tabular}
-\end{center}
+\end{longtable}
+\end{table}
