@@ -67,7 +67,7 @@ X2PC = np.copy(XPC)
 
 #XPC = XPC[:,0:2]
 
-hierarchicalClustering(XPC,y,6,C,Method = 'complete')
+#hierarchicalClustering(XPC,y,6,C,Method = 'complete')
 
 #XBin = convertToBinary(XCHD)
 
