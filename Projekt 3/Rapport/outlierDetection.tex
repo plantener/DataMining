@@ -1,4 +1,6 @@
-To be able to find anomalies and outliers we will in this section, use some different methods to be able find the most likely anomalies and outliers. Afterwards we will then compare the different methods we have done on our data, to get the most likely outliers from the different methods we have used.
+To be able to find anomalies and outliers we will in this section, use some different methods to be able find the most likely anomalies and outliers. Afterwards we will then compare the different methods we have used on our data, to get the most likely outliers from the different methods we have used.
+
+For doing these detections of outliers, we have standardized our data.
 
 Using leave-one-out, we were able to find the optimal kernel width to $0.25$.
 
@@ -6,7 +8,9 @@ Using leave-one-out, we were able to find the optimal kernel width to $0.25$.
 
 When we are checking our different data objects estimated density, we do not want our data to be in an low density area, since they are then most likely to be outliers.
 
-When we look at a Gaussian density estimation of all our data objects we can see that we probably have below a 100 outliers, which we then afterwards only take a look at those 100. Here we see that after the 20th object the curve starts to grow, which means we can take a look at those, and when we look closer to those we see around the 17-19 that it have an significant growth which could mean that we have some outliers lying below these. This does not mean they are outliers, but it could be an indication of it.
+\subsubsection{Gaussian Density Estimation}
+
+When we look at a Gaussian density estimation of all our data objects we can see that we probably have below 100 outliers, which we then afterwards only take a look at those 100. Here we see that after the 20th object the curve starts to grow, which means we can take a look at those, and when we look closer to the first 17-19 data objects. Here we have a significant growth which could mean that we have some outliers lying below these. This does not mean they are outliers, but it could be an indication of it.
 
 \begin{figure}[H]
 \centering
@@ -18,7 +22,9 @@ When we look at a Gaussian density estimation of all our data objects we can see
 \label{gkd}
 \end{figure}
 
-With a KNN density estimation we want to have some of the same data object as with gassian density estimation to be in the low density end, so that we are able to confirm that we have some outliers. As with the Gaussian method, we again first look at figure of all the data objects, which shows a bit better then Gaussian where we have a sudden increase of density. In this case it already starts in the 1st data object and drastically increases until around the 50th data object. So after this we take a look at 100 lowest density scores, this actual shows that we have the most drastic increase around the 5'th lowest density data objects. We decrease the number of objects to look at, and this show that the 4 lowest densities most likely are outliers.
+\subsubsection{KNN Density Estimation}
+
+With a KNN density estimation we want to have some of the same data object as with gassian density estimation to be in the low density end, so that we are able to increase the probability of these data objects being outliers. As with the Gaussian method, we again first look at figure of all the data objects, which shows a bit better than Gaussian where we have a sudden increase of density. In this case it already starts in the 1st data object and drastically increases until around the 50th data object. So after this we take a look at 100 lowest density scores, this actual shows that we have the most drastic increase around the 5'th lowest density data objects. We decrease the number of objects to look at, and this show that the 4 objects with lowest densities are more likely to be outliers.
 
 \begin{figure}[H]
 \centering
@@ -30,7 +36,9 @@ With a KNN density estimation we want to have some of the same data object as wi
 \label{knn}
 \end{figure}
 
-As with Gaussian and KNN we start to look at all the data objects score in the knn average relative density, and see it increases quick in the beginning, so we take a look at the 20 lowest data objects. In this graph we the see that the from the data object with the lowest density to the next one we have the biggest jump in density, which most likely would make the data object with the lowest density an outlier.
+\subsubsection{KNN Average Relative Density Estimation}
+
+As with Gaussian and KNN we start to look at all the data objects score in the knn average relative density, and see it increases quick in the beginning, so we take a look at the 20 lowest data objects. In this graph we the see that the biggest jump in density is between the first two objects, which most likely would make the data object with the lowest density an outlier.
 
 \begin{figure}[H]
 \centering
@@ -58,7 +66,7 @@ When we take a look at the distance method, we see that this time we want a low 
 
 \subsection{Comparison of outlier score}
 
-When we compare the different outlier score and see which data objects the different methods found, we see that some of them are recurring. If we take a look at table \ref{compare} we see that the first data object in all 4 methods, all have data object 345, this could mean that it is an outlier since each method gave it a bad score. If we then take a look at some of the others, we see that some of them are recurring in some of the other methods, again this could mean that these are outliers to. If we take a look at the table below we can properly say that data object 345, 246, 362 and 241 is outliers because of they have a low score and is recurring in at least one of the other methods.
+When we compare the different outlier score and see which data objects the different methods found, we see that some of them are recurring. If we take a look at table \ref{compare} we see that the first data object in all 4 methods, all have data object 345, this could mean that it is an outlier since each method gave it a bad score. If we then take a look at some of the others, we see that some of them are recurring in some of the other methods, again this could mean that these are outliers to. If we take a look at the table below we can say that data objects 345, 246, 362 and 241 have a greater chance of being outliers because they have a low score and is recurring in at least one of the other methods.
 \begin{table}[H]
 \begin{longtable}{lcccc}
 \hline
