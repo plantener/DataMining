@@ -22,7 +22,7 @@ For plotting the Gaussian Mixture Model, we have chosen to use 6 clusters, as th
 \begin{figure}[H]
 \center
 \hspace*{-1.5cm}
-\includegraphics[scale=0.5]{pictures/GaussianK6.png}
+\includegraphics[scale=0.4]{pictures/GaussianK6.png}
 \caption{\footnotesize This shows the data points plotted onto the two most describing principal component. For each point is shown whether the subject in fact has or does not have the disease. Furthermore it is shown which cluster the subject is assigned to.}
 \label{GMM}
 \end{figure}
@@ -44,18 +44,11 @@ When doing hierarchical clustering, we have used euclidean distance measure. Fur
 We will not look at the single linkage method, as this is not very describing for our data set, but in Figure \ref{HCResults}, one can see the results of doing hierarchical clustering using either the average or complete method.
 
 \begin{figure}[H]
-\begin{subfigure}[b]{1\textwidth}
-\includegraphics[scale=0.5]{pictures/HCAvg.png}
-\caption{\footnotesize Hierarchical Clustering of data point using Average method.}
-\label{HCResultsAVG}
-\end{subfigure}
-\begin{subfigure}[b]{1\textwidth}
-\includegraphics[scale=0.5]{pictures/HCCom.png}
+\includegraphics[scale=0.4]{pictures/HCCom.png}
 \caption{\footnotesize Hierarchical Clustering of data points using Complete method.}
 \label{HCResultsCOM}
-\end{subfigure}
-\caption{\footnotesize Hierarchical Clustering}
-\label{HCResults}
+%\caption{\footnotesize Hierarchical Clustering}
+%\label{HCResults}
 \end{figure}
 
 We see from Figure \ref{HCResults} that both when using the average and the complete method, we get a very big cluster containing the majority of the data points. For the average method, this is cluster \HCAVGD{} holding 447 data point, while for the complete method, it is cluster \HCCOMD{}  holding 375 elements.
