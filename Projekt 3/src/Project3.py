@@ -2,7 +2,7 @@ import xlrd
 from scipy.stats import zscore
 from methods import *
 from pylab import *
-from writeapriorifile import *
+#from writeapriorifile import *
 
 
 #Converts Present and Absent into numbers.
@@ -56,17 +56,17 @@ XPC = getPrincipalComponents(XStandardized)
 
 X2PC = np.copy(XPC)
 
-plotCVK(XPC,range(1,21),iterations = 1)
-gmm(XPC, y, 9, C, K=6)
+#plotCVK(XPC,range(1,21),iterations = 1)
+#gmm(XPC, y, 9, C, K=6)
 
-hierarchicalClustering(XPC,y,6,C,Method = 'complete')
+#hierarchicalClustering(XPC,y,6,C,Method = 'complete')
 
 XBin = convertToBinary(XCHD)
 
-attributeNames2 = attributeNames + ['CHD']
+#attributeNames2 = attributeNames + ['CHD']
 
-WriteAprioriFile(XBin,titles=attributeNames2,filename="AprioriFile.txt")
+#WriteAprioriFile(XBin,titles=attributeNames2,filename="AprioriFile.txt")
 
-doApriori("AprioriFile.txt",minSup=30,minConf = 50)
+#doApriori("AprioriFile.txt",minSup=30,minConf = 50)
 
-outlierDetection(XStandardized,objects = 5)
+outlierDetection(XStandardized,objects = 461)

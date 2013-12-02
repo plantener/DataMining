@@ -51,7 +51,16 @@ As with Gaussian and KNN we start to look at all the data objects score in the k
 
 \subsection{K'th Nearest Neighbour Distance}
 
-When we take a look at the distance method, we see that this time we want a low score in stead of a high score as with the distance scores. But it shows around the same numbers of bad scores as with the density as well as good scores, which can be seen in the table below. You can also see that it is some of the same data objects that keeps showing up in all the different runs, they can be seen in the table below.
+When we take a look at the distance method, we see that this time we want a low score in stead of a high score as with the distance scores. But it shows around the same numbers of bad scores as with the density as well as good scores, which can be seen in figure \ref{dist}. 
+\begin{figure}[H]
+\centering
+\includegraphics[width=7.5cm, keepaspectratio=true]{pictures/knndistance5.png}
+\includegraphics[width=7.5cm, keepaspectratio=true]{pictures/knndistance25.png}
+\vspace{-0.4cm}
+\caption{\footnotesize Outlier score k'th nearest neighbour distance}
+\label{dist}
+\end{figure}
+You can also see that it is some of the same data objects that keeps showing up in all the different runs, they can be seen in the table below.
 \begin{table}[H]
 \begin{longtable}{lccccc}
 \hline
@@ -61,7 +70,7 @@ When we take a look at the distance method, we see that this time we want a low 
 25 & 345 & 362 & 21  & 426 & 241 \\
 50 & 345 & 362 & 241 & 21  & 359 \\ \hline
 \end{longtable}
-\caption{\footnotesize In this table we see k'th nearest neighbour distance, for different k values. Each row is a new run with a different k, and the columns is the 5 worst scores.}
+\caption{\footnotesize In this table we see k'th nearest neighbour distance, for different k values. Each row is a new run with a different k, and the columns is the 5 worst scores. It should be said that the numbers shown in the table is data objects ID.}
 \end{table}
 
 \subsection{Comparison of outlier score}
@@ -78,5 +87,5 @@ When we compare the different outlier score and see which data objects the diffe
 5 & 334      & 241 & 39      & 241 \\ \hline
 \end{longtable}
 \label{compare}
-\caption{\footnotesize Here we see the comparison of all the different outlier scoring methods.}
+\caption{\footnotesize Here we see the comparison of all the different outlier scoring methods. It should be said that the numbers shown in the table is data objects ID.}
 \end{table}
