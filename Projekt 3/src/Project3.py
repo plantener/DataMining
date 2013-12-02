@@ -2,7 +2,7 @@ import xlrd
 from scipy.stats import zscore
 from methods import *
 from pylab import *
-#from writeapriorifile import *
+from writeapriorifile import *
 
 
 #Converts Present and Absent into numbers.
@@ -56,40 +56,17 @@ XPC = getPrincipalComponents(XStandardized)
 
 X2PC = np.copy(XPC)
 
-#plotCVK(XPC,range(1,21),iterations = 3)
-#gmm(XPC, y, 9, C, K=6)
+plotCVK(XPC,range(1,21),iterations = 1)
+gmm(XPC, y, 9, C, K=6)
 
-#XPC = XPC[:,0:2]
-#X = X[:,0:2]
-#gmm(XPC,y,9,C,K=11)
+hierarchicalClustering(XPC,y,6,C,Method = 'complete')
 
-#CVK(X,range(1,51),"diag",3)
+XBin = convertToBinary(XCHD)
 
-#XPC = XPC[:,0:2]
+attributeNames2 = attributeNames + ['CHD']
 
-#hierarchicalClustering(XPC,y,6,C,Method = 'complete')
+WriteAprioriFile(XBin,titles=attributeNames2,filename="AprioriFile.txt")
 
-#XBin = convertToBinary(XCHD)
-
-#index = 4
-#poss = 0
-#negs = 0
-#for i in range(len(XBin)):
-#    if XBin[i,index] == 0:
-#        negs += 1
-#    else:
-#        poss += 1
-        
-#print negs
-#print poss
-
-#attributeNames2 = attributeNames + ['CHD']
-#for i in range(0,len(y)):
-#XBin = np.insert(XBin, 0, y[i], axis=1)
-#XBin = [XBin[i] + y[i] for i in range(len(XBin))]#s + y#[x + y for x in XBin]
-
-#WriteAprioriFile(XBin,titles=attributeNames2,filename="AprioriFile.txt")
-
-#doApriori("AprioriFile.txt",minSup=30,minConf = 55)
+doApriori("AprioriFile.txt",minSup=30,minConf = 50)
 
 outlierDetection(XStandardized,objects = 5)
