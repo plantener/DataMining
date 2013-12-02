@@ -30,7 +30,7 @@ With a KNN density estimation we want to have some of the same data object as wi
 \label{knn}
 \end{figure}
 
-As with Gaussian and KNN we start with to look at all the data objects score, and see it increases quick in the beginning, so we take a look at the 20 lowest data objects. In this graph we the see that the from the data object with the lowest density to the next one we have the biggest jump in density, which most likely would make the data object with the lowest density an outlier.
+As with Gaussian and KNN we start to look at all the data objects score in the knn average relative density, and see it increases quick in the beginning, so we take a look at the 20 lowest data objects. In this graph we the see that the from the data object with the lowest density to the next one we have the biggest jump in density, which most likely would make the data object with the lowest density an outlier.
 
 \begin{figure}[H]
 \centering
@@ -58,7 +58,7 @@ When we take a look at the distance method, we see that this time we want a low 
 
 \subsection{Comparison of outlier score}
 
-When we compare the different outlier score and see which data objects the different methods found, we see that some of them are recurring. If we look at the first data object in all 4 methods, we see that the first have 345 but is in 2 row for the last data object, this properly means that this is an outlier since each method gave it a bad score. If we then take a look at some of the others we see that some of them is recurring in at least one of the other methods, this could mean that these is outliers to. If we take a look at the table below we can properly say that data object 345, 246, 362 and 241 is outliers because of they have a low score and is recurring in at least one of the other methods.
+When we compare the different outlier score and see which data objects the different methods found, we see that some of them are recurring. If we take a look at table \ref{compare} we see that the first data object in all 4 methods, all have data object 345, this could mean that it is an outlier since each method gave it a bad score. If we then take a look at some of the others, we see that some of them are recurring in some of the other methods, again this could mean that these are outliers to. If we take a look at the table below we can properly say that data object 345, 246, 362 and 241 is outliers because of they have a low score and is recurring in at least one of the other methods.
 \begin{table}[H]
 \begin{longtable}{lcccc}
 \hline
@@ -69,5 +69,6 @@ When we compare the different outlier score and see which data objects the diffe
 4 & 241      & 442 & 426     & 426 \\ 
 5 & 334      & 241 & 39      & 241 \\ \hline
 \end{longtable}
+\label{compare}
 \caption{\footnotesize Here we see the comparison of all the different outlier scoring methods.}
 \end{table}
